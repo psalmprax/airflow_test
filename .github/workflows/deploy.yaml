@@ -42,7 +42,7 @@ jobs:
         with:
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           proxy_host: ${{ secrets.HOST_DNS }}
-          proxy_user: ${{ secrets.USERNAME }}
+          proxy_username: ${{ secrets.USERNAME }}
           host: "10.0.0.224"
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
