@@ -19,7 +19,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-        run: ls -ltra "$PWD" && echo "${SSH_PRIVATE_KEY}" | grep -qw "less" | ssh -q -i /dev/stdin ec2-user@${REMOTE_HOST} 'hostnamectl'
+        run: ls -ltra "$PWD" && echo "${SSH_PRIVATE_KEY}" | ssh -q -i /dev/stdin ec2-user@${REMOTE_HOST} 'hostnamectl'
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
