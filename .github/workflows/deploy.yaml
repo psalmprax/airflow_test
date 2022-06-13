@@ -27,6 +27,6 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-        run: ls -ltra "$PWD" && echo "${SSH_PRIVATE_KEY}"
+        run: ls -ltra "$PWD" && echo ${SSH_PRIVATE_KEY}
 
 
