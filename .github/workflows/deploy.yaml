@@ -22,6 +22,11 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
 
       - name: copy to ec2
-        run: ls -ltra "$PWD"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+        run: ls -ltra "$PWD" && echo "${SSH_PRIVATE_KEY}" | grep -qw "less" | ssh -q -i /dev/stdin ${REMOTE_USER}@${REMOTE_HOST} 'hostnamectl' -T 'cat > /agan_airflow.pem'
 
 
