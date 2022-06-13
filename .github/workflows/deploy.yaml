@@ -35,6 +35,6 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-        run: ls -ltra "$PWD" && ssh -i agan_airflow.pem ec2-user@3.71.89.50
+        run: ls -ltra "$PWD" && ssh -i agan_airflow.pem ec2-user@3.71.89.50 && pwd
 
 
