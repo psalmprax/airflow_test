@@ -37,4 +37,14 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
         run: ls -ltra "$PWD" && ssh -i agan_airflow.pem -T ec2-user@3.71.89.50 && pwd
 
+      - name: new ssh proxy
+        env:
+          proxy_key: ${{ secrets.EC2_SSH_KEY }}
+          proxy_host: ${{ secrets.HOST_DNS }}
+          proxy_user: ${{ secrets.USERNAME }}
+          host: "10.0.0.224"
+          username: "ubuntu"
+          key: ${{ secrets.EC2_SSH_KEY }}
+        run: ls -ltra "$PWD" && ssh -i agan_airflow.pem -T ec2-user@3.71.89.50 && pwd
+
 
