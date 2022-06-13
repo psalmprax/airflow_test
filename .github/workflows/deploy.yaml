@@ -13,6 +13,14 @@ jobs:
       - name: Checkout Files
         uses: actions/checkout@v2
 
+      - name: copy to ec2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+        run: ls -ltra "$PWD" && echo ${SSH_PRIVATE_KEY}
+
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -21,12 +29,6 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
 
-      - name: copy to ec2
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-        run: ls -ltra "$PWD" && echo ${SSH_PRIVATE_KEY}
+
 
 
