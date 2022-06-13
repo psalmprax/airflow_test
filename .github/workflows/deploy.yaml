@@ -22,6 +22,6 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
 
       - name: copy to ec2
-        run: ssh-add - <<< "${{ secrets.EC2_SSH_KEY }}" && scp -i ${{ secrets.EC2_SSH_KEY }} ubuntu@10.0.0.108:/
+        run: ls -ltra "$PWD"
 
 
