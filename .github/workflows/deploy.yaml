@@ -19,7 +19,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && sudo ssh-add <(echo "${SSH_PRIVATE_KEY}")
+        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && ls -ltra
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
