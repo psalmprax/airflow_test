@@ -21,3 +21,7 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
 
+      - name: copy to ec2
+        run: scp ${{ secrets.EC2_SSH_KEY }} -i ${{ secrets.EC2_SSH_KEY }} ubuntu@10.0.0.108:/
+
+
