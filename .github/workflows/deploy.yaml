@@ -13,22 +13,22 @@ jobs:
       - name: Checkout Files
         uses: actions/checkout@v2
 
-#      - name: copy to ec2
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-#          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-#          REMOTE_USER: ${{ secrets.USERNAME }}
-#          TARGET: ${{ secrets.TARGET_DIR }}
-#        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
-#
-#      - name: Deploy to Server
-#        uses: easingthemes/ssh-deploy@main
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-#          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-#          REMOTE_USER: ${{ secrets.USERNAME }}
-#          TARGET: ${{ secrets.TARGET_DIR }}
-#          script: pwd
+      - name: copy to ec2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+          script: pwd
 #      - name: where we are now
 #        env:
 #          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
