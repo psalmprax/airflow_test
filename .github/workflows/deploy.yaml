@@ -48,6 +48,3 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: whoami && rm -rf airflow_test && pwd && git clone https://github.com/psalmprax/airflow_test.git
 
-      #        run: ls -ltra "$PWD" && ssh -i agan_airflow.pem -T ec2-user@3.71.89.50 && pwd
-
-
