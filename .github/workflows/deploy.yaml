@@ -43,7 +43,7 @@ jobs:
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           proxy_host: ${{ secrets.HOST_DNS }}
           proxy_username: ${{ secrets.USERNAME }}
-          host: "10.0.0.224"
+          host: "10.0.0.49"
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: whoami && rm -rf airflow_test && pwd && git clone https://github.com/psalmprax/airflow_test.git
