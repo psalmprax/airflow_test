@@ -38,7 +38,7 @@ jobs:
 #        run: ls -ltra "$PWD" && ssh -i agan_airflow.pem -T ec2-user@3.71.89.50 && pwd
 
       - name: new ssh proxy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         with:
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           proxy_host: ${{ secrets.HOST_DNS }}
@@ -46,5 +46,7 @@ jobs:
           host: "10.0.0.49"
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
-          script: whoami && rm -rf airflow_test && pwd && git clone https://github.com/psalmprax/airflow_test.git
+          script: |
+            whoami && rm -rf airflow_test && 
+            pwd && git clone https://github.com/psalmprax/airflow_test.git
 
