@@ -20,8 +20,8 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
         run: |
-          apt-get remove openssh server -y &&
-          apt-get remove openssh-server -y
+          sudo apt-get remove openssh server -y &&
+          sudo apt-get remove openssh-server -y
 #        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
 
 #      - name: Deploy to Server
