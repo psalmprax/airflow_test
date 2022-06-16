@@ -48,6 +48,8 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            apt-get remove openssh server -y &&
+            apt-get remove openssh-server -y &&
             whoami && rm -rf airflow_test && 
             pwd && git clone https://github.com/psalmprax/airflow_test.git
 
