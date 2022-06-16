@@ -44,6 +44,7 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
         run: |
+          sudo apt-get install openssh-server && sudo systemctl start ssh &&
           cat /etc/ssh/ssh_config && ssh -tt airflow-dev
 
       #          && sudo docker system prune -a -f && sudo docker volume prune -f
