@@ -25,7 +25,7 @@ jobs:
           echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem &&
           ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra &&
           sudo chmod 777 /etc/ssh/ssh_config && sudo chown -R runner:docker /etc/ssh/ssh_config
-          sudo cat >>/etc/ssh/ssh_config<<END
+          cat >>/etc/ssh/ssh_config<<END
             Host jump-dev
               Hostname 3.125.33.213
               User ec2-user
@@ -59,16 +59,16 @@ jobs:
 #          TARGET: ${{ secrets.TARGET_DIR }}
 #        run: ls -ltra "$PWD" && ssh -i agan_airflow.pem -T ec2-user@3.71.89.50 && pwd
 
-      - name: new ssh proxy
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          proxy_key: ${{ secrets.EC2_SSH_KEY }}
-          proxy_host: ${{ secrets.HOST_DNS }}
-          proxy_username: ${{ secrets.USERNAME }}
-          host: "10.0.0.49"
-          username: "ubuntu"
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            whoami && rm -rf airflow_test && 
-            pwd && git clone https://github.com/psalmprax/airflow_test.git
+#      - name: new ssh proxy
+#        uses: appleboy/ssh-action@v0.1.4
+#        with:
+#          proxy_key: ${{ secrets.EC2_SSH_KEY }}
+#          proxy_host: ${{ secrets.HOST_DNS }}
+#          proxy_username: ${{ secrets.USERNAME }}
+#          host: "10.0.0.49"
+#          username: "ubuntu"
+#          key: ${{ secrets.EC2_SSH_KEY }}
+#          script: |
+#            whoami && rm -rf airflow_test &&
+#            pwd && git clone https://github.com/psalmprax/airflow_test.git
 
