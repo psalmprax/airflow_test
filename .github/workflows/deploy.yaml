@@ -22,7 +22,7 @@ jobs:
         run: |
           sudo apt-get remove openssh-server -y &&
           sudo docker ps -a && sudo docker images &&
-          ls -ltra /etc/ssh/
+          ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config
 #          && sudo docker system prune -a -f && sudo docker volume prune -f
 #        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
 
