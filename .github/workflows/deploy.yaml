@@ -21,7 +21,7 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
         run: |
           sudo apt-get remove openssh-server -y &&
-          sudo docker ps -a
+          sudo docker ps -a && sudo docker images
 #        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
 
 #      - name: Deploy to Server
