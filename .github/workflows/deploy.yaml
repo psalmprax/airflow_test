@@ -13,40 +13,40 @@ jobs:
       - name: Checkout Files
         uses: actions/checkout@v2
 
-      - name: ssh configuration
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-        run: |
-          sudo apt-get remove openssh-server -y &&
-          sudo docker ps -a && sudo docker images &&
-          echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem &&
-          ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra &&
-          sudo chmod 777 /etc/ssh/ssh_config && sudo chown -R runner:docker /etc/ssh/ssh_config
-          cat >> /etc/ssh/ssh_config <<EOF
-            Host jump-dev
-              Hostname 3.70.126.86
-              User ec2-user
-              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
-            Host airflow-dev
-              HostName 10.0.0.231
-              User ubuntu
-              ProxyJump jump-dev
-              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
-              LocalForward 4500 127.0.0.1:8080
-          EOF
-      - name: copy to ec2
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-        run: |
-          sudo apt-get install openssh-server && sudo systemctl start ssh &&
-          cat /etc/ssh/ssh_config && ssh -vvv -tt -p 22 airflow-dev
-      #          && sudo docker system prune -a -f && sudo docker volume prune -f
+#      - name: ssh configuration
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+#          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+#          REMOTE_USER: ${{ secrets.USERNAME }}
+#          TARGET: ${{ secrets.TARGET_DIR }}
+#        run: |
+#          sudo apt-get remove openssh-server -y &&
+#          sudo docker ps -a && sudo docker images &&
+#          echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem &&
+#          ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra &&
+#          sudo chmod 777 /etc/ssh/ssh_config && sudo chown -R runner:docker /etc/ssh/ssh_config
+#          cat >> /etc/ssh/ssh_config <<EOF
+#            Host jump-dev
+#              Hostname 3.70.126.86
+#              User ec2-user
+#              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
+#            Host airflow-dev
+#              HostName 10.0.0.231
+#              User ubuntu
+#              ProxyJump jump-dev
+#              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
+#              LocalForward 4500 127.0.0.1:8080
+#          EOF
+#      - name: copy to ec2
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+#          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+#          REMOTE_USER: ${{ secrets.USERNAME }}
+#          TARGET: ${{ secrets.TARGET_DIR }}
+#        run: |
+#          sudo apt-get install openssh-server && sudo systemctl start ssh &&
+#          cat /etc/ssh/ssh_config && ssh -vvv -tt -p 22 airflow-dev
+#          && sudo docker system prune -a -f && sudo docker volume prune -f
 
 #          pwd && ssh-keygen -R 3.70.126.86 && ssh-keygen -R 10.0.0.231 &&
 #        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
@@ -68,16 +68,16 @@ jobs:
 #          TARGET: ${{ secrets.TARGET_DIR }}
 #        run: ls -ltra "$PWD" && ssh -i agan_airflow.pem -T ec2-user@3.71.89.50 && pwd
 
-#      - name: new ssh proxy
-#        uses: appleboy/ssh-action@v0.1.4
-#        with:
-#          proxy_key: ${{ secrets.EC2_SSH_KEY }}
-#          proxy_host: ${{ secrets.HOST_DNS }}
-#          proxy_username: ${{ secrets.USERNAME }}
-#          host: "10.0.0.49"
-#          username: "ubuntu"
-#          key: ${{ secrets.EC2_SSH_KEY }}
-#          script: |
-#            whoami && rm -rf airflow_test &&
-#            pwd && git clone https://github.com/psalmprax/airflow_test.git
+      - name: new ssh proxy
+        uses: appleboy/ssh-action@master
+        with:
+          proxy_key: ${{ secrets.EC2_SSH_KEY }}
+          proxy_host: ${{ secrets.HOST_DNS }}
+          proxy_username: ${{ secrets.USERNAME }}
+          host: "10.0.0.231"
+          username: "ubuntu"
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            whoami && rm -rf airflow_test &&
+            pwd && git clone https://github.com/psalmprax/airflow_test.git
 
