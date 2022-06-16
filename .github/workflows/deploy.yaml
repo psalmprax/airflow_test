@@ -23,7 +23,8 @@ jobs:
           sudo apt-get remove openssh-server -y &&
           sudo docker ps -a && sudo docker images &&
           echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem &&
-          ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra
+          ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra &&
+          sudo chmod 777 /etc/ssh/ssh_config && sudo chown -R runner:docker /etc/ssh/ssh_config
           sudo cat >>/etc/ssh/ssh_config<<END
             Host jump-dev
               Hostname 3.125.33.213
