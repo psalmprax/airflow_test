@@ -25,17 +25,19 @@ jobs:
           echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem &&
           ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra &&
           sudo chmod 777 /etc/ssh/ssh_config && sudo chown -R runner:docker /etc/ssh/ssh_config
-          cat >>/etc/ssh/ssh_config<<-EOF
-            Host jump-dev
-              Hostname 3.125.33.213
-              User ec2-user
-              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
-            Host airflow-dev
-              HostName 10.0.0.49
-              User ubuntu
-              ProxyJump jump-dev
-              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
-              LocalForward 4500 127.0.0.1:8080EOF 
+#          cat >>/etc/ssh/ssh_config<<-EOF
+          echo "
+            Host jump-dev \n
+              Hostname 3.125.33.213 \n
+              User ec2-user \n
+              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem \n
+            Host airflow-dev \n
+              HostName 10.0.0.49 \n
+              User ubuntu \n
+              ProxyJump jump-dev \n
+              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem \n
+              LocalForward 4500 127.0.0.1:8080" > /etc/ssh/ssh_config
+#          EOF
           && cat /etc/ssh/ssh_config && ssh airflow-dev &&
 
       #          && sudo docker system prune -a -f && sudo docker volume prune -f
