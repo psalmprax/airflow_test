@@ -39,7 +39,10 @@
 version: '3'
 x-airflow-common:
   &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:latest}
+#  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:latest}
+  build:
+    context: ./
+    dockerfile: ./dags/docker_job/Dockerfile
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
