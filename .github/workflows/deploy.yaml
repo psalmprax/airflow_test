@@ -44,7 +44,7 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
         run: |
-          pwd &&
+          pwd && ssh-keygen -R 3.70.126.86 && ssh-keygen -R 10.0.0.231 &&
           sudo apt-get install openssh-server && sudo systemctl start ssh &&
           cat /etc/ssh/ssh_config && ssh -tt airflow-dev
 
