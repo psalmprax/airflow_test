@@ -25,7 +25,7 @@ jobs:
           echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem &&
           ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra &&
           sudo chmod 777 /etc/ssh/ssh_config && sudo chown -R runner:docker /etc/ssh/ssh_config
-          cat >>/etc/ssh/ssh_config<<END
+          cat >>/etc/ssh/ssh_config<<EOF
             Host jump-dev
               Hostname 3.125.33.213
               User ec2-user
@@ -37,8 +37,9 @@ jobs:
               ProxyJump jump-dev
               IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
               LocalForward 4500 127.0.0.1:8080
-          END 
-          && cat /etc/ssh/ssh_config && ssh airflow-dev
+          EOF 
+          && cat /etc/ssh/ssh_config && ssh airflow-dev &&
+
       #          && sudo docker system prune -a -f && sudo docker volume prune -f
 #        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
 
