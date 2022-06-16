@@ -13,12 +13,15 @@ jobs:
       - name: Checkout Files
         uses: actions/checkout@v2
 
-#      - name: copy to ec2
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-#          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-#          REMOTE_USER: ${{ secrets.USERNAME }}
-#          TARGET: ${{ secrets.TARGET_DIR }}
+      - name: copy to ec2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+        run: |
+          apt-get remove openssh server -y &&
+          apt-get remove openssh-server -y
 #        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
 
 #      - name: Deploy to Server
@@ -48,8 +51,6 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            apt-get remove openssh server -y &&
-            apt-get remove openssh-server -y &&
             whoami && rm -rf airflow_test && 
             pwd && git clone https://github.com/psalmprax/airflow_test.git
 
