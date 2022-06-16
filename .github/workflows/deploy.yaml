@@ -24,19 +24,19 @@ jobs:
           sudo docker ps -a && sudo docker images &&
           echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem &&
           ls -ltra /etc/ssh/ && cat /etc/ssh/ssh_config && pwd && ls -ltra
-#          cat >>  <<END
-#            Host jump-dev
-#              Hostname 3.125.33.213
-#              User ec2-user
-#              IdentityFile ~/Videos/agan_airflow.pem
-#
-#            Host airflow-dev
-#              HostName 10.0.0.49
-#              User ubuntu
-#              ProxyJump jump-dev
-#              IdentityFile ~/Videos/agan_airflow.pem
-#              LocalForward 4500 127.0.0.1:8080
-#          END
+          cat >>/etc/ssh/ssh_config<<END
+            Host jump-dev
+              Hostname 3.125.33.213
+              User ec2-user
+              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
+
+            Host airflow-dev
+              HostName 10.0.0.49
+              User ubuntu
+              ProxyJump jump-dev
+              IdentityFile /home/runner/work/airflow_test/airflow_test/agan_airflow.pem
+              LocalForward 4500 127.0.0.1:8080
+          END
       #          && sudo docker system prune -a -f && sudo docker volume prune -f
 #        run: ls -ltra "$PWD" && sudo apt-get install openssh-server && sudo systemctl start ssh && echo "${SSH_PRIVATE_KEY}" > "$PWD"/agan_airflow.pem && chmod 400 "$PWD"/agan_airflow.pem
 
