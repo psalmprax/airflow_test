@@ -39,7 +39,7 @@
 version: '3'
 x-airflow-common:
   &airflow-common
-#  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:latest}
+#  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.0.2}
   build:
     context: ./
     dockerfile: ./dags/docker_job/Dockerfile
@@ -114,6 +114,12 @@ services:
     <<: *airflow-common
     command: celery worker
     restart: always
+    deploy:
+      replicas: 2
+      mode: replicated
+      placement:
+        constraints:
+          - node.labels.type == worker
 
   airflow-init:
     <<: *airflow-common

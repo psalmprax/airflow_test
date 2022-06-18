@@ -1,5 +1,16 @@
 from selenium import webdriver
 
+from selenium.webdriver.common.proxy import Proxy, ProxyType
+from random_user_agent.user_agent import UserAgent
+from random_user_agent.params import SoftwareName, OperatingSystem
+
+softwares_names = [SoftwareName.CHROME.value]
+operatiing_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
+user_agent_rotator = UserAgent(softwares_names=softwares_names,
+                               operatiing_systems=operatiing_systems,
+                               limit=10000000)
+user_agent = user_agent_rotator.get_random_user_agent()
+
 # chrome driver config
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
@@ -18,10 +29,21 @@ options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 options.add_argument('--incognito')
 
-
 options.add_argument("log-level=3")
 
-driver = webdriver.Chrome(executable_path="chromedriver", options=options)
+PROXY = "http://gate.smartproxy.com:7000"
+prox = Proxy()
+prox.proxy_type = ProxyType.MANUAL
+prox.autodetect = False
+capabilities = webdriver.DesiredCapabilities.CHROME
+prox.http_proxy = PROXY
+prox.ssl_proxy = PROXY
+prox.add_to_capabilities(capabilities=capabilities)
+
+try:
+    driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options)
+except Exception as ex:
+    print(ex)
 clickables = "//button[@id='buttonZustand']"
 xpath = "//ul[@class='uk-nav uk-nav-dropdown uk-text-bold' and @id='dropdownZustand']//li[@class='{} " \
         "uk-dropdown-close'] "

@@ -10,12 +10,12 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 # from airflow.hooks.postgres_hook import PostgresHook
 from bs4 import BeautifulSoup
-from selenium import webdriver
+# from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from pricing.vars import iphones
+from docker_job.pricing.vars import * #iphones
 
 
 class ProductPriceData:
@@ -111,44 +111,42 @@ class ProductPriceData:
 
 
 def run_from_class(**kwargs):
-    from pricing.vars import options, clickables, xpath
+    from docker_job.pricing.vars import options, clickables, xpath
     from airflow.hooks.postgres_hook import PostgresHook
+    import os
+    cwd = os.getcwd()
+    print(cwd)
 
-    pg_hook = PostgresHook(postgres_conn_id='pricing')
-    connection = pg_hook.get_conn()
-    cursor = connection.cursor()
-    ppd = ProductPriceData(driver=webdriver.Chrome(executable_path="chromedriver", options=options))
+    # pg_hook = PostgresHook(postgres_conn_id='pricing')
+    # connection = pg_hook.get_conn()
+    # cursor = connection.cursor()
+
+    ppd = ProductPriceData(driver=webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options))
+#    ppd = ProductPriceData(driver=driver, options=options))
 
     # products = ['iphone', 'samsung-galaxy', 'huawei']
     result = list()
-    # for product in products:
-    #     ppd = ProductPriceData(driver=webdriver.Chrome(executable_path="chromedriver", options=options))
-    #     phone_list = ppd.get_product_cat_url(url=f"https://www.handyverkauf.net/?preisvergleich={product}",
-    #                                          driver=webdriver.Chrome(
-    #                                              executable_path="chromedriver",
-    #                                              options=options)
-    #                                          )
-    #     print(phone_list)
-    #     print("#####################################################################")
-    #     print(ppd.clean_list(phone_list, 'https://'))
-    #     sample = random.sample(ppd.clean_list(phone_list, 'https://')[:236], 4)
-    for url in iphones[:10]:
-        phone_data = ppd.scrape_phones([url]
-                                       ,
-                                       webdriver.Chrome(executable_path="chromedriver", options=options),
-                                       clickables, xpath)
-        result += phone_data
-        results = [(a.strip("€"), b, c, d, str(e)) for row in result
-                   for a, b, c, d, e in zip(row['Prices'],
-                                            row['Anbieter'],
-                                            row['Device'],
-                                            row['Condition'],
-                                            row['Created_at'])]
-    insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
-                   "created_at) values {} "
-    insert_query = insert_query.format(','.join(['%s'] * len(results)))
-    cursor.execute(insert_query, results)
-    cursor.execute("COMMIT")
+
+    # for url in iphones[:10]:
+    print(kwargs["url"])
+#    phone_data = ppd.scrape_phones([kwargs["url"]],
+#                                   webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options),
+#                                   clickables, xpath)
+    phone_data = ppd.scrape_phones([kwargs["url"]],
+                                   driver,
+                                   clickables, xpath)
+    result += phone_data
+    results = [(a.strip("€"), b, c, d, str(e)) for row in result
+               for a, b, c, d, e in zip(row['Prices'],
+                                        row['Anbieter'],
+                                        row['Device'],
+                                        row['Condition'],
+                                        row['Created_at'])]
+    # insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
+                   # "created_at) values {} "
+    # insert_query = insert_query.format(','.join(['%s'] * len(results)))
+    # cursor.execute(insert_query, results)
+    # cursor.execute("COMMIT")
     print(results)
     # return {"data": result}
 
@@ -171,23 +169,24 @@ def create_dag(
               catchup=False,
               template_searchpath=['/opt/airflow/dags'])
     with dag:
-        python_task = PythonOperator(
-            task_id=task_id,
-            provide_context=True,
-            python_callable=my_func
-        )
+        # python_task = PythonOperator(
+        #     task_id=task_id,
+        #     provide_context=True,
+        #     python_callable=my_func
+        # )
 
-        create_product_price_table = PostgresOperator(
-            task_id=f"table_{task_id}_creation",
-            postgres_conn_id="pricing",
-            sql="""sql/create_product_price_table.sql"""
-        )
+        # create_product_price_table = PostgresOperator(
+        #     task_id=f"table_{task_id}_creation",
+        #     postgres_conn_id="pricing",
+        #     sql="""sql/create_product_price_table.sql"""
+        # )
+        #
+        # upsert_product_price_table = PostgresOperator(
+        #     task_id=f"table_{task_id}_upsert",
+        #     postgres_conn_id="pricing",
+        #     sql="""sql/upsert_product_price_table.sql"""
+        # )
 
-        upsert_product_price_table = PostgresOperator(
-            task_id=f"table_{task_id}_upsert",
-            postgres_conn_id="pricing",
-            sql="""sql/upsert_product_price_table.sql"""
-        )
 
         start_clean = BashOperator(
             task_id=f'start_clean-{task_id}',
@@ -204,12 +203,21 @@ def create_dag(
                          f"&& rm -rf /tmp/* 2>/dev/null || exit 0"
                          f"&& rm -rf /tmp/.p* 2>/dev/null || exit 0"
         )
-        # >> update_product_price_table
-        start_clean >> create_product_price_table >> python_task >> upsert_product_price_table >> end_clean
+        for url in iphones[:10]:
+            ti = url.split("/")[-1]
+            print(ti)
+            python_task = PythonOperator(
+                task_id=f"{task_id}-{ti}",
+                provide_context=True,
+                python_callable=my_func,
+                op_kwargs={"url": url}
+            )
+            # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
+            start_clean >> python_task >> end_clean
     return dag
 
 
-task_id = "product_prices_testers"
+task_id = "price_test_scale"
 
 default_args = {
     'depends_on_past': False,
