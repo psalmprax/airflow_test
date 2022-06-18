@@ -23,8 +23,10 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-#            ls -ltra && sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down -v 2> /dev/null &&
-#            exit 0 && sudo docker system prune -a -f && ll &&
+            FILE=/home/ubuntu/airflow_test/docker-compose.yaml
+            if [ -f "$FILE" ]; then
+                sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down -v 2> /dev/null && sudo docker system prune -a -f
+            fi
             whoami  && sudo rm -rf airflow_test &&
             pwd && sudo git clone https://github.com/psalmprax/airflow_test.git && ls -ltra &&
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml up --build -d &&
@@ -34,6 +36,9 @@ jobs:
             sudo chmod -R 777 /home/ubuntu/airflow_test/plugins/ && 
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/plugins/ && 
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml up --build -d
+
+#            ls -ltra && sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down -v 2> /dev/null &&
+#            exit 0 && sudo docker system prune -a -f && ll &&
 #            && sudo docker-compose up --build -d
 #            sudo docker-compose down -v && sudo docker system prune -a -f &&
 #            && cd .. && rm -rf airflow_test 2> /dev/null
