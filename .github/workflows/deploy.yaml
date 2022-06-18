@@ -19,12 +19,12 @@ jobs:
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           proxy_host: ${{ secrets.HOST_DNS }}
           proxy_username: ${{ secrets.USERNAME }}
-          host: "10.0.0.231"
+          host: "10.0.0.59"
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             ls -ltra && sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down -v 2> /dev/null &&
-            sudo docker system prune -a -f &&
+            sudo docker system prune -a -f && ll &&
             whoami  && sudo rm -rf airflow_test &&
             pwd && sudo git clone https://github.com/psalmprax/airflow_test.git && ls -ltra &&
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml up --build -d &&
