@@ -23,7 +23,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            whoami && rm -rf airflow_test && ls -ltra &&
-            pwd && git clone https://github.com/psalmprax/airflow_test.git &&
+            whoami && rm -rf airflow_test &&
+            pwd && git clone https://github.com/psalmprax/airflow_test.git && ls -ltra &&
             cd airflow-test && sudo docker-compose down -v && sudo docker system prune -a -f &&
             sudo docker-compose up --build -d
