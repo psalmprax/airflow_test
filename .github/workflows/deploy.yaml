@@ -25,5 +25,5 @@ jobs:
           script: |
             whoami && rm -rf airflow_test && sudo rm -rf airflow-docker-operator-with-compose &&
             pwd && git clone https://github.com/psalmprax/airflow_test.git &&
-	    cd airflow-docker-operator-with-compose && sudo docker-compose down -v && sudo docker system prune -a -f &&
-	    sudo docker-compose up --build -d
+            cd airflow-docker-operator-with-compose && sudo docker-compose down -v && sudo docker system prune -a -f &&
+            sudo docker-compose up --build -d
