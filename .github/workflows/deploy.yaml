@@ -27,7 +27,8 @@ jobs:
             sudo docker system prune -a -f &&
             whoami  && sudo rm -rf airflow_test &&
             pwd && sudo git clone https://github.com/psalmprax/airflow_test.git && ls -ltra &&
-            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml up --build -d
+            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml up --build -d &&
+            sudo docker ps -a
 #            && cd airflow_test
 #            && sudo docker-compose up --build -d
 #            sudo docker-compose down -v && sudo docker system prune -a -f &&
