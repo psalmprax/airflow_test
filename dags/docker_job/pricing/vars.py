@@ -39,7 +39,7 @@ options.add_argument("log-level=3")
 # prox.http_proxy = PROXY
 # prox.ssl_proxy = PROXY
 # prox.add_to_capabilities(capabilities=capabilities)
-
+options.add_argument('--proxy-server="http=92.222.237.109:8888"')
 try:
     driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options)
 except Exception as ex:
