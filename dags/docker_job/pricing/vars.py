@@ -14,8 +14,8 @@ user_agent = user_agent_rotator.get_random_user_agent()
 # chrome driver config
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
-user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 ' \
-             'Safari/537.36 '
+# user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 ' \
+#              'Safari/537.36 '
 options.add_argument('user-agent={0}'.format(user_agent))
 options.add_argument('--disable-infobars')
 options.add_argument('--disable-dev-shm-usage')
@@ -31,14 +31,14 @@ options.add_argument('--incognito')
 
 options.add_argument("log-level=3")
 
-PROXY = "http://gate.smartproxy.com:7000"
-prox = Proxy()
-prox.proxy_type = ProxyType.MANUAL
-prox.autodetect = False
-capabilities = webdriver.DesiredCapabilities.CHROME
-prox.http_proxy = PROXY
-prox.ssl_proxy = PROXY
-prox.add_to_capabilities(capabilities=capabilities)
+# PROXY = "http://gate.smartproxy.com:7000"
+# prox = Proxy()
+# prox.proxy_type = ProxyType.MANUAL
+# prox.autodetect = False
+# capabilities = webdriver.DesiredCapabilities.CHROME
+# prox.http_proxy = PROXY
+# prox.ssl_proxy = PROXY
+# prox.add_to_capabilities(capabilities=capabilities)
 
 try:
     driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options)
