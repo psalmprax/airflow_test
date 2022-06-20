@@ -67,6 +67,11 @@ class ProductPriceData:
         device = soup.find("h1", class_="handy_name").text
         text = self.driver.find_element_by_xpath(clickables).get_attribute('textContent').strip()
 
+        if "AM" in datetime.today().strftime("%D:%M:%Y:%H:%M %p"):
+            time_of_day = "AM"
+        else:
+            time_of_day = "PM"
+
         for href in get_prices:
             anbieter = href.find("a", href=True)
             prices.append(anbieter.text)
@@ -76,7 +81,9 @@ class ProductPriceData:
                'Anbieter': anbieters,
                'Device': [device] * len(anbieters),
                'Condition': [text] * len(anbieters),
-               'Created_at': [date.today()] * len(anbieters)}
+               'Created_at': [date.today()] * len(anbieters),
+               'Am_Pm': [time_of_day] * len(anbieters)}
+
         return dct
 
     # def (self, urls, clickable_links, driver, xpath ):
@@ -122,26 +129,19 @@ def run_from_class(**kwargs):
     # cursor = connection.cursor()
 
     ppd = ProductPriceData(driver=webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options))
-#    ppd = ProductPriceData(driver=driver, options=options))
-
-    # products = ['iphone', 'samsung-galaxy', 'huawei']
     result = list()
-
-    # for url in iphones[:10]:
     print(kwargs["url"])
-#    phone_data = ppd.scrape_phones([kwargs["url"]],
-#                                   webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options),
-#                                   clickables, xpath)
     phone_data = ppd.scrape_phones([kwargs["url"]],
                                    driver,
                                    clickables, xpath)
     result += phone_data
-    results = [(a.strip("€"), b, c, d, str(e)) for row in result
-               for a, b, c, d, e in zip(row['Prices'],
-                                        row['Anbieter'],
-                                        row['Device'],
-                                        row['Condition'],
-                                        row['Created_at'])]
+    results = [(a.strip("€"), b, c, d, str(e), f) for row in result
+               for a, b, c, d, e, f in zip(row['Prices'],
+                                           row['Anbieter'],
+                                           row['Device'],
+                                           row['Condition'],
+                                           row['Created_at'],
+                                           row['Am_Pm'])]
     # insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
                    # "created_at) values {} "
     # insert_query = insert_query.format(','.join(['%s'] * len(results)))
