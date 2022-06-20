@@ -81,8 +81,7 @@ class ProductPriceData:
                'Anbieter': anbieters,
                'Device': [device] * len(anbieters),
                'Condition': [text] * len(anbieters),
-               'Created_at': [date.today()] * len(anbieters),
-               'Am_Pm': [time_of_day] * len(anbieters)}
+               'Created_at': [date.today()] * len(anbieters)}
         return dct
 
     # def (self, urls, clickable_links, driver, xpath ):
@@ -134,13 +133,12 @@ def run_from_class(**kwargs):
                                    driver,
                                    clickables, xpath)
     result += phone_data
-    results = [(a.strip("€"), b, c, d, str(e), f) for row in result
-               for a, b, c, d, e, f in zip(row['Prices'],
-                                           row['Anbieter'],
-                                           row['Device'],
-                                           row['Condition'],
-                                           row['Created_at'],
-                                           row['Am_Pm'])]
+    results = [(a.strip("€"), b, c, d, str(e)) for row in result
+               for a, b, c, d, e in zip(row['Prices'],
+                                        row['Anbieter'],
+                                        row['Device'],
+                                        row['Condition'],
+                                        row['Created_at'])]
     # insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
                    # "created_at) values {} "
     # insert_query = insert_query.format(','.join(['%s'] * len(results)))
