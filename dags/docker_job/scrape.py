@@ -12,7 +12,7 @@ from selenium.webdriver.common.proxy import ProxyType, Proxy
 from random_user_agent.user_agent import UserAgent
 from random_user_agent.params import SoftwareName, OperatingSystem
 from webdriver_manager.chrome import ChromeDriverManager
-from parameters import iphones
+# from parameters import iphones
 from webdriver_setup import get_webdriver_for
 
 clickables = "//button[@id='buttonZustand']"
