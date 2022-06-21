@@ -1,7 +1,7 @@
 from itertools import cycle
 # from time import sleep
 import time as t
-from raw_copy import *
+# from raw_copy import *
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
