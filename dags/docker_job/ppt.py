@@ -120,10 +120,12 @@ class ProductPriceData:
 def run_from_class(**kwargs):
     from docker_job.pricing.vars import options, clickables, xpath
     from airflow.hooks.postgres_hook import PostgresHook
+    from webdriver_manager.chrome import ChromeDriverManager
 
     # pg_hook = PostgresHook(postgres_conn_id='pricing')
     # connection = pg_hook.get_conn()
     # cursor = connection.cursor()
+    ChromeDriverManager().install()
 
     ppd = ProductPriceData()
     result = list()

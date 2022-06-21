@@ -95,7 +95,7 @@ def create_webdriver(browser, proxy_config):
         driver = get_webdriver_for(browser, options=firefox_options)
 
     elif browser == "chrome":
-        ChromeDriverManager().install()
+        # ChromeDriverManager().install()
 
         softwares_names = [SoftwareName.CHROME.value]
         operating_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
