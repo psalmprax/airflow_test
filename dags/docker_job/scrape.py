@@ -120,7 +120,7 @@ def create_webdriver(browser, proxy_config):
 
         chrome_options.add_argument("log-level=3")
         # driver = get_webdriver_for(browser, options=chrome_options, desired_capabilities=proxy_config)
-        driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options, desired_capabilities=proxy_config)
+        driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=chrome_options, desired_capabilities=proxy_config)
 
     return driver
 
