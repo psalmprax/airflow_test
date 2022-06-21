@@ -119,7 +119,8 @@ def create_webdriver(browser, proxy_config):
         chrome_options.add_argument('--incognito')
 
         chrome_options.add_argument("log-level=3")
-        driver = get_webdriver_for(browser, options=chrome_options, desired_capabilities=proxy_config)
+        # driver = get_webdriver_for(browser, options=chrome_options, desired_capabilities=proxy_config)
+        driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options, desired_capabilities=proxy_config)
 
     return driver
 
@@ -139,7 +140,7 @@ def make_request_with_proxy(browser, proxy_config, urls, ppd):
 
     try:
 
-        ppd.scrape_phones(urls=urls, driver=driver, clicks=clickables, xpath=xpath)
+        ppd.scrape_phones(urls=urls, driver=driver, clickable_links=clickables, xpath=xpath)
         # print(f"IP: {driver.find_element(By.ID, 'ip').text}")
 
     except WebDriverException as ex:
