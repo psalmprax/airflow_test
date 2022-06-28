@@ -1,22 +1,22 @@
-import random
-
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from pyvirtualdisplay import Display
 
-display = Display(visible=0, size=(800, 600))
-display.start()
+from selenium.webdriver.common.proxy import Proxy, ProxyType
+from random_user_agent.user_agent import UserAgent
+from random_user_agent.params import SoftwareName, OperatingSystem
+
+softwares_names = [SoftwareName.CHROME.value]
+operatiing_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
+user_agent_rotator = UserAgent(softwares_names=softwares_names,
+                               operatiing_systems=operatiing_systems,
+                               limit=10000000)
+user_agent = user_agent_rotator.get_random_user_agent()
+
 # chrome driver config
 options = webdriver.ChromeOptions()
-# options.add_argument('--headless')
+options.add_argument('--headless')
 # user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 ' \
 #              'Safari/537.36 '
-# options.add_argument('user-agent={0}'.format(user_agent))
-try:
-    options.add_extension('dags/docker_job/mjnbclmflcpookeapghfhapeffmpodij.crx')
-except Exception as ex:
-    options.add_extension('mjnbclmflcpookeapghfhapeffmpodij.crx')
-
+options.add_argument('user-agent={0}'.format(user_agent))
 options.add_argument('--disable-infobars')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--no-sandbox')
@@ -28,11 +28,15 @@ options.add_argument("---force-device-scale-factor=1")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 options.add_argument('--incognito')
+
 options.add_argument("log-level=3")
 
-# driver = webdriver.Chrome(executable_path="chromedriver", options=options)
-# driver.Manage().Window.Maximize()
-driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+
+options.add_argument('--proxy-server="http=92.222.237.109:8888"')
+try:
+    driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=options)
+except Exception as ex:
+    print(ex)
 clickables = "//button[@id='buttonZustand']"
 xpath = "//ul[@class='uk-nav uk-nav-dropdown uk-text-bold' and @id='dropdownZustand']//li[@class='{} " \
         "uk-dropdown-close'] "
@@ -89,3 +93,4 @@ iphones = ["https://www.handyverkauf.net/apple-iphone-x-64gb-space-grau_h_5143",
            "https://www.handyverkauf.net/apple-iphone-se-2022-64gb-mitternacht_h_10236",
            "https://www.handyverkauf.net/apple-iphone-se-2022-128gb-mitternacht_h_10239",
            "https://www.handyverkauf.net/apple-iphone-se-2022-256gb-mitternacht_h_10242"]
+
