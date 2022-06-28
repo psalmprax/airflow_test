@@ -1,6 +1,6 @@
-FROM selenium/standalone-chrome
-FROM python:3.6-buster
-FROM dperson/torproxy
+# FROM selenium/standalone-chrome
+# FROM python:3.6-buster
+# FROM dperson/torproxy
 FROM apache/airflow:latest
 # apache/airflow:latest
 # RUN apt-get update -y \
