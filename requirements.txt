@@ -6,5 +6,6 @@ selenium
 random-user-agent
 webdriver_manager
 webdriver-setup
+pyvirtualdisplay
 # httpx==0.20.0
 # 3.1.27
