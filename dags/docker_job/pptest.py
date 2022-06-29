@@ -209,7 +209,7 @@ def create_dag(
                 op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
             )
             # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
-            create_product_price_table >> start_clean >> python_task >> upsert_product_price_table >> end_clean
+            start_clean >> create_product_price_table >> python_task >> upsert_product_price_table >> end_clean
     return dag
 
 
