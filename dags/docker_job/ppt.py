@@ -120,7 +120,7 @@ def run_from_class(**kwargs):
     from airflow.hooks.postgres_hook import PostgresHook
     from webdriver_manager.chrome import ChromeDriverManager
     # from docker_job.pricing.vars import *  # iphones
-    from docker_job.scrape import *
+    from docker_job.scrape import main
     from docker_job.pricing.vars import driver, clickables, xpath, options
     from selenium import webdriver
 
