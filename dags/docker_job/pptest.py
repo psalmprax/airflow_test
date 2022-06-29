@@ -115,7 +115,7 @@ class ProductPriceData:
 
 
 def run_from_class(**kwargs):
-    from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
+    # from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
     from airflow.hooks.postgres_hook import PostgresHook
     from webdriver_manager.chrome import ChromeDriverManager
 
@@ -133,8 +133,8 @@ def run_from_class(**kwargs):
     #                                clickables, xpath)
     # phone_data = main(kwargs["url"], ppd)
     phone_data = ppd.scrape_phones([kwargs["url"]],
-                                   driver,
-                                   clickables, xpath)
+                                   kwargs["driver"],
+                                   kwargs["clickables"], kwargs["xpath"])
     result += phone_data
     results = [(a.strip("€"), b, c, d, str(e), f) for row in result
                for a, b, c, d, e, f in zip(row['Prices'],
@@ -204,6 +204,7 @@ def create_dag(
                          f"&& rm -rf /tmp/.p* 2>/dev/null || exit 0"
         )
         from docker_job.pricing.vars import iphones
+        from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
         for url in iphones[:10]:
             ti = url.split("/")[-1]
             print(ti)
@@ -211,7 +212,7 @@ def create_dag(
                 task_id=f"{task_id}-{ti}",
                 provide_context=True,
                 python_callable=my_func,
-                op_kwargs={"url": url}
+                op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
             )
             # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
             start_clean >> python_task >> end_clean
