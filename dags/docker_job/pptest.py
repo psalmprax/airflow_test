@@ -119,19 +119,13 @@ def run_from_class(**kwargs):
     from airflow.hooks.postgres_hook import PostgresHook
     from webdriver_manager.chrome import ChromeDriverManager
 
-    # pg_hook = PostgresHook(postgres_conn_id='pricing')
-    # connection = pg_hook.get_conn()
-    # cursor = connection.cursor()
-
-    # ChromeDriverManager().install()
+    pg_hook = PostgresHook(postgres_conn_id='pricing')
+    connection = pg_hook.get_conn()
+    cursor = connection.cursor()
 
     ppd = ProductPriceData()
     result = list()
     print(kwargs["url"])
-    # phone_data = ppd.scrape_phones([kwargs["url"]],
-    #                                driver,
-    #                                clickables, xpath)
-    # phone_data = main(kwargs["url"], ppd)
     phone_data = ppd.scrape_phones([kwargs["url"]],
                                    kwargs["driver"],
                                    kwargs["clickables"], kwargs["xpath"])
@@ -143,11 +137,11 @@ def run_from_class(**kwargs):
                                            row['Condition'],
                                            row['Created_at'],
                                            row['Am_Pm'])]
-    # insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
-    # "created_at) values {} "
-    # insert_query = insert_query.format(','.join(['%s'] * len(results)))
-    # cursor.execute(insert_query, results)
-    # cursor.execute("COMMIT")
+    insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
+                   "created_at) values {} "
+    insert_query = insert_query.format(','.join(['%s'] * len(results)))
+    cursor.execute(insert_query, results)
+    cursor.execute("COMMIT")
     print(results)
     # return {"data": result}
 
@@ -176,17 +170,17 @@ def create_dag(
         #     python_callable=my_func
         # )
 
-        # create_product_price_table = PostgresOperator(
-        #     task_id=f"table_{task_id}_creation",
-        #     postgres_conn_id="pricing",
-        #     sql="""sql/create_product_price_table.sql"""
-        # )
-        #
-        # upsert_product_price_table = PostgresOperator(
-        #     task_id=f"table_{task_id}_upsert",
-        #     postgres_conn_id="pricing",
-        #     sql="""sql/upsert_product_price_table.sql"""
-        # )
+        create_product_price_table = PostgresOperator(
+            task_id=f"table_{task_id}_creation",
+            postgres_conn_id="pricing",
+            sql="""sql/create_product_price_table.sql"""
+        )
+
+        upsert_product_price_table = PostgresOperator(
+            task_id=f"table_{task_id}_upsert",
+            postgres_conn_id="pricing",
+            sql="""sql/upsert_product_price_table.sql"""
+        )
 
         start_clean = BashOperator(
             task_id=f'start_clean-{task_id}',
@@ -215,7 +209,7 @@ def create_dag(
                 op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
             )
             # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
-            start_clean >> python_task >> end_clean
+            create_product_price_table >> start_clean >> python_task >> upsert_product_price_table >> end_clean
     return dag
 
 
