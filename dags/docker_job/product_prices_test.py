@@ -12,10 +12,9 @@ from airflow.providers.postgres.operators.postgres import PostgresOperator
 from bs4 import BeautifulSoup
 # from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
-
-from docker_job.pricing.vars import * #iphones
+from docker_job.pricing.vars import iphones
 
 
 class ProductPriceData:
@@ -101,7 +100,7 @@ class ProductPriceData:
 
                     # open dropdown menu again
                     WebDriverWait(self.driver, 20).until(
-                        EC.element_to_be_clickable((By.XPATH, clickable_links))).click()
+                        expected_conditions.element_to_be_clickable((By.XPATH, clickable_links))).click()
 
                     # click conditiona status (sehr gut,gut, ****)
                     self.driver.find_element_by_xpath(xpath.format(val_class)).click()
@@ -117,8 +116,10 @@ class ProductPriceData:
 
 
 def run_from_class(**kwargs):
-    from docker_job.pricing.vars import options, clickables, xpath
+    # from docker_job.pricing.vars import options, clickables, xpath
     from airflow.hooks.postgres_hook import PostgresHook
+    from docker_job.pricing.vars import driver, clickables, xpath, options
+    from selenium import webdriver
     import os
     cwd = os.getcwd()
     print(cwd)
@@ -142,7 +143,7 @@ def run_from_class(**kwargs):
                                            row['Created_at'],
                                            row['Am_Pm'])]
     # insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
-                   # "created_at) values {} "
+    # "created_at) values {} "
     # insert_query = insert_query.format(','.join(['%s'] * len(results)))
     # cursor.execute(insert_query, results)
     # cursor.execute("COMMIT")
@@ -185,7 +186,6 @@ def create_dag(
         #     postgres_conn_id="pricing",
         #     sql="""sql/upsert_product_price_table.sql"""
         # )
-
 
         start_clean = BashOperator(
             task_id=f'start_clean-{task_id}',

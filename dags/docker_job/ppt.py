@@ -12,11 +12,9 @@ from airflow.providers.postgres.operators.postgres import PostgresOperator
 from bs4 import BeautifulSoup
 # from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
-
-from docker_job.pricing.vars import *  # iphones
-from docker_job.scrape import *
+from docker_job.pricing.vars import iphones
 
 
 class ProductPriceData:
@@ -102,7 +100,7 @@ class ProductPriceData:
 
                     # open dropdown menu again
                     WebDriverWait(self.driver, 20).until(
-                        EC.element_to_be_clickable((By.XPATH, clickable_links))).click()
+                        expected_conditions.element_to_be_clickable((By.XPATH, clickable_links))).click()
 
                     # click conditiona status (sehr gut,gut, ****)
                     self.driver.find_element_by_xpath(xpath.format(val_class)).click()
@@ -118,9 +116,13 @@ class ProductPriceData:
 
 
 def run_from_class(**kwargs):
-    from docker_job.pricing.vars import options, clickables, xpath
+    # from docker_job.pricing.vars import options, clickables, xpath
     from airflow.hooks.postgres_hook import PostgresHook
     from webdriver_manager.chrome import ChromeDriverManager
+    # from docker_job.pricing.vars import *  # iphones
+    from docker_job.scrape import *
+    from docker_job.pricing.vars import driver, clickables, xpath, options
+    from selenium import webdriver
 
     # pg_hook = PostgresHook(postgres_conn_id='pricing')
     # connection = pg_hook.get_conn()
