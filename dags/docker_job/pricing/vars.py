@@ -13,8 +13,10 @@ options = webdriver.ChromeOptions()
 #              'Safari/537.36 '
 # options.add_argument('user-agent={0}'.format(user_agent))
 try:
+    print("The main part of the extension ************************")
     options.add_extension('dags/docker_job/mjnbclmflcpookeapghfhapeffmpodij.crx')
 except Exception as ex:
+    print("Exception part of the extension ************************************************", ex)
     options.add_extension('mjnbclmflcpookeapghfhapeffmpodij.crx')
 
 options.add_argument('--disable-infobars')
@@ -27,7 +29,7 @@ options.add_argument("---force-device-scale-factor=1")
 
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
-options.add_argument('--incognito')
+# options.add_argument('--incognito')
 options.add_argument("log-level=3")
 
 # driver = webdriver.Chrome(executable_path="chromedriver", options=options)
