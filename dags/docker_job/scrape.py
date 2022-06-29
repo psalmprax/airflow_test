@@ -19,6 +19,7 @@ clickables = "//button[@id='buttonZustand']"
 xpath = "//ul[@class='uk-nav uk-nav-dropdown uk-text-bold' and @id='dropdownZustand']//li[@class='{} " \
         "uk-dropdown-close'] "
 
+
 def get_proxies():
     """Return the list of elite proxies
     :rtype: list
@@ -120,7 +121,8 @@ def create_webdriver(browser, proxy_config):
 
         chrome_options.add_argument("log-level=3")
         # driver = get_webdriver_for(browser, options=chrome_options, desired_capabilities=proxy_config)
-        driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=chrome_options, desired_capabilities=proxy_config)
+        driver = webdriver.Chrome(executable_path="dags/docker_job/chromedriver", options=chrome_options,
+                                  desired_capabilities=proxy_config)
 
     return driver
 
@@ -150,7 +152,6 @@ def make_request_with_proxy(browser, proxy_config, urls, ppd):
 
 
 def main(urls, ppt):
-
     proxies = get_proxies()
     proxy_pool = cycle(proxies)
 

@@ -13,8 +13,6 @@ from bs4 import BeautifulSoup
 # from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
-from docker_job.pricing.vars import iphones
 
 
 class ProductPriceData:
@@ -202,6 +200,7 @@ def create_dag(
                          f"&& rm -rf /tmp/* 2>/dev/null || exit 0"
                          f"&& rm -rf /tmp/.p* 2>/dev/null || exit 0"
         )
+        from selenium.webdriver.support.ui import WebDriverWait
         for url in iphones[:10]:
             ti = url.split("/")[-1]
             print(ti)
