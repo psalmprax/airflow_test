@@ -10,6 +10,8 @@ FROM apache/airflow:latest
 #     && apt-get clean
 
 # RUN adduser --disabled-password --gecos '' airflow
+ENV AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT=3000
+ENV AIRFLOW__CELERY__OPERATION_TIMEOUT=3000
 USER root
 RUN  apt-get update \
   && apt-get install -y wget \

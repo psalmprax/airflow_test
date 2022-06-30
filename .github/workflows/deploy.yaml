@@ -82,3 +82,8 @@ jobs:
 #            && sudo docker-compose up --build -d
 #            sudo docker-compose down -v && sudo docker system prune -a -f &&
 #            && cd .. && rm -rf airflow_test 2> /dev/null
+
+
+#############  data warehouse troubleshoot  #####################################
+# https://aws.amazon.com/premiumsupport/knowledge-center/rds-connectivity-instance-subnet-vpc/
+# https://aws.amazon.com/premiumsupport/knowledge-center/rds-connectivity-instance-subnet-vpc/
