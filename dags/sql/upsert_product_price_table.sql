@@ -5,7 +5,8 @@ left join analytics_objects.obj_product_price pp on pps.price = pp.price
 and pps.anbieter = pp.anbieter
 and pps.device = pp.device
 and pps.condition = pp.condition
-and cast(pps.created_at as DATE) = cast(pp.created_at as DATE) where pp.price is null
-and pps.am_pm = pp.am_pm;
+and cast(pps.created_at as DATE) = cast(pp.created_at as DATE)
+and pps.am_pm = pp.am_pm
+where pp.price is null;
 
 drop table if exists analytics_objects.obj_product_price_stage;
