@@ -138,7 +138,7 @@ def run_from_class(**kwargs):
                                            row['Created_at'],
                                            row['Am_Pm'])]
     insert_query = "insert into analytics_objects.obj_product_price_stage (price,anbieter,device,condition," \
-                   "created_at) values {} "
+                   "created_at, am_pm) values {} "
     insert_query = insert_query.format(','.join(['%s'] * len(results)))
     cursor.execute(insert_query, results)
     cursor.execute("COMMIT")
