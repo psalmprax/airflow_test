@@ -58,6 +58,9 @@ x-airflow-common:
     AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT: 3000
     AIRFLOW__CELERY__OPERATION_TIMEOUT: 3000
     AIRFLOW__CELERY__WORKER_CONCURRENCY: 6
+    AIRFLOW__SCHEDULE__JOB__HEARTBEAT_SEC: 300
+    AIRFLOW__SCHEDULE__MAX_TIS_PER_QUERY: 256
+    AIRFLOW__SCHEDULE__PARSING_PROCESSES: 10
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -114,7 +117,11 @@ services:
     restart: always
     deploy:
       replicas: 3
-#      mode: replicated
+      restart_policy:
+        condition: on-failure
+        delay: 8s
+        max_attempts: 1000
+      mode: replicated
 #      placement:
 #        constraints:
 #          - node.labels.type == scheduler
@@ -123,6 +130,8 @@ services:
     <<: *airflow-common
     command: celery worker
     restart: always
+    depends_on:
+      - airflow-scheduler
     deploy:
       replicas: 3
       mode: replicated
