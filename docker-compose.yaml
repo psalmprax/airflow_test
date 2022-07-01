@@ -109,6 +109,12 @@ services:
     <<: *airflow-common
     command: scheduler
     restart: always
+    deploy:
+      replicas: 3
+      mode: replicated
+      placement:
+        constraints:
+          - node.labels.type == scheduler
 
   airflow-worker:
     <<: *airflow-common
