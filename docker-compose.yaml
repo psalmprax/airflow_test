@@ -115,7 +115,7 @@ services:
     command: celery worker
     restart: always
     deploy:
-      replicas: 1
+      replicas: 3
       mode: replicated
       placement:
         constraints:
