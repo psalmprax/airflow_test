@@ -19,8 +19,8 @@ jobs:
           proxy_key: ${{ secrets.EC2_SSH_KEY }}
           proxy_host: ${{ secrets.HOST_DNS }}
           proxy_username: ${{ secrets.USERNAME }}
-          host: "10.3.0.188"
-          username: "ubuntu"
+          host: ${{ secrets.TARGET_DNS }}
+          username: ${{ secrets.TARGET_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             FILE=/home/ubuntu/airflow_test/docker-compose.yaml
