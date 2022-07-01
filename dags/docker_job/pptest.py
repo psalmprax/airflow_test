@@ -223,7 +223,7 @@ default_args = {
     'email_on_retry': False,
     'retries': 5,
     'retry_delay': timedelta(minutes=2),
-    'execution_timeout': timedelta(seconds=200000000000000),
+    'execution_timeout': timedelta(seconds=200000),
 }
 description = f'A {task_id} DAG '
 schedule_interval = timedelta(minutes=150)
