@@ -162,7 +162,7 @@ def create_dag(
               description=description,
               dag_id=dag_id,
               start_date=start_date,
-              catchup=False,
+              catchup=True,
               template_searchpath=['/opt/airflow/dags'])
     with dag:
         # python_task = PythonOperator(
