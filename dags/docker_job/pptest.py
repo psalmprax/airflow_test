@@ -200,7 +200,7 @@ def create_dag(
         )
         from docker_job.pricing.vars import iphones
         from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
-        for url in iphones[:10]:
+        for url in iphones:
             ti = url.split("/")[-1]
             print(ti)
             python_task = PythonOperator(
