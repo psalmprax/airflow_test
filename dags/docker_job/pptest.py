@@ -131,7 +131,7 @@ def run_from_class(**kwargs):
     #                                kwargs["driver"],
     #                                kwargs["clickables"], kwargs["xpath"])
     phone_data = ppd.scrape_phones([kwargs["url"]],
-                                   webdriver.Chrome(ChromeDriverManager().install(), options=kwargs["options"]),
+                                   webdriver.Chrome(executable_path="chromedriver", options=options),
                                    kwargs["clickables"], kwargs["xpath"])
     result += phone_data
     results = [(a.strip("€"), b, c, d, str(e), f) for row in result
@@ -220,14 +220,14 @@ default_args = {
     'email': ['samuel.momoh-olle@asgoodasnew.com'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 50,
-    'retry_delay': timedelta(minutes=1),
+    'retries': 250,
+    'retry_delay': timedelta(minutes=3),
     'execution_timeout': timedelta(seconds=200000),
 }
 description = f'A {task_id} DAG '
 schedule_interval = timedelta(minutes=150)
 dag_id = f'Job-{task_id}'
-start_date = datetime(2022, 7, 1)
+start_date = datetime(2022, 7, 2)
 
 globals()[dag_id] = create_dag(dag_id=dag_id,
                                schedule=schedule_interval,
