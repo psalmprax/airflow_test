@@ -34,7 +34,7 @@ options.add_argument("log-level=3")
 
 # driver = webdriver.Chrome(executable_path="chromedriver", options=options)
 # driver.Manage().Window.Maximize()
-driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+# driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 clickables = "//button[@id='buttonZustand']"
 xpath = "//ul[@class='uk-nav uk-nav-dropdown uk-text-bold' and @id='dropdownZustand']//li[@class='{} " \
         "uk-dropdown-close'] "
