@@ -198,7 +198,7 @@ def create_dag(
                          f"&& rm -rf /tmp/.p* 2>/dev/null || exit 0"
         )
         from docker_job.pricing.vars import iphones
-        from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
+        from docker_job.pricing.vars import options, clickables, xpath, iphones
         from webdriver_manager.chrome import ChromeDriverManager
         for url in iphones:
             ti = url.split("/")[-1]
