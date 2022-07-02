@@ -116,14 +116,14 @@ services:
     command: scheduler
     restart: always
     deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 500M
+#      resources:
+#        limits:
+#          cpus: '0.001'
+#          memory: 500M
 #        reservations:
 #          cpus: '0.0001'
 #          memory: 200M
-      replicas: 7
+      replicas: 4
       restart_policy:
         condition: on-failure
 #        delay: 8s
@@ -140,12 +140,12 @@ services:
     depends_on:
       - airflow-scheduler
     deploy:
-      replicas: 7
+      replicas: 4
       mode: replicated
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 500M
+#      resources:
+#        limits:
+#          cpus: '0.001'
+#          memory: 500M
 #        reservations:
 #          cpus: '0.0001'
 #          memory: 200M
