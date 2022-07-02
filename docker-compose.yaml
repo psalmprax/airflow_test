@@ -120,9 +120,9 @@ services:
         limits:
           cpus: '0.001'
           memory: 500M
-        reservations:
-          cpus: '0.0001'
-          memory: 200M
+#        reservations:
+#          cpus: '0.0001'
+#          memory: 200M
       replicas: 7
       restart_policy:
         condition: on-failure
@@ -146,9 +146,9 @@ services:
         limits:
           cpus: '0.001'
           memory: 500M
-        reservations:
-          cpus: '0.0001'
-          memory: 200M
+#        reservations:
+#          cpus: '0.0001'
+#          memory: 200M
 #      placement:
 #        constraints:
 #          - node.labels.type == worker
