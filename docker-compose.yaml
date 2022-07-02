@@ -115,13 +115,13 @@ services:
     <<: *airflow-common
     command: scheduler
     restart: always
-#    deploy:
-#      replicas: 3
-#      restart_policy:
-#        condition: on-failure
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
 #        delay: 8s
 #        max_attempts: 1000
-#      mode: replicated
+      mode: replicated
 #      placement:
 #        constraints:
 #          - node.labels.type == scheduler
@@ -132,9 +132,9 @@ services:
     restart: always
     depends_on:
       - airflow-scheduler
-#    deploy:
-#      replicas: 3
-#      mode: replicated
+    deploy:
+      replicas: 3
+      mode: replicated
 #      placement:
 #        constraints:
 #          - node.labels.type == worker
