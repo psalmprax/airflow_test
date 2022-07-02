@@ -26,9 +26,11 @@ RUN apt-get update
 RUN apt install -y xvfb
 RUN apt-get install -y google-chrome-stable
 RUN chmod -R 777 /opt/airflow/logs
+RUN chmod -R 777 /opt/airflow/dags
 RUN chmod -R 777 /opt/airflow
 RUN chown -R airflow:5000 /opt/airflow/logs
 RUN chown -R airflow:5000 /opt/airflow
+RUN chown -R airflow:5000 /opt/airflow/dags
 
 USER airflow
 COPY requirements.txt requirements.txt
