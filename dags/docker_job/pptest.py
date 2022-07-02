@@ -131,7 +131,7 @@ def run_from_class(**kwargs):
     #                                kwargs["driver"],
     #                                kwargs["clickables"], kwargs["xpath"])
     phone_data = ppd.scrape_phones([kwargs["url"]],
-                                   webdriver.Chrome(executable_path="chromedriver", options=options),
+                                   webdriver.Chrome(executable_path="chromedriver", options=kwargs['options']),
                                    kwargs["clickables"], kwargs["xpath"])
     result += phone_data
     results = [(a.strip("€"), b, c, d, str(e), f) for row in result
