@@ -117,7 +117,6 @@ class ProductPriceData:
 def run_from_class(**kwargs):
     # from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
     from airflow.hooks.postgres_hook import PostgresHook
-    from webdriver_manager.chrome import ChromeDriverManager
 
     pg_hook = PostgresHook(postgres_conn_id='pricing')
     connection = pg_hook.get_conn()
@@ -200,6 +199,7 @@ def create_dag(
         )
         from docker_job.pricing.vars import iphones
         from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
+        from webdriver_manager.chrome import ChromeDriverManager
         for url in iphones:
             ti = url.split("/")[-1]
             print(ti)
@@ -207,7 +207,11 @@ def create_dag(
                 task_id=f"{task_id}-{ti}",
                 provide_context=True,
                 python_callable=my_func,
-                op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
+                op_kwargs={"url": url,
+                           'driver': webdriver.Chrome(ChromeDriverManager().install(), options=options),
+                           'clickables': clickables,
+                           'xpath': xpath,
+                           'options': options}
             )
             # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
             start_clean >> create_product_price_table >> python_task >> upsert_product_price_table >> end_clean
