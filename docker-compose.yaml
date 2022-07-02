@@ -116,7 +116,7 @@ services:
     command: scheduler
     restart: always
     deploy:
-      replicas: 3
+      replicas: 7
       restart_policy:
         condition: on-failure
 #        delay: 8s
@@ -133,7 +133,7 @@ services:
     depends_on:
       - airflow-scheduler
     deploy:
-      replicas: 3
+      replicas: 7
       mode: replicated
 #      placement:
 #        constraints:

@@ -220,8 +220,8 @@ default_args = {
     'email': ['samuel.momoh-olle@asgoodasnew.com'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 5,
-    'retry_delay': timedelta(minutes=2),
+    'retries': 50,
+    'retry_delay': timedelta(minutes=1),
     'execution_timeout': timedelta(seconds=200000),
 }
 description = f'A {task_id} DAG '
