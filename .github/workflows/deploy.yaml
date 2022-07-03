@@ -76,9 +76,6 @@ jobs:
             sudo chmod -R 777 /home/ubuntu/airflow_test/plugins/ && 
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/plugins/ && 
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d &&
-            gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys FDC247B7 &&
-            echo 'deb https://repo.windscribe.com/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/windscribe-repo.list && 
-            sudo apt-get update -y && apt-get install windscribe-cli && 
             sudo dpkg -i /home/ubuntu/airflow_test/dags/windscribe_2.4.8_beta_amd64.deb &&
             sudo apt install expect -y &&
             
@@ -98,6 +95,9 @@ jobs:
 
 #            sudo apt-key adv --keyserver keyserver.ubuntu.com:80 --recv-key FDC247B7 &&
 
+#            gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys FDC247B7 &&
+#            echo 'deb https://repo.windscribe.com/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/windscribe-repo.list &&
+#            sudo apt-get update -y && apt-get install windscribe-cli &&
 #            ls -ltra && sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down -v 2> /dev/null &&
 #            exit 0 && sudo docker system prune -a -f && ll &&
 #            && sudo docker-compose up --build -d
