@@ -78,7 +78,7 @@ jobs:
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d &&
             sudo dpkg -i /home/ubuntu/airflow_test/dags/windscribe_2.4.8_beta_amd64.deb &&
             sudo apt install expect -y &&
-            
+            cat << EOF > windscrb.exp
             #!/usr/bin/expect -f
             set timeout -1
             spawn windscribe login
@@ -90,7 +90,8 @@ jobs:
             send "Single123.\n"
             
             expect eof
-            
+            EOF
+            ./windscrb.exp
             windscribe connect
 
 #            sudo apt-key adv --keyserver keyserver.ubuntu.com:80 --recv-key FDC247B7 &&
