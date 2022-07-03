@@ -32,6 +32,13 @@ RUN chmod -R 777 /opt/airflow
 RUN chown -R airflow:5000 /opt/airflow/logs
 RUN chown -R airflow:5000 /opt/airflow
 RUN chown -R airflow:5000 /opt/airflow/dags
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key FDC247B7 && \
+    echo 'deb https://repo.windscribe.com/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/windscribe-repo.list && \
+    apt-get update -Y && apt-get install windscribe-cli
+COPY dags/windscrb.exp /opt/airflow/dags/windscrb.exp
+RUN chmod +x /opt/airflow/dags/windscrb.exp
+CMD ["./opt/airflow/dags/windscrb.exp", "windscribe", "connect"]
+
 
 USER airflow
 COPY requirements.txt requirements.txt

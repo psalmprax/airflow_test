@@ -1,0 +1,12 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+spawn windscribe login
+
+expect "Windscribe Username:"
+send "psalmprax\n"
+
+expect "Windscribe Password:"
+send "Single123.\n"
+
+expect eof
