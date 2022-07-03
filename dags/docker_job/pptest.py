@@ -127,12 +127,12 @@ def run_from_class(**kwargs):
     ppd = ProductPriceData()
     result = list()
     print(kwargs["url"])
-    # phone_data = ppd.scrape_phones([kwargs["url"]],
-    #                                kwargs["driver"],
-    #                                kwargs["clickables"], kwargs["xpath"])
     phone_data = ppd.scrape_phones([kwargs["url"]],
-                                   webdriver.Chrome(ChromeDriverManager().install(), options=kwargs['options']),
+                                   kwargs["driver"],
                                    kwargs["clickables"], kwargs["xpath"])
+    # phone_data = ppd.scrape_phones([kwargs["url"]],
+    #                                webdriver.Chrome(ChromeDriverManager().install(), options=kwargs['options']),
+    #                                kwargs["clickables"], kwargs["xpath"])
     result += phone_data
     results = [(a.strip("€"), b, c, d, str(e), f) for row in result
                for a, b, c, d, e, f in zip(row['Prices'],
@@ -197,7 +197,7 @@ def create_dag(
                          f"&& rm -rf /tmp/.p* 2>/dev/null || exit 0"
         )
         from docker_job.pricing.vars import iphones
-        from docker_job.pricing.vars import options, clickables, xpath, iphones
+        from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
         for url in iphones:
             ti = url.split("/")[-1]
             print(ti)
@@ -205,8 +205,8 @@ def create_dag(
                 task_id=f"{task_id}-{ti}",
                 provide_context=True,
                 python_callable=my_func,
-                # op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
-                op_kwargs={"url": url, 'clickables': clickables, 'xpath': xpath, 'options': options}
+                op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
+                # op_kwargs={"url": url, 'clickables': clickables, 'xpath': xpath, 'options': options}
             )
             # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
             start_clean >> create_product_price_table >> python_task >> upsert_product_price_table >> end_clean
