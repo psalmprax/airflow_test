@@ -228,7 +228,7 @@ def create_dag(
                          f"&& rm -rf /tmp/.p* 2>/dev/null || exit 0"
         )
         from docker_job.pricing.vars import iphones
-        from docker_job.pricing.vars import options, clickables, xpath, iphones, driver
+        from docker_job.pricing.vars import options, clickables, xpath, iphones
         for url in iphones:
             ti = url.split("/")[-1]
             print(ti)
@@ -236,8 +236,8 @@ def create_dag(
                 task_id=f"{task_id}-{ti}",
                 provide_context=True,
                 python_callable=my_func,
-                op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
-                # op_kwargs={"url": url, 'clickables': clickables, 'xpath': xpath, 'options': options}
+                # op_kwargs={"url": url, 'driver': driver, 'clickables': clickables, 'xpath': xpath, 'options': options}
+                op_kwargs={"url": url, 'clickables': clickables, 'xpath': xpath, 'options': options}
             )
             # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
             start_clean >> create_product_price_table >> python_task >> upsert_product_price_table >> end_clean
