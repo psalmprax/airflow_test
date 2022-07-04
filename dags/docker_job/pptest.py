@@ -144,7 +144,7 @@ def run_from_class(**kwargs):
     PROXY = "socks5://localhost:9050"  # IP:PORT or HOST:PORT
     options = webdriver.ChromeOptions()
 
-    options.add_argument("user-data-dir=/home/psalmprax/dags/google-chrome")
+    options.add_argument("user-data-dir=/opt/airflow/dags/google-chrome")
     options.add_argument('--headless')
     options.add_argument('user-agent={0}'.format(user_agent))
 
