@@ -156,14 +156,14 @@ def run_from_class(**kwargs):
     options.add_argument("--silent")
 
     options.add_argument('--proxy-server=%s' % PROXY)
-    driver = webdriver.Chrome(chrome_options=options, executable_path=ChromeDriverManager().install())
+    driver_chrome = webdriver.Chrome(chrome_options=options, executable_path=ChromeDriverManager().install())
     ############################################################################################################
     # phone_data = ppd.scrape_phones([kwargs["url"]],
     #                                kwargs["driver"],
     #                                kwargs["clickables"], kwargs["xpath"])
-    # phone_data = ppd.scrape_phones([kwargs["url"]],
-    #                                webdriver.Chrome(ChromeDriverManager().install(), options=kwargs['options']),
-    #                                kwargs["clickables"], kwargs["xpath"])
+    phone_data = ppd.scrape_phones([kwargs["url"]],
+                                   driver_chrome,
+                                   kwargs["clickables"], kwargs["xpath"])
     result += phone_data
     results = [(a.strip("€"), b, c, d, str(e), f) for row in result
                for a, b, c, d, e, f in zip(row['Prices'],

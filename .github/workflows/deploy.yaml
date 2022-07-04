@@ -86,7 +86,7 @@ jobs:
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/logs/ &&
             sudo chmod -R 777 /home/ubuntu/airflow_test/plugins/ && 
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/plugins/ && 
-            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d &&
+            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d
 
 #            cat << EOF > windscrb.exp
 #            #!/usr/bin/expect -f
