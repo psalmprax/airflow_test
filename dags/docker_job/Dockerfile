@@ -25,6 +25,7 @@ RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' |
 RUN apt-get update
 RUN apt install -y xvfb
 # RUN apt install expect -y
+RUN apt install tor
 RUN apt-get install -y google-chrome-stable
 # RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
 RUN chmod -R 777 /opt/airflow/logs
@@ -33,18 +34,13 @@ RUN chmod -R 777 /opt/airflow
 RUN chown -R airflow:5000 /opt/airflow/logs
 RUN chown -R airflow:5000 /opt/airflow
 RUN chown -R airflow:5000 /opt/airflow/dags
+
 # RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key FDC247B7 && \
 #     echo 'deb https://repo.windscribe.com/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/windscribe-repo.list && \
 #     apt-get update -Y && apt-get install windscribe-cli
 
-COPY dags/windscribe_2.4.8_beta_amd64.deb /opt/airflow/dags/windscribe_2.4.8_beta_amd64.deb
-
-# RUN dpkg -e /opt/airflow/dags/windscribe_2.4.8_beta_amd64.deb tmp
-# RUN dpkg -i /opt/airflow/dags/windscribe_2.4.8_beta_amd64.deb
-# COPY dags/windscrb.exp /opt/airflow/dags/windscrb.exp
-# RUN chmod +x /opt/airflow/dags/windscrb.exp
-
-CMD ["./opt/airflow/dags/windscrb.exp", "windscribe", "connect"]
+# COPY dags/windscribe_2.4.8_beta_amd64.deb /opt/airflow/dags/windscribe_2.4.8_beta_amd64.deb
+# CMD ["./opt/airflow/dags/windscrb.exp", "windscribe", "connect"]
 
 
 USER airflow

@@ -1,0 +1,6 @@
+2022/06/28-15:15:29.744 1255b Creating DB /home/psalmprax/.config/google-chrome/Default/IndexedDB/https_googleads.g.doubleclick.net_0.indexeddb.leveldb since it was missing.
+2022/06/28-15:15:29.751 1255b Reusing MANIFEST /home/psalmprax/.config/google-chrome/Default/IndexedDB/https_googleads.g.doubleclick.net_0.indexeddb.leveldb/MANIFEST-000001
+2022/06/28-15:16:05.007 11a0d Level-0 table #5: started
+2022/06/28-15:16:05.008 11a0d Level-0 table #5: 405 bytes OK
+2022/06/28-15:16:05.020 11a0d Delete type=0 #3
+2022/06/28-15:16:05.020 11a0d Manual compaction at level-0 from (begin) .. (end); will stop at (end)

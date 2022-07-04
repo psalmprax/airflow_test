@@ -127,9 +127,40 @@ def run_from_class(**kwargs):
     ppd = ProductPriceData()
     result = list()
     print(kwargs["url"])
-    phone_data = ppd.scrape_phones([kwargs["url"]],
-                                   kwargs["driver"],
-                                   kwargs["clickables"], kwargs["xpath"])
+
+    ####################################################################################
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium import webdriver
+    from random_user_agent.params import SoftwareName, OperatingSystem
+    from random_user_agent.user_agent import UserAgent
+
+    softwares_names = [SoftwareName.FIREFOX.value]
+    operatiing_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
+    user_agent_rotator = UserAgent(softwares_names=softwares_names,
+                                   operatiing_systems=operatiing_systems,
+                                   limit=10000000)
+    user_agent = user_agent_rotator.get_random_user_agent()
+
+    PROXY = "socks5://localhost:9050"  # IP:PORT or HOST:PORT
+    options = webdriver.ChromeOptions()
+
+    options.add_argument("user-data-dir=/home/psalmprax/dags/google-chrome")
+    options.add_argument('--headless')
+    options.add_argument('user-agent={0}'.format(user_agent))
+
+    options.add_argument('--disable-infobars')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--no-sandbox')
+
+    options.add_argument("--disable-browser-side-navigation")
+    options.add_argument("--silent")
+
+    options.add_argument('--proxy-server=%s' % PROXY)
+    driver = webdriver.Chrome(chrome_options=options, executable_path=ChromeDriverManager().install())
+    ############################################################################################################
+    # phone_data = ppd.scrape_phones([kwargs["url"]],
+    #                                kwargs["driver"],
+    #                                kwargs["clickables"], kwargs["xpath"])
     # phone_data = ppd.scrape_phones([kwargs["url"]],
     #                                webdriver.Chrome(ChromeDriverManager().install(), options=kwargs['options']),
     #                                kwargs["clickables"], kwargs["xpath"])
