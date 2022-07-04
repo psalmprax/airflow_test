@@ -141,7 +141,7 @@ def run_from_class(**kwargs):
                                    limit=10000000)
     user_agent = user_agent_rotator.get_random_user_agent()
 
-    PROXY = "socks5://localhost:9050"  # IP:PORT or HOST:PORT
+    PROXY = "socks5://127.0.0.1:9050"  # IP:PORT or HOST:PORT
     options = webdriver.ChromeOptions()
 
     options.add_argument("user-data-dir=/home/airflow/.config/google-chrome")
@@ -156,7 +156,7 @@ def run_from_class(**kwargs):
     options.add_argument("--silent")
 
     options.add_argument('--proxy-server=%s' % PROXY)
-    driver_chrome = webdriver.Chrome(chrome_options=options, executable_path=ChromeDriverManager().install())
+    driver_chrome = webdriver.Chrome(options=options, executable_path=ChromeDriverManager().install())
     ############################################################################################################
     # phone_data = ppd.scrape_phones([kwargs["url"]],
     #                                kwargs["driver"],
