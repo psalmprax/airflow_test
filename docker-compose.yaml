@@ -123,9 +123,9 @@ services:
 #        reservations:
 #          cpus: '0.0001'
 #          memory: 200M
-      replicas: 4
-      restart_policy:
-        condition: on-failure
+      replicas: 2
+#      restart_policy:
+#        condition: on-failure
 #        delay: 8s
 #        max_attempts: 1000
       mode: replicated
