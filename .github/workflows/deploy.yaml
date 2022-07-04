@@ -78,7 +78,7 @@ jobs:
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d &&
             sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys FDC247B7 &&
             echo 'deb https://repo.windscribe.com/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/windscribe-repo.list &&
-            sudo apt-get update -y && sudo apt-get install windscribe-cli &&
+            sudo apt-get update -y && sudo apt-get install windscribe-cli -y &&
             sudo apt install expect -y &&
             cat << EOF > windscrb.exp
             #!/usr/bin/expect -f
