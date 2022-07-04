@@ -13,6 +13,17 @@ jobs:
       - name: Checkout Files
         uses: actions/checkout@v2
 
+      - name: ssh to jump server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script:
+            sudo yum install git -y && 
+            sudo amazon-linux-extras install epel -y &&
+            sudo yum install dpkg-devel dpkg-dev -y
+
       - name: new ssh proxy
         uses: appleboy/ssh-action@master
         with:
@@ -80,6 +91,7 @@ jobs:
             echo 'deb https://repo.windscribe.com/ubuntu bionic main' | sudo tee /etc/apt/sources.list.d/windscribe-repo.list &&
             sudo apt-get update -y && sudo apt-get install windscribe-cli -y &&
             sudo apt install expect -y &&
+            sudo apt install iptables -y &&
             cat << EOF > windscrb.exp
             #!/usr/bin/expect -f
             set timeout -1
