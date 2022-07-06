@@ -25,7 +25,7 @@ RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' |
 RUN apt-get update
 RUN apt install -y xvfb
 # RUN apt install expect -y
-RUN apt install tor -y
+# RUN apt install tor -y
 RUN apt-get install -y google-chrome-stable
 # RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
 RUN chmod -R 777 /opt/airflow/logs

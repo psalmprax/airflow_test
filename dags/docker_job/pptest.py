@@ -120,9 +120,9 @@ def run_from_class(**kwargs):
     from webdriver_manager.chrome import ChromeDriverManager
     from selenium import webdriver
 
-    pg_hook = PostgresHook(postgres_conn_id='pricing')
-    connection = pg_hook.get_conn()
-    cursor = connection.cursor()
+    # pg_hook = PostgresHook(postgres_conn_id='pricing')
+    # connection = pg_hook.get_conn()
+    # cursor = connection.cursor()
 
     ppd = ProductPriceData()
     result = list()
@@ -133,6 +133,10 @@ def run_from_class(**kwargs):
     from selenium import webdriver
     from random_user_agent.params import SoftwareName, OperatingSystem
     from random_user_agent.user_agent import UserAgent
+    # from pyvirtualdisplay import Display
+
+    # display = Display(visible=0, size=(800, 600))
+    # display.start()
 
     softwares_names = [SoftwareName.FIREFOX.value]
     operatiing_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
@@ -141,28 +145,48 @@ def run_from_class(**kwargs):
                                    limit=10000000)
     user_agent = user_agent_rotator.get_random_user_agent()
 
-    PROXY = "socks5://127.0.0.1:9050"  # IP:PORT or HOST:PORT
+    # PROXY = "socks5://localhost:9050"  # IP:PORT or HOST:PORT
     options = webdriver.ChromeOptions()
 
-    options.add_argument("user-data-dir=/home/airflow/.config/google-chrome")
-    options.add_argument('--headless')
+    # options.add_argument("user-data-dir=/home/airflow/.config/google-chrome")
+    # options.add_argument('--headless')
     options.add_argument('user-agent={0}'.format(user_agent))
 
-    options.add_argument('--disable-infobars')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--no-sandbox')
+    # options.add_argument('--disable-infobars')
+    # options.add_argument('--disable-dev-shm-usage')
+    # options.add_argument('--no-sandbox')
 
-    options.add_argument("--disable-browser-side-navigation")
-    options.add_argument("--silent")
+    # options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    # options.add_experimental_option('useAutomationExtension', False)
+    # options.add_argument("log-level=3")
 
-    options.add_argument('--proxy-server=%s' % PROXY)
-    driver_chrome = webdriver.Chrome(options=options, executable_path=ChromeDriverManager().install())
+    # webdriver.DesiredCapabilities.CHROME['proxy'] = {
+    #     "httpProxy": PROXY,
+    #     "ftpProxy": PROXY,
+    #     "sslProxy": PROXY,
+    #     "proxyType": "MANUAL",
+    #
+    # }
+    #
+    # webdriver.DesiredCapabilities.CHROME['acceptSslCerts'] = True
+
+    # options.add_argument("--disable-browser-side-navigation")
+    # options.add_argument("--silent")
+
+    # options.add_argument('--proxy-server=%s' % PROXY)
+    # driver_chrome = webdriver.Chrome(chrome_options=options, executable_path=ChromeDriverManager().install())
     ############################################################################################################
     # phone_data = ppd.scrape_phones([kwargs["url"]],
     #                                kwargs["driver"],
     #                                kwargs["clickables"], kwargs["xpath"])
+
+    options.add_argument("--start-maximized")  # open Browser in maximized mode
+    options.add_argument("--no-sandbox")  # bypass OS security model
+    options.add_argument("--disable-dev-shm-usage")  # overcome limited resource problems
+    # options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    # options.add_experimental_option('useAutomationExtension', False)
     phone_data = ppd.scrape_phones([kwargs["url"]],
-                                   driver_chrome,
+                                   webdriver.Chrome(chrome_options=options, executable_path=ChromeDriverManager().install()),
                                    kwargs["clickables"], kwargs["xpath"])
     result += phone_data
     results = [(a.strip("€"), b, c, d, str(e), f) for row in result
@@ -176,9 +200,9 @@ def run_from_class(**kwargs):
                    "created_at, am_pm) values {} "
     insert_query = insert_query.format(','.join(['%s'] * len(results)))
     # if results:
-    cursor.execute(insert_query, results)
-    cursor.execute("COMMIT")
-    print(results)
+    # cursor.execute(insert_query, results)
+    # cursor.execute("COMMIT")
+    # print(results)
     # return {"data": result}
 
 
@@ -200,17 +224,17 @@ def create_dag(
               catchup=False,
               template_searchpath=['/opt/airflow/dags'])
     with dag:
-        create_product_price_table = PostgresOperator(
-            task_id=f"table_{task_id}_creation",
-            postgres_conn_id="pricing",
-            sql="""sql/create_product_price_table.sql"""
-        )
-
-        upsert_product_price_table = PostgresOperator(
-            task_id=f"table_{task_id}_upsert",
-            postgres_conn_id="pricing",
-            sql="""sql/upsert_product_price_table.sql"""
-        )
+        # create_product_price_table = PostgresOperator(
+        #     task_id=f"table_{task_id}_creation",
+        #     postgres_conn_id="pricing",
+        #     sql="""sql/create_product_price_table.sql"""
+        # )
+        #
+        # upsert_product_price_table = PostgresOperator(
+        #     task_id=f"table_{task_id}_upsert",
+        #     postgres_conn_id="pricing",
+        #     sql="""sql/upsert_product_price_table.sql"""
+        # )
 
         start_clean = BashOperator(
             task_id=f'start_clean-{task_id}',
@@ -229,7 +253,7 @@ def create_dag(
         )
         from docker_job.pricing.vars import iphones
         from docker_job.pricing.vars import options, clickables, xpath, iphones
-        for url in iphones:
+        for url in iphones[:1]:
             ti = url.split("/")[-1]
             print(ti)
             python_task = PythonOperator(
@@ -240,7 +264,9 @@ def create_dag(
                 op_kwargs={"url": url, 'clickables': clickables, 'xpath': xpath, 'options': options}
             )
             # >> update_product_price_table , create_product_price_table >> ,upsert_product_price_table >>
-            start_clean >> create_product_price_table >> python_task >> upsert_product_price_table >> end_clean
+            # start_clean >> create_product_price_table >> python_task >> upsert_product_price_table >> end_clean
+            start_clean >> python_task >> end_clean
+
     return dag
 
 

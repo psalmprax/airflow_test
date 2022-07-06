@@ -1,6 +1,0 @@
-2022/06/28-16:05:32.578 14276 Creating DB /home/psalmprax/.config/google-chrome/Default/IndexedDB/https_e816427ff41e87c8f964fa3c0114c63d.safeframe.googlesyndication.com_0.indexeddb.leveldb since it was missing.
-2022/06/28-16:05:32.620 14276 Reusing MANIFEST /home/psalmprax/.config/google-chrome/Default/IndexedDB/https_e816427ff41e87c8f964fa3c0114c63d.safeframe.googlesyndication.com_0.indexeddb.leveldb/MANIFEST-000001
-2022/06/28-16:05:37.782 144e9 Level-0 table #5: started
-2022/06/28-16:05:37.784 144e9 Level-0 table #5: 480 bytes OK
-2022/06/28-16:05:37.786 144e9 Delete type=0 #3
-2022/06/28-16:05:37.786 144e9 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
