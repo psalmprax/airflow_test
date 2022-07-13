@@ -15,10 +15,11 @@ def mysql_conn(**kwargs):
     connection = hook.get_conn()
     cursor = connection.cursor()
     insert_query = f"""select * from {kwargs["table"]}"""
-    df = cursor.execute(insert_query)
-    cursor.execute("COMMIT")
-    # for rec in df:
-    #     print(rec)
+    cursor.execute(insert_query)
+    rows = cursor.fetchall()
+    # cursor.execute("COMMIT")
+    for rec in rows:
+        print(rec)
     print(cursor)
 
 
