@@ -17,8 +17,8 @@ def mysql_conn(**kwargs):
     insert_query = f"""select * from {kwargs["table"]}"""
     df = cursor.execute(insert_query)
     cursor.execute("COMMIT")
-    for rec in df:
-        print(rec)
+    # for rec in df:
+    #     print(rec)
     print(cursor)
 
 
