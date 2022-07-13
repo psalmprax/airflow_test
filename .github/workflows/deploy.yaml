@@ -76,7 +76,7 @@ jobs:
               sudo apt-get install postgresql-client -y
             fi
             if [ -f "$FILE" ]; then
-                sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down -v 2> /dev/null && sudo docker system prune -a -f
+                sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down 2> /dev/null && sudo docker system prune -a -f
             fi
             whoami  && sudo rm -rf airflow_test &&
             pwd && sudo git clone https://github.com/psalmprax/airflow_test.git && ls -ltra &&

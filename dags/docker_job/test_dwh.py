@@ -3,11 +3,24 @@ from datetime import timedelta, datetime, date
 
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
+from airflow.providers.mysql.hooks.mysql import MySqlHook
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 
 # from airflow.hooks.postgres_hook import PostgresHook
+def mysql_conn(**kwargs):
+    hook = MySqlHook(mysql_conn_id='mysql_conn')
+    # cur = hook.get_conn()
+    connection = hook.get_conn()
+    cursor = connection.cursor()
+    insert_query = f"""select * from {kwargs["table"]}"""
+    df = cursor.execute(insert_query)
+    cursor.execute("COMMIT")
+    for rec in df:
+        print(rec)
+    print(cursor)
+
 
 def create_dag(
         dag_id,
@@ -42,10 +55,17 @@ def create_dag(
     with dag:
         create_product_price_table = PostgresOperator(
             task_id=f"table_{task_id}_creation",
-            postgres_conn_id="new_dwh_conn",
+            postgres_conn_id="psql_conn",
             sql=sql
         )
-        create_product_price_table
+        for table_name in ["address", "business_channel"]:
+            fetch_data_from_adamant = PythonOperator(
+                task_id=f"get_{table_name}_from_adamant_dwh",
+                provide_context=True,
+                python_callable=my_func,
+                op_kwargs={"table": table_name}
+            )
+            fetch_data_from_adamant >> create_product_price_table
     return dag
 
 
@@ -71,4 +91,4 @@ globals()[dag_id] = create_dag(dag_id=dag_id,
                                description=description,
                                start_date=start_date,
                                default_args=default_args,
-                               my_func='run_from_class')
+                               my_func=mysql_conn)
