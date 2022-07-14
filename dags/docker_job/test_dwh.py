@@ -19,14 +19,14 @@ def mysql_conn(**kwargs):
     row_count = cursor.fetchall()
     print(row_count)
     # cursor.execute("COMMIT")
-    if row_count[0] < 100000:
+    if row_count[0][0] < 100000:
         insert_query = f"""select * from {kwargs["table"]}"""
         cursor.execute(insert_query)
         rows = cursor.fetchall()
         for rec in rows:
             print(rec)
     else:
-        for x in range(1, row_count[0], 100000):
+        for x in range(1, row_count[0][0], 100000):
             insert_query = f"""select * from {kwargs["table"]} limit {x} 100000"""
             cursor.execute(insert_query)
             rows = cursor.fetchall()
