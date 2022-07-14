@@ -17,7 +17,7 @@ def mysql_conn(**kwargs):
     insert_query = f"""select count(*) from {kwargs["table"]}"""
     cursor.execute(insert_query)
     row_count = cursor.fetchall()
-    priint(row_count)
+    print(row_count)
     # cursor.execute("COMMIT")
     if row_count[0] < 100000:
         insert_query = f"""select * from {kwargs["table"]}"""
