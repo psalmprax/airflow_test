@@ -11,15 +11,27 @@ from airflow.providers.postgres.operators.postgres import PostgresOperator
 # from airflow.hooks.postgres_hook import PostgresHook
 def mysql_conn(**kwargs):
     hook = MySqlHook(mysql_conn_id='mysql_conn')
-    # cur = hook.get_conn()
     connection = hook.get_conn()
     cursor = connection.cursor()
-    insert_query = f"""select * from {kwargs["table"]}"""
+    # SELECT * FROM MyTable ORDER BY whatever LIMIT 1000, 1000
+    insert_query = f"""select count(*) from {kwargs["table"]}"""
     cursor.execute(insert_query)
-    rows = cursor.fetchall()
+    row_count = cursor.fetchall()
+    priint(row_count)
     # cursor.execute("COMMIT")
-    for rec in rows:
-        print(rec)
+    if row_count[0] < 100000:
+        insert_query = f"""select * from {kwargs["table"]}"""
+        cursor.execute(insert_query)
+        rows = cursor.fetchall()
+        for rec in rows:
+            print(rec)
+    else:
+        for x in range(1, row_count[0], 100000):
+            insert_query = f"""select * from {kwargs["table"]} limit {x} 100000"""
+            cursor.execute(insert_query)
+            rows = cursor.fetchall()
+            for rec in rows:
+                print(rec)
     print(cursor)
 
 
