@@ -27,7 +27,7 @@ def mysql_conn(**kwargs):
             print(rec)
     else:
         for x in range(1, row_count[0][0], 100000):
-            insert_query = f"""select * from {kwargs["table"]} limit {x} 100000"""
+            insert_query = f"""select * from {kwargs["table"]} limit {x}, 100000"""
             cursor.execute(insert_query)
             rows = cursor.fetchall()
             for rec in rows:
