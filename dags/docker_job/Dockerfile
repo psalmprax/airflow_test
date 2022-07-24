@@ -46,4 +46,5 @@ RUN chown -R airflow:5000 /opt/airflow/dags
 USER airflow
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
+RUN pip install 'apache-airflow[amazon]'
 CMD ["echo", "hello world"]

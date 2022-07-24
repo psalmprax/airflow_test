@@ -1,0 +1,216 @@
+adamant:
+    extract_strategy: full_refresh
+    conn_id: mysql_conn
+    schema: raw_adamant
+    table_name:
+        address:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        business_channel:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        category:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        customer:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        device:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+        device_category:
+            primary_key: device_id
+            strategy: ID_STRATEGY
+            update_column:
+                - device_id
+        fos_user_group:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        fos_user_user:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        fos_user_user_group:
+            primary_key: user_id
+            strategy: ID_STRATEGY
+            update_column:
+                - user_id
+        gateway:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        invoice:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+        orders:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+        order_failed:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        order_item:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        order_item_detail:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        order_voucher:
+            primary_key: order_id
+            strategy: ID_STRATEGY
+            update_column:
+                - order_id
+        payment:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+        sales_channel:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        shipping:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        voucher:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        warranty:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+wkfs:
+    extract_strategy: full_refresh
+    conn_id: mysql_wkfs_conn
+    schema: raw_wkfs
+    table_name:
+        add_userfield:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        add_userfield_value:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+                - transaction_id
+        advertising_channel:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+                - application_id
+                - name
+        advertising_offer:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - offer_id
+                - advertising_channel_id
+                - offer_id
+        article_numbers_rsp_history:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+        answer:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+        application:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+                - name
+        application_payment_type:
+            primary_key: application_id
+            strategy: ID_STRATEGY
+            update_column:
+                - application_id
+                - payment_type_id
+        business_channel:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+                - outlet_name
+        business_channel_offer:
+            primary_key: offer_id
+            strategy: ID_STRATEGY
+            update_column:
+                - offer_id
+                - business_channel_id
+                - is_original_business_channel
+        business_channel_type:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+                - name
+        b2b_trade_detail:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+                - trade_id
+
+        calculation:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+                - name
+        category:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+                - name
+        check_result_action:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - id
+        clarification:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_column:
+                - check_result_actions_id
+        contractor:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_column:
+                - id
+                - name

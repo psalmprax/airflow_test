@@ -57,7 +57,7 @@ x-airflow-common:
     AIRFLOW__CORE__ENABLE_XCOM_PICKLING: 'true' # "_run_image of the DockerOperator returns now a python string, not a byte string" Ref: https://github.com/apache/airflow/issues/13487
     AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT: 3000
     AIRFLOW__CELERY__OPERATION_TIMEOUT: 3000
-    AIRFLOW__CELERY__WORKER_CONCURRENCY: 6
+    AIRFLOW__CELERY__WORKER_CONCURRENCY: 16
     AIRFLOW__SCHEDULE__JOB__HEARTBEAT_SEC: 300
     AIRFLOW__SCHEDULE__MAX_TIS_PER_QUERY: 256
     AIRFLOW__SCHEDULE__PARSING_PROCESSES: 10
@@ -140,7 +140,7 @@ services:
     depends_on:
       - airflow-scheduler
     deploy:
-      replicas: 4
+      replicas: 6
       mode: replicated
 #      resources:
 #        limits:
