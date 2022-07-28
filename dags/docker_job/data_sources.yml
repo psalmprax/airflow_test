@@ -2,6 +2,7 @@ adamant:
     extract_strategy: full_refresh
     conn_id: mysql_conn
     schema: raw_adamant
+    source_schema: adamant
     table_name:
         address:
             primary_key: id
@@ -112,6 +113,7 @@ wkfs:
     extract_strategy: full_refresh
     conn_id: mysql_wkfs_conn
     schema: raw_wkfs
+    source_schema: symfony1
     table_name:
         add_userfield:
             primary_key: id

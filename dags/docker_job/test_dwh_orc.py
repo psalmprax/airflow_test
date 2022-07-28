@@ -23,7 +23,44 @@ from airflow.providers.amazon.aws.operators.s3 import S3CreateObjectOperator
 def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, conn, schema, table):
 	import pandas as pd
 	column_lists = list()
-	data_types = {'Int64': 'BIGINT', 'Float64': 'NUMERIC', 'string': 'TEXT', 'datetime64[ns]': 'DATETIME', 'object': 'TEXT'}
+	columns_dict = dict()
+	column_lists_type = list()
+	# data_types = {
+	# 	'Int64': 'BIGINT ENCODE lzo',
+	# 	'Float64': 'DOUBLE PRECISION ENCODE',
+	# 	'string': 'varchar(MAX) ENCODE lzo',
+	# 	'datetime64[ns]': 'DATETIME',
+	# 	'object': 'varchar(MAX) ENCODE lzo'
+	# }
+	
+	data_types = {
+		'INTEGER': 'BIGINT ENCODE lzo',
+		'TINYINT': 'BIGINT ENCODE lzo',
+		'SMALLINT': 'BIGINT ENCODE lzo',
+		'MEDIUMINT': 'BIGINT ENCODE lzo',
+		'INT': 'BIGINT ENCODE lzo',
+		'BIGINT': 'BIGINT ENCODE lzo',
+		'DECIMAL': 'DOUBLE PRECISION ENCODE lzo',
+		'FLOAT': 'REAL ENCODE lzo',
+		'DOUBLE': 'DOUBLE PRECISION ENCODE',
+		'CHAR': 'CHAR ENCODE lzo',
+		'YEAR': 'VARCHAR(MAX) ENCODE lzo',
+		'VARCHAR': 'VARCHAR(MAX) ENCODE lzo',
+		'BIT': 'VARCHAR(MAX) ENCODE lzo',
+		'BINARY': 'VARCHAR(MAX) ENCODE lzo',
+		'VARBINARY': 'VARCHAR(MAX) ENCODE lzo',
+		'TINYTEXT': 'VARCHAR(MAX) ENCODE lzo',
+		'MEDIUMTEXT': 'VARCHAR(MAX) ENCODE lzo',
+		'TEXT': 'VARCHAR(MAX) ENCODE lzo',
+		'ENUM': 'VARCHAR(MAX) ENCODE lzo',
+		'SET': 'VARCHAR(MAX) ENCODE lzo',
+		'SPATIAL': 'VARCHAR(MAX) ENCODE lzo',
+		'DATETIME': 'DATETIME ENCODE lzo',
+		'DATE': 'DATE ENCODE lzo',
+		'TIME': 'TIME ENCODE lzo',
+		'TIMESTAMP': 'TIMESTAMP ENCODE lzo',
+
+	}
 	src_engine = create_engine(BaseHook.get_hook(conn_id=conn).get_uri())  # pylint: disable=bad-indentation
 	src_engine._metadata = MetaData(bind=src_engine)  # pylint: disable=protected-access
 	src_engine._metadata.reflect(src_engine)  # pylint: disable=protected-access
@@ -32,13 +69,18 @@ def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, co
 	qry = f"create table if not exists {schema}.{table} ("
 	for cols in columns_table:
 		column_lists.append(cols['name'])
+		column_lists_type.append(str(type(cols['type'])).split(".")[-1].replace("'>", ""))
+		columns_dict[cols['name']] = str(type(cols['type'])).split(".")[-1].replace("'>", "")
 	
+	columns_dict['agan_ingestion_date'] = 'VARCHAR'
 	column_lists.append("agan_ingestion_date")
 	mysql_cursor.execute(query_for_schema)
 	rows = mysql_cursor.fetchall()
 	
 	print("##################################### START ******** ########################################")
 	print(column_lists)
+	print(column_lists_type)
+	print(columns_dict)
 	print("##################################### END ******** ########################################")
 	
 	lists = [[*i, datetime.today().strftime("%Y-%m-%d %H:%M:%S%Z")] for i in rows]
@@ -48,19 +90,23 @@ def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, co
 	for k, v in df.dtypes.items():
 		# qry += f"{list(k)[0]} {data_types[str(v)]} NULL,"
 		print(f"{k} @@@@@@@@@@@@@@@@@@@@@@@@@  ********************** @@@@@@@@@@@@@@@@@@@@@@@ {v} NULL,")
-	df = df.convert_dtypes()
+	# df = df.convert_dtypes()
 	
-	for k, v in df.dtypes.items():
-		# print(f"{k} @@@@@@@@@@@@@@@@@@@@@@@@@  ********************** @@@@@@@@@@@@@@@@@@@@@@@ {v} NULL,")
-
-		print(f"{k} {data_types[str(v)]} NULL,")
+	# for k, v in df.dtypes.items():
+	# 	# print(f"{k} @@@@@@@@@@@@@@@@@@@@@@@@@  ********************** @@@@@@@@@@@@@@@@@@@@@@@ {v} NULL,")
+	#
+	# 	print(f"{k} {data_types[str(v)]} NULL,")
+	# 	qry += f"{k} {data_types[str(v)]} NULL,"
+	
+	for k , v in columns_dict.items():
+		print(f"{k} {v} NULL,")
 		qry += f"{k} {data_types[str(v)]} NULL,"
-
+		
 		print(k, " ======================> ", v)
 	# del(df)
 	# qry += "agan_ingestion_date VARCHAR(MAX) NULL )"
 	# change here when adding additional metal data
-	qry = qry.replace("agan_ingestion_date TEXT NULL,", "agan_ingestion_date TEXT NULL)")
+	qry = qry.replace("agan_ingestion_date VARCHAR(MAX) ENCODE lzo NULL,", "agan_ingestion_date varchar(MAX) ENCODE lzo NULL)")
 	qry_schema = f"create schema if not exists {schema};"
 	print(qry)
 	print(qry_schema)
@@ -168,24 +214,24 @@ def download_datatable(mysql_cursor, filename_location, query, columns) -> None:
 	print("##################################### START ########################################")
 	print(columns)
 	print("##################################### END ########################################")
-
+	
 	if rows:
 		list = [[*i, datetime.today().strftime("%Y-%m-%d %H:%M:%S%Z")] for i in rows]
 		# print(list[:10])
 		df = pd.DataFrame(list, columns=columns)
-		write(filename_location.replace(".csv", ".parq"), df)
+		# write(filename_location.replace(".csv", ".parq"), df)
 		df = df.convert_dtypes()
 		
-		# print(df.head(5))
-		# table_from_pandas = pa.Table.from_pandas(df, preserve_index=False)
-		# pq.write_table(table_from_pandas, filename_location.replace(".csv", ".parquet"))
-		# print(df.dtypes)
-		# for k, v in df.dtypes.items():
-		# 	print(k, " ======================> ", v)
-		# print(pq.ParquetFile(filename_location.replace(".csv", ".parquet")).schema)
-		# print(pq.ParquetFile(filename_location.replace(".csv", ".parquet")).read_row_group(0))
-		print(pq.ParquetFile(filename_location.replace(".csv", ".parq")).schema)
-		print(pq.ParquetFile(filename_location.replace(".csv", ".parq")).read_row_group(0))
+		print(df.head(5))
+		table_from_pandas = pa.Table.from_pandas(df, preserve_index=False)
+		pq.write_table(table_from_pandas, filename_location.replace(".csv", ".parquet"))
+		print(df.dtypes)
+		for k, v in df.dtypes.items():
+			print(k, " ======================> ", v)
+		print(pq.ParquetFile(filename_location.replace(".csv", ".parquet")).schema)
+		print(pq.ParquetFile(filename_location.replace(".csv", ".parquet")).read_row_group(0))
+		# print(pq.ParquetFile(filename_location.replace(".csv", ".parq")).schema)
+		# print(pq.ParquetFile(filename_location.replace(".csv", ".parq")).read_row_group(0))
 		return True
 	return False
 
@@ -193,18 +239,6 @@ def download_datatable(mysql_cursor, filename_location, query, columns) -> None:
 # with open(filename_location, "w", newline="") as file:
 # 	writer = csv.writer(file)
 # 	writer.writerows(list)
-
-
-# create_object = S3CreateObjectOperator(
-# 	task_id=f"save-file-{filename_location.split('/')[-1].replace('_','-')}-to-s3",
-# 	s3_bucket="airflow-stage-lake",
-# 	aws_conn_id="s3_conn",
-# 	s3_key=filename_location,
-# 	data=bytes(list),
-# 	replace=True
-# )
-#
-# create_object.execute(dict())
 
 
 def test(**kwargs):
@@ -313,200 +347,6 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 	return response
 
 
-#
-# def mysql_conn(**kwargs):  # pylint: disable=too-many-locals
-# 	"""
-# 	# Count number of records and use that data download in batch of 100000 if
-# 	# data count is more than 100000 otherwise download all data at once
-# 	:param kwargs:
-# 	"""
-# 	import os
-#
-# 	print(kwargs["ti"])
-# 	print(kwargs['conn_id'])
-# 	mysql = MySqlHook(mysql_conn_id=kwargs['conn_id'])
-# 	psql = PostgresHook(postgres_conn_id="psql_conn")
-# 	mysql_connection = mysql.get_conn()
-# 	cursor = mysql_connection.cursor()
-# 	pg_connection = psql.get_conn()
-# 	pg_cursor = pg_connection.cursor()
-# 	STRATEGY = ["ID_STRATEGY", "DATE_STRATEGY", "NOT_ID_DATE_STRATEGY"]
-# 	last_id = 0
-# 	last_id_val = -10
-# 	source_qry = None
-# 	if "id" in kwargs["table"].split('.')[1]:
-# 		insert_query = f"""select {kwargs["table"].split('.')[1]} from {kwargs["table"].split('.')[0]} order by
-# 						{kwargs["table"].split('.')[1]} desc limit 1"""  ## select from source table
-#
-# 		try:
-# 			insert_query_cnt = f"""select {kwargs["table"].split('.')[1]} from {kwargs['schema']}.
-# 								{kwargs["table"].split('.')[0]} order by {kwargs["table"].split('.')[1]} desc limit
-# 								1"""  ## select from target dwh table
-# 			pg_cursor.execute(insert_query_cnt)
-# 			start_row_count = pg_cursor.fetchall()[0][0]
-# 			last_id_val = start_row_count
-# 			print(last_id_val, "SAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyyy   YESSSSSSSSSSSS")
-# 			last_id_qry = f"""select count(*) from {kwargs["table"].split('.')[0]}
-# 								where {kwargs["table"].split('.')[1]}  > {start_row_count}"""
-# 			cursor.execute(last_id_qry)
-# 			last_id = cursor.fetchall()[0][0]
-# 			print(last_id, "SAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyyy")
-#
-# 		except Exception as ex:
-# 			print("SAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyyy     NNNNNNNNOOOOOOOOOOOO")
-# 			pg_cursor.execute("ROLLBACK")
-# 			pg_cursor.execute("COMMIT")
-# 			print("no record available for id")
-# 			start_row_count = 0
-# 		cursor.execute(insert_query)
-# 		end_row_count = cursor.fetchall()[0][0]
-# 		if last_id > 0:
-# 			end_row_count = last_id
-# 			start_row_count = 0
-#
-# 	else:
-# 		try:
-#
-# 			insert_query_cnt = f"""select {kwargs["table"].split('.')[1]} from {kwargs['schema']}.
-# 								{kwargs["table"].split('.')[0]} order by
-# 								{kwargs["table"].split('.')[1]} desc limit 1"""
-# 			pg_cursor.execute(insert_query_cnt)
-# 			date_filter = pg_cursor.fetchall()[0][0]
-# 			# source_qry = f"""select * from {kwargs["table"].split('.')[0]} where
-# 			# 				{kwargs["table"].split('.')[1]} >= DATE_SUB('{date_filter}', INTERVAL 2 DAY)
-# 			# 				order by {kwargs["table"].split('.')[1]}"""
-#
-# 			source_qry = f"""select * from {kwargs["table"].split('.')[0]} where
-# 							{kwargs["table"].split('.')[1]} > '{date_filter}'
-# 							order by {kwargs["table"].split('.')[1]}"""
-# 			print(source_qry, "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
-# 			start_row_count = False
-# 			end_row_count = False
-# 		except Exception as ex:
-# 			print(ex)
-# 			pg_cursor.execute("ROLLBACK")
-# 			pg_cursor.execute("COMMIT")
-# 			print("no record available update_at")
-# 			insert_query = f"""select count(*) from {kwargs["table"].split('.')[0]}"""
-# 			start_row_count = 0
-# 			cursor.execute(insert_query)
-# 			end_row_count = cursor.fetchall()[0][0]
-#
-# 	# Parent and Task Directory path
-# 	directory = kwargs["table"].split('.')[0]
-# 	parent_dir = "/tmp"
-# 	task_dir = os.path.join(parent_dir, task_id)
-# 	try:
-# 		os.mkdir(task_dir)
-# 	except Exception as ex:
-# 		print(f"The file {task_dir} Exist already")
-#
-# 	path = os.path.join(task_dir, directory)
-#
-# 	try:
-# 		os.mkdir(path)
-# 	except Exception as ex:
-# 		print(f"The file {path} Exist already")
-#
-# 	print(path)
-# 	# shutil.rmtree(task_dir)
-#
-# 	file_name = None
-# 	files = list()
-# 	columns_list_copy = kwargs['get_create_schemae'](
-# 		kwargs['table'].split('.')[0], kwargs['conn_id'],
-# 		pg_cursor,
-# 		kwargs['schema'])
-#
-# 	# download data to local folder in the container
-# 	insert_query = None
-# 	try:
-# 		print(start_row_count, " -----> ", end_row_count)
-# 		if isinstance(start_row_count, int) and isinstance(end_row_count, int):
-# 			for start_limit in range(start_row_count, end_row_count, 100000):
-# 				if last_id > 0 and last_id_val > -10:
-# 					insert_query = f"""select * from (select * from {kwargs["table"].split('.')[0]}
-# 									where {kwargs["table"].split('.')[1]} > {last_id_val} order by
-# 									{kwargs["table"].split('.')[1]} asc)  as tbl limit 0, {end_row_count} """
-# 				elif last_id_val == -10:
-# 					insert_query = f"""select * from (select * from {kwargs["table"].split('.')[0]} order by
-# 									{kwargs["table"].split('.')[1]} asc)  as tbl limit {start_limit}, 100000 """
-#
-# 				if insert_query:
-# 					print(insert_query)
-# 					file_name = f"{path}/{kwargs['table'].split('.')[0]}_{start_limit}.csv"
-# 					files.append(file_name)
-# 					kwargs['download_tb'](cursor, file_name, insert_query)
-# 		if isinstance(start_row_count, bool) and isinstance(end_row_count, bool):
-# 			print( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-# 			print(source_qry)
-# 			file_name = f"{path}/{kwargs['table'].split('.')[0]}_update.csv"
-# 			files.append(file_name)
-# 			kwargs['download_tb'](cursor, file_name, source_qry)
-# 	except Exception as ex:
-# 		print(ex, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-# 		print(source_qry)
-# 		file_name = f"{path}/{kwargs['table'].split('.')[0]}_update.csv"
-# 		files.append(file_name)
-# 		kwargs['download_tb'](cursor, file_name, source_qry)
-#
-# 	extract_strategy = None
-# 	try:
-# 		if "updated_at" in kwargs['table']:
-# 			extract_strategy = "UPSERT"  # kwargs['table'].split(".")[1]
-# 			kwargs["table"] = kwargs['table'].split(".")[0]
-# 			print(extract_strategy)
-# 		print(kwargs["table"])
-# 	except Exception as ex:
-# 		pass
-#
-# 	for file in files:
-# 		print(file.split("/"), " STRATEGY: ", extract_strategy)
-# 		create_local_to_s3_job = LocalFilesystemToS3Operator(
-# 			task_id=f"create-local-{file.split('_')[1].replace('/', '-')}-to-s3-job",
-# 			filename=file,
-# 			aws_conn_id="s3_conn",
-# 			dest_key=file,
-# 			dest_bucket="airsamtest",
-# 			replace=True,
-# 		)
-# 		if not extract_strategy:
-# 			task_transfer_s3_to_redshift = S3ToRedshiftOperator(
-# 				s3_bucket="airsamtest",
-# 				s3_key=file,
-# 				aws_conn_id="s3_conn",
-# 				redshift_conn_id="psql_conn",
-# 				schema=kwargs['schema'],
-# 				table=kwargs['table'].split(".")[0],
-# 				copy_options=['csv'],
-# 				# method="UPSERT",
-# 				# upsert_keys=columns_list_copy,
-# 				task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
-# 			)
-# 		if extract_strategy:
-# 			task_transfer_s3_to_redshift = S3ToRedshiftOperator(
-# 				s3_bucket="airsamtest",
-# 				s3_key=file,
-# 				aws_conn_id="s3_conn",
-# 				redshift_conn_id="psql_conn",
-# 				schema=kwargs['schema'],
-# 				table=kwargs['table'].split(".")[0],
-# 				copy_options=['csv'],
-# 				method=extract_strategy,
-# 				upsert_keys=columns_list_copy,
-# 				task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
-# 			)
-# 		delete_s3_bucket = S3DeleteObjectsOperator(
-# 			task_id=f"delete-s3-{file.split('_')[1].replace('/', '-')}-from-s3",
-# 			bucket="airsamtest",
-# 			keys=file,
-# 			aws_conn_id="s3_conn",
-# 		)
-# 		create_local_to_s3_job.execute(dict())
-# 		task_transfer_s3_to_redshift.execute(dict())
-# 		delete_s3_bucket.execute(dict())
-# 	shutil.rmtree(path)
-
 def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 	"""
 	# Count number of records and use that data download in batch of 100000 if
@@ -584,61 +424,9 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 			status = kwargs['download_tb'](mysql_cursor, file_name, get_data_config["strategy_qry"], columns_list_copy)
 			if status:
 				files.append(file_name)
-		# file = file_name
-		# extract_strategy = "UPSERT"
 		print(file_name)
-		# for file in files:
-		# print(file.split("/"), " STRATEGY: ", extract_strategy)
 		print(files, " STRATEGY: ", extract_strategy)
 	
-	# print(file, " STRATEGY: ", extract_strategy)
-	
-	# create_local_to_s3_job = LocalFilesystemToS3Operator(
-	# 	task_id=f"create-local-{file.split('_')[1].replace('/', '-')}-to-s3-job",
-	# 	filename=file,
-	# 	aws_conn_id="s3_conn",
-	# 	dest_key=file.replace(".csv", ".parquet"),
-	# 	dest_bucket="airsamtest",
-	# 	replace=True,
-	# )
-	# if isinstance(get_data_config["start_row_count"], int) \
-	# 		and isinstance(get_data_config["end_row_count"], int):
-	# 	task_transfer_s3_to_redshift = S3ToRedshiftOperator(
-	# 		s3_bucket="airsamtest",
-	# 		s3_key=file.replace(".csv", ".parquet"),
-	# 		aws_conn_id="s3_conn",
-	# 		redshift_conn_id="psql_conn",
-	# 		schema=kwargs['schema'],
-	# 		table=kwargs['table'],
-	# 		copy_options=['csv'],
-	# 		# method="UPSERT",
-	# 		# upsert_keys=columns_list_copy,
-	# 		task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
-	# 	)
-	# if isinstance(get_data_config["start_row_count"], bool) \
-	# 		and isinstance(get_data_config["end_row_count"], bool):
-	# 	task_transfer_s3_to_redshift = S3ToRedshiftOperator(
-	# 		s3_bucket="airsamtest",
-	# 		s3_key=file.replace(".csv", ".parquet"),
-	# 		aws_conn_id="s3_conn",
-	# 		redshift_conn_id="psql_conn",
-	# 		schema=kwargs['schema'],
-	# 		table=kwargs['table'],
-	# 		copy_options=['csv'],
-	# 		method=extract_strategy,
-	# 		upsert_keys=strategy["update_column"],
-	# 		task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
-	# 	)
-	# delete_s3_bucket = S3DeleteObjectsOperator(
-	# 	task_id=f"delete-s3-{file.split('_')[1].replace('/', '-')}-from-s3",
-	# 	bucket="airsamtest",
-	# 	keys=file.replace(".csv", ".parquet"),
-	# 	aws_conn_id="s3_conn",
-	# )
-	# create_local_to_s3_job.execute(dict())
-	# task_transfer_s3_to_redshift.execute(dict())
-	# delete_s3_bucket.execute(dict())
-	# shutil.rmtree(get_download_location_config)
 	except Exception as ex:
 		print(ex, "ERRRRORRRRRRRRRR")
 		print(get_data_config["strategy_qry"])
@@ -652,17 +440,17 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 			print(file.split("/"), " STRATEGY: ", extract_strategy)
 			create_local_to_s3_job = LocalFilesystemToS3Operator(
 				task_id=f"create-local-{file.split('_')[1].replace('/', '-')}-to-s3-job",
-				filename=file.replace(".csv", ".parq"),
+				filename=file.replace(".csv", ".parquet"),
 				aws_conn_id="s3_conn",
-				dest_key=file.replace(".csv", ".parq"),
+				dest_key=file.replace(".csv", ".parquet"),
 				dest_bucket="airsamtest",
 				replace=True,
 			)
 			if isinstance(get_data_config["start_row_count"], int) \
-				and isinstance(get_data_config["end_row_count"], int):
+					and isinstance(get_data_config["end_row_count"], int):
 				task_transfer_s3_to_redshift = S3ToRedshiftOperator(
 					s3_bucket="airsamtest",
-					s3_key=file.replace(".csv", ".parq"),
+					s3_key=file.replace(".csv", ".parquet"),
 					aws_conn_id="s3_conn",
 					redshift_conn_id="psql_conn",
 					schema=kwargs['schema'],
@@ -673,10 +461,10 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 					task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
 				)
 			if isinstance(get_data_config["start_row_count"], bool) \
-				and isinstance(get_data_config["end_row_count"], bool):
+					and isinstance(get_data_config["end_row_count"], bool):
 				task_transfer_s3_to_redshift = S3ToRedshiftOperator(
 					s3_bucket="airsamtest",
-					s3_key=file.replace(".csv", ".parq"),
+					s3_key=file.replace(".csv", ".parquet"),
 					aws_conn_id="s3_conn",
 					redshift_conn_id="psql_conn",
 					schema=kwargs['schema'],
@@ -689,7 +477,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 			delete_s3_bucket = S3DeleteObjectsOperator(
 				task_id=f"delete-s3-{file.split('_')[1].replace('/', '-')}-from-s3",
 				bucket="airsamtest",
-				keys=file.replace(".csv", ".parq"),
+				keys=file.replace(".csv", ".parquet"),
 				aws_conn_id="s3_conn",
 			)
 			create_local_to_s3_job.execute(dict())
@@ -786,7 +574,7 @@ def create_dag(  # pylint: disable=redefined-outer-name
 	return dag
 
 
-task_id = "test_dwh"
+task_id = "test_dwh_orc"
 
 default_args = {
 	'depends_on_past': False,
@@ -807,7 +595,7 @@ with open("dags/docker_job/data_sources.yml") as file_loc:
 	for tbl in source_table:
 		for key, val in tbl.items():
 			print(key, " -> ", val['table_name'])
-			dag_id = f'Job-{key}'
+			dag_id = f'Job-{key}-orc'
 			description = f'A {key} DAG '
 			
 			globals()[dag_id] = create_dag(

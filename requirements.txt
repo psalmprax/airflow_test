@@ -1,5 +1,5 @@
-# oauth2client==3.0.0
-# GitPython==3.1.24
+oauth2client==3.0.0
+GitPython==3.1.24
 urllib3==1.25.11
 folium==0.2.1
 selenium
@@ -10,5 +10,6 @@ pyvirtualdisplay
 pandas
 sqlalchemy
 apache-airflow[amazon]
+pyarrow
+fastparquet
 # httpx==0.20.0
-# 3.1.27
