@@ -10,6 +10,7 @@ from sqlalchemy import create_engine, inspect, MetaData  # pylint: disable=impor
 from airflow import DAG  # pylint: disable=import-error
 from airflow.hooks.base_hook import BaseHook  # pylint: disable=import-error
 from airflow.hooks.postgres_hook import PostgresHook  # pylint: disable=import-error
+from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator  # pylint: disable=import-error
 from airflow.providers.mysql.hooks.mysql import MySqlHook  # pylint: disable=import-error
 from airflow.hooks.S3_hook import S3Hook
@@ -59,7 +60,7 @@ def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, co
 		'DATE': 'DATE ENCODE lzo',
 		'TIME': 'TIME ENCODE lzo',
 		'TIMESTAMP': 'TIMESTAMP ENCODE lzo',
-
+		
 	}
 	src_engine = create_engine(BaseHook.get_hook(conn_id=conn).get_uri())  # pylint: disable=bad-indentation
 	src_engine._metadata = MetaData(bind=src_engine)  # pylint: disable=protected-access
@@ -98,7 +99,7 @@ def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, co
 	# 	print(f"{k} {data_types[str(v)]} NULL,")
 	# 	qry += f"{k} {data_types[str(v)]} NULL,"
 	
-	for k , v in columns_dict.items():
+	for k, v in columns_dict.items():
 		print(f"{k} {v} NULL,")
 		qry += f"{k} {data_types[str(v)]} NULL,"
 		
@@ -106,7 +107,8 @@ def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, co
 	# del(df)
 	# qry += "agan_ingestion_date VARCHAR(MAX) NULL )"
 	# change here when adding additional metal data
-	qry = qry.replace("agan_ingestion_date VARCHAR(MAX) ENCODE lzo NULL,", "agan_ingestion_date varchar(MAX) ENCODE lzo NULL)")
+	qry = qry.replace("agan_ingestion_date VARCHAR(MAX) ENCODE lzo NULL,",
+	                  "agan_ingestion_date varchar(MAX) ENCODE lzo NULL)")
 	qry_schema = f"create schema if not exists {schema};"
 	print(qry)
 	print(qry_schema)
@@ -480,7 +482,12 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 				keys=file.replace(".csv", ".parquet"),
 				aws_conn_id="s3_conn",
 			)
+			delete_local_data = BashOperator(
+				task_id=f"start_clean-local-data-{file.split('_')[1].replace('/', '-')}",
+				bash_command=f"rm -rf {file.replace('.csv', '.parquet')}"
+			)
 			create_local_to_s3_job.execute(dict())
+			delete_local_data.execute(dict())
 			task_transfer_s3_to_redshift.execute(dict())
 			delete_s3_bucket.execute(dict())
 	except Exception as ex:
