@@ -220,7 +220,7 @@ def download_datatable(mysql_cursor, filename_location, query, columns) -> None:
 		# print(list[:10])
 		df = pd.DataFrame(list, columns=columns)
 		# write(filename_location.replace(".csv", ".parq"), df)
-		df = df.convert_dtypes()
+		# df = df.convert_dtypes()
 		
 		print(df.head(5))
 		table_from_pandas = pa.Table.from_pandas(df, preserve_index=False)
