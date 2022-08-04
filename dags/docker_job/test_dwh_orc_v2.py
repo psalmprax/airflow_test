@@ -4,6 +4,7 @@ Data Ingestion for Adamant and WKFS
 import csv
 import os
 import shutil
+from docker_job.config import *
 from datetime import datetime, timedelta  # , datetime
 # import sqlalchemy  # pylint: disable=import-error
 from sqlalchemy import create_engine, inspect, MetaData  # pylint: disable=import-error
@@ -21,40 +22,17 @@ from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObj
 from airflow.providers.amazon.aws.operators.s3 import S3CreateObjectOperator
 
 
-def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, conn, schema, table):
+def create_table_from_pandas(
+		redshift_cursor,
+		conn,
+		schema,
+		table
+):
 	import pandas as pd
 	column_lists = list()
 	columns_dict = dict()
 	column_lists_type = list()
 	
-	data_types = {
-		'INTEGER': 'BIGINT ENCODE lzo',
-		'TINYINT': 'BIGINT ENCODE lzo',
-		'SMALLINT': 'BIGINT ENCODE lzo',
-		'MEDIUMINT': 'BIGINT ENCODE lzo',
-		'INT': 'BIGINT ENCODE lzo',
-		'BIGINT': 'BIGINT ENCODE lzo',
-		'DECIMAL': 'DOUBLE PRECISION ENCODE lzo',
-		'FLOAT': 'REAL ENCODE lzo',
-		'DOUBLE': 'DOUBLE PRECISION ENCODE',
-		'CHAR': 'CHAR ENCODE lzo',
-		'YEAR': 'VARCHAR(MAX) ENCODE lzo',
-		'VARCHAR': 'VARCHAR(MAX) ENCODE lzo',
-		'BIT': 'VARCHAR(MAX) ENCODE lzo',
-		'BINARY': 'VARCHAR(MAX) ENCODE lzo',
-		'VARBINARY': 'VARCHAR(MAX) ENCODE lzo',
-		'TINYTEXT': 'VARCHAR(MAX) ENCODE lzo',
-		'MEDIUMTEXT': 'VARCHAR(MAX) ENCODE lzo',
-		'TEXT': 'VARCHAR(MAX) ENCODE lzo',
-		'ENUM': 'VARCHAR(MAX) ENCODE lzo',
-		'SET': 'VARCHAR(MAX) ENCODE lzo',
-		'SPATIAL': 'VARCHAR(MAX) ENCODE lzo',
-		'DATETIME': 'DATETIME ENCODE lzo',
-		'DATE': 'DATE ENCODE lzo',
-		'TIME': 'TIME ENCODE lzo',
-		'TIMESTAMP': 'TIMESTAMP ENCODE lzo',
-		
-	}
 	src_engine = create_engine(BaseHook.get_hook(conn_id=conn).get_uri())  # pylint: disable=bad-indentation
 	src_engine._metadata = MetaData(bind=src_engine)  # pylint: disable=protected-access
 	src_engine._metadata.reflect(src_engine)  # pylint: disable=protected-access
@@ -66,35 +44,22 @@ def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, co
 		column_lists_type.append(str(type(cols['type'])).split(".")[-1].replace("'>", ""))
 		columns_dict[cols['name']] = str(type(cols['type'])).split(".")[-1].replace("'>", "")
 	
-	columns_dict['agan_ingestion_date'] = 'VARCHAR'
-	column_lists.append("agan_ingestion_date")
-	mysql_cursor.execute(query_for_schema)
-	rows = mysql_cursor.fetchall()
-	
 	print("##################################### START ******** ########################################")
 	print(column_lists)
 	print(column_lists_type)
 	print(columns_dict)
 	print("##################################### END ******** ########################################")
-	
-	lists = [[*i, datetime.today().strftime("%Y-%m-%d %H:%M:%S%Z")] for i in rows]
-	print(lists[:5])
-	df = pd.DataFrame(lists, columns=column_lists)
-	
-	for k, v in df.dtypes.items():
-		# qry += f"{list(k)[0]} {data_types[str(v)]} NULL,"
-		print(f"{k} @@@@@@@@@@@@@@@@@@@@@@@@@  ********************** @@@@@@@@@@@@@@@@@@@@@@@ {v} NULL,")
-	# df = df.convert_dtypes()
-	
+	# columns_dict['agan_ingestion_date'] = 'VARCHAR'
+	# column_lists.append("agan_ingestion_date")
+	for value in airflow_job_metadata:
+		columns_dict[value] = 'VARCHAR'
+		column_lists.append(value)
 	for k, v in columns_dict.items():
-		print(f"{k} {v} NULL,")
-		qry += f"{k} {data_types[str(v)]} NULL,"
-		
-		print(k, " ======================> ", v)
+		qry += f"{k} VARCHAR(MAX) ENCODE lzo NULL,"
 	
 	qry = qry.replace(
-		"agan_ingestion_date VARCHAR(MAX) ENCODE lzo NULL,",
-		"agan_ingestion_date varchar(MAX) ENCODE lzo NULL)"
+		f"{airflow_job_metadata[-1]} VARCHAR(MAX) ENCODE lzo NULL,",
+		f"{airflow_job_metadata[-1]} varchar(MAX) ENCODE lzo NULL)"
 	)
 	qry_schema = f"create schema if not exists {schema};"
 	print(qry)
@@ -115,9 +80,7 @@ def create_table_from_pandas(query_for_schema, mysql_cursor, redshift_cursor, co
 	return column_lists
 
 
-# from airflow.hooks.postgres_hook import PostgresHook
-
-def download_datatable(mysql_cursor, filename_location, query, columns) -> None:
+def download_datatable(mysql_cursor, filename_location, query, columns, kwargs) -> None:
 	"""
 
 	:param columns:
@@ -129,36 +92,34 @@ def download_datatable(mysql_cursor, filename_location, query, columns) -> None:
 	import pyarrow as pa
 	import pyarrow.parquet as pq
 	from fastparquet import write
+	import pyarrow.orc as orc
+	import numpy as np
 	mysql_cursor.execute(query)
 	rows = mysql_cursor.fetchall()
-	print("##################################### START ########################################")
-	print(columns)
-	print("##################################### END ########################################")
+	airflow_job_metadata_values = list()
+	for meta in airflow_job_metadata:
+		airflow_job_metadata_values.append(kwargs[meta])
+		print(kwargs[meta])
 	
 	if rows:
-		list = [[*i, datetime.today().strftime("%Y-%m-%d %H:%M:%S%Z")] for i in rows]
-		# print(list[:10])
-		df = pd.DataFrame(list, columns=columns)
-		# write(filename_location.replace(".csv", ".parq"), df)
+		# list = [[*i, datetime.today().strftime("%Y-%m-%d %H:%M:%S%Z")] for i in rows]
+		lists = [[*i, *airflow_job_metadata_values] for i in rows]
+
+		df = pd.DataFrame(lists, columns=columns)
+		# df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
+		# df.replace(to_replace=[None], value=np.nan, regex=True, inplace=True)
+		# df.replace(r'^\s*$', '', regex=True, inplace=True)
+		# df.replace(to_replace=[None], value='', regex=True, inplace=True)
+		# df = df.fillna(value=np.nan)
+		df = df.astype(str)
 		# df = df.convert_dtypes()
-		
-		print(df.head(5))
+		# print(df.dtypes)
+		# print(df.head(3))
 		table_from_pandas = pa.Table.from_pandas(df, preserve_index=False)
-		pq.write_table(table_from_pandas, filename_location.replace(".csv", ".parquet"))
-		print(df.dtypes)
-		for k, v in df.dtypes.items():
-			print(k, " ======================> ", v)
-		print(pq.ParquetFile(filename_location.replace(".csv", ".parquet")).schema)
-		print(pq.ParquetFile(filename_location.replace(".csv", ".parquet")).read_row_group(0))
-		# print(pq.ParquetFile(filename_location.replace(".csv", ".parq")).schema)
-		# print(pq.ParquetFile(filename_location.replace(".csv", ".parq")).read_row_group(0))
+		pq.write_table(table_from_pandas, filename_location.replace(".csv", ".parquet"), compression='SNAPPY')
 		return True
 	return False
 
-
-# with open(filename_location, "w", newline="") as file:
-# 	writer = csv.writer(file)
-# 	writer.writerows(list)
 
 def mkdir_for_task(table_name, dag_id_folder):
 	# Parent and Task Directory path
@@ -191,61 +152,91 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 	response["end_row_count"] = end_row_count
 	response["last_id_val"] = -10
 	
-	insert_query = f"""select {strategy["primary_key"]} from {kwargs['source_schema']}.{kwargs["table"]} order by
-					{strategy["primary_key"]} desc limit 1"""  ## select from source table
+	# insert_query = query['source_or_target_last_record_id'].format(
+	# 	strategy["primary_key"],
+	# 	kwargs['source_schema'],
+	# 	kwargs["table"],
+	# 	strategy["primary_key"]
+	# )
+	
+	insert_query_cnt = query['source_or_target_last_record_id'].format(
+		strategy["primary_key"],
+		kwargs['schema'],
+		kwargs["table"],
+		strategy["primary_key"]
+	)
+	
+	# insert_query = query['source_or_target_last_record_id'].format(
+	# 	strategy["primary_key"],
+	# 	kwargs['source_schema'],
+	# 	kwargs["table"],
+	# 	strategy["primary_key"]
+	# )
+	updated_at_insert_query_cnt = query['updated_at_source_or_target_last_record_id'].format(
+		strategy["primary_key"],
+		kwargs['schema'],
+		kwargs["table"],
+		strategy["primary_key"]
+	)
+	
 	if strategy["strategy"] == "ID_STRATEGY":
 		try:
-			insert_query_cnt = f"""select {strategy["primary_key"]} from {kwargs['schema']}.
-								{kwargs["table"]} order by {strategy["primary_key"]} desc limit
-								1"""  ## select from target dwh table
 			redshift_cursor.execute(insert_query_cnt)
-			last_id_val = redshift_cursor.fetchall()[0][0]
+			last_id_val = int(redshift_cursor.fetchall()[0][0])
 			response["last_id_val"] = last_id_val
 			print("last_id_val: ", last_id_val)
-			last_id_qry = f"""select count(*) from {kwargs['source_schema']}.{kwargs["table"].split('.')[0]}
-								where {strategy["primary_key"]}  > {last_id_val}"""
+			
+			last_id_qry = query['last_id_qry'].format(
+				kwargs['source_schema'],
+				kwargs["table"],
+				strategy["primary_key"],
+				last_id_val
+			)
 			mysql_cursor.execute(last_id_qry)
-			last_id = mysql_cursor.fetchall()[0][0]
+			last_id = int(mysql_cursor.fetchall()[0][0])
 			print("last_id: ", last_id)
-		# response["last_id"] = last_id
-		
 		except Exception as ex:
 			redshift_cursor.execute("ROLLBACK")
 			redshift_cursor.execute("COMMIT")
 			print("No record available for ID_STRATEGY")
+			insert_query = f"""select count(*) from {kwargs['source_schema']}.{kwargs["table"]}"""
+			print(insert_query)
 			start_row_count = 0
 			mysql_cursor.execute(insert_query)
 			end_row_count = mysql_cursor.fetchall()[0][0]
 			response["last_id"] = last_id
 			response["start_row_count"] = start_row_count
 			response["end_row_count"] = end_row_count
-		print(start_row_count, " ----------------- > ", end_row_count)
+		# print(start_row_count, " ----------------- > ", end_row_count)
 		if last_id > 0:
 			start_row_count = 0
 			end_row_count = last_id
 			response["last_id"] = last_id
 			response["start_row_count"] = start_row_count
 			response["end_row_count"] = end_row_count
-		print(start_row_count, " ----------------- > ", end_row_count)
+	# print(start_row_count, " ----------------- > ", end_row_count)
 	
 	if strategy["strategy"] == "DATE_STRATEGY":
 		
+		print(updated_at_insert_query_cnt, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 		try:
 			
-			insert_query_cnt = f"""select {strategy["primary_key"]} from {kwargs['schema']}.
-								{kwargs["table"]} order by
-								{strategy["primary_key"]} desc limit 1"""
-			redshift_cursor.execute(insert_query_cnt)
+			redshift_cursor.execute(updated_at_insert_query_cnt)
 			date_filter = redshift_cursor.fetchall()[0][0]
+			print(date_filter, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 			
-			source_qry = f"""select * from {kwargs['source_schema']}.{kwargs["table"]} where
-							{strategy["primary_key"]} > '{date_filter}'
-							order by {strategy["primary_key"]}"""
+			source_qry = query['source_fetch_new_update_data_qry'].format(
+				kwargs['source_schema'],
+				kwargs["table"],
+				strategy["primary_key"],
+				date_filter,
+				strategy["primary_key"]
+			)
 			print("STRATEGY SOURCE QUERY: ", source_qry)
 			response["strategy_qry"] = source_qry
 		
 		except Exception as ex:
-			print(ex)
+			print(ex, "cheching for errrrrrrrrrrrrrrrrrrroooooooooooooooooorrrrrrrrrrrrr")
 			redshift_cursor.execute("ROLLBACK")
 			redshift_cursor.execute("COMMIT")
 			print("No record available for DATE_STRATEGY")
@@ -277,6 +268,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 	redshift = redshift.get_conn()
 	redshift_cursor = redshift.cursor()
 	strategy = kwargs["strategy"]
+	update_query_type = kwargs["strategy"]["update_query_type"]
 	print(type(strategy))
 	print(strategy['primary_key'])
 	
@@ -285,72 +277,112 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 	
 	file_name = None
 	files = list()
-	# columns_list_copy = kwargs['get_create_schema'](
-	# 	kwargs['table'], kwargs['conn_id'],
-	# 	redshift_cursor,
-	# 	kwargs['schema'])
-	
-	query_for_schema = f"""select * from {kwargs['source_schema']}.{kwargs['table']} limit 10"""
 	columns_list_copy = create_table_from_pandas(
-		query_for_schema,
-		mysql_cursor,
 		redshift_cursor,
 		kwargs['conn_id'],
 		kwargs['schema'],
-		kwargs['table']
+		kwargs['table'],
 	)
 	
 	# download data to local folder in the container
 	insert_query = None
 	try:
 		print(get_data_config["start_row_count"], " -----> ", get_data_config["end_row_count"])
+		print(get_data_config["last_id"], " -----> ", get_data_config["last_id_val"])
+
 		if isinstance(get_data_config["start_row_count"], int) and isinstance(get_data_config["end_row_count"], int):
 			print("Using ID_STRATEGY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			
-			for start_limit in range(get_data_config["start_row_count"], get_data_config["end_row_count"], 100000):
-				if get_data_config["last_id"] > 0 and get_data_config["last_id_val"] > -10:
-					insert_query = f"""select * from (select * from {kwargs['source_schema']}.{kwargs["table"]}
-									where {strategy['primary_key']} > {get_data_config["last_id_val"]} order by
-									{strategy['primary_key']} asc)  as tbl limit 0,
-									{get_data_config["end_row_count"]}"""
-				elif get_data_config["last_id_val"] == -10:
-					insert_query = f"""select * from (select * from {kwargs['source_schema']}.{kwargs["table"]}
-					order by {strategy['primary_key']} asc)  as tbl limit {start_limit}, 100000 """
+			if update_query_type == "NORMAL":
 				
-				if insert_query:
+				for start_limit in range(get_data_config["start_row_count"], get_data_config["end_row_count"], 100000):
+					print("Using ID_STRATEGY }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}")
+					print(type(get_data_config["last_id"]), " -----> ", type(get_data_config["last_id_val"]))
+					
+					if get_data_config["last_id"] >= 0 and get_data_config["last_id_val"] > -10:
+						print("Using ID_STRATEGY }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}")
+						
+						insert_query = query['last_id_OR_last_id_val'].format(
+							kwargs['source_schema'],
+							kwargs["table"],
+							strategy['primary_key'],
+							get_data_config["last_id_val"],
+							strategy['primary_key'],
+							get_data_config["end_row_count"]
+						)
+					elif get_data_config["last_id_val"] > -10:
+						print("Using ID_STRATEGY (((((((((((((((((((((((((((((((((((((((((((((")
+
+						insert_query = query['last_id_OR_last_id_val'].format(
+							kwargs['source_schema'],
+							kwargs["table"],
+							strategy['primary_key'],
+							get_data_config["last_id_val"],
+							strategy['primary_key'],
+							get_data_config["end_row_count"]
+						)
+					elif get_data_config["last_id_val"] == -10:
+						insert_query = query['last_id_val_full_refresh'].format(
+							kwargs['source_schema'],
+							kwargs["table"],
+							strategy['primary_key'],
+							start_limit
+						)
 					print(insert_query)
-					# print(file_name)
-					file_name = f"{get_download_location_config}/{kwargs['table']}_{start_limit}.csv"
-					status = kwargs['download_tb'](mysql_cursor, file_name, insert_query, columns_list_copy)
-					print(status)
-					if status:
+					if insert_query:
+						file_name = f"{get_download_location_config}/{kwargs['table']}_{start_limit}.csv"
+						status = kwargs['download_tb'](mysql_cursor, file_name, insert_query, columns_list_copy, kwargs)
+						print(status)
+						if not status:
+							break
 						files.append(file_name)
-		print("####################### STAAAARTTTTTTTT ##########################")
+			
+			else:
+				print(update_query_type, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+				for start_limit in range(get_data_config["start_row_count"], get_data_config["end_row_count"], 10000):
+					if get_data_config["last_id"] >= 0 and get_data_config["last_id_val"] > -10:
+						print(update_query_type, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+						insert_query = query['last_id_OR_last_id_val_SPECIAL'].format(
+							kwargs['source_schema'],
+							kwargs["table"],
+							strategy['primary_key'],
+							get_data_config["last_id_val"],
+							get_data_config["end_row_count"]
+						)
+					elif get_data_config["last_id_val"] == -10:
+						insert_query = query['last_id_val_full_refresh_SPECIAL'].format(
+							kwargs['source_schema'],
+							kwargs["table"],
+							start_limit
+						)
+						print(update_query_type, "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+						print(insert_query)
+					
+					if insert_query:
+						file_name = f"{get_download_location_config}/{kwargs['table']}_{start_limit}.csv"
+						status = kwargs['download_tb'](mysql_cursor, file_name, insert_query, columns_list_copy, kwargs)
+						print(status)
+						if not status:
+							break
+						files.append(file_name)
 		if isinstance(get_data_config["start_row_count"], bool) \
-				and isinstance(get_data_config["end_row_count"], bool) \
-				and get_data_config["last_id_val"] == -10:
-			print("Using DATE_STRATEGY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			print(get_data_config["strategy_qry"])
-			# file_name = f"{get_download_location_config}/{kwargs['table']}_update.csv"
-			# files.append(file_name)
-			file_name = f"{get_download_location_config}/{kwargs['table']}_update.csv"
-			status = kwargs['download_tb'](mysql_cursor, file_name, get_data_config["strategy_qry"], columns_list_copy)
-			if status:
-				files.append(file_name)
-		print(file_name)
-		print(files, " STRATEGY: ", extract_strategy)
-	
+				and isinstance(get_data_config["end_row_count"], bool):
+			if get_data_config["last_id_val"] == -10:
+				file_name = f"{get_download_location_config}/{kwargs['table']}_update.csv"
+				print(get_data_config["strategy_qry"], "AAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh")
+				status = kwargs['download_tb'](
+					mysql_cursor, file_name, get_data_config["strategy_qry"],
+					columns_list_copy, kwargs
+				)
+				if status:
+					files.append(file_name)
+			else:
+				pass
 	except Exception as ex:
 		print(ex, "ERRRRORRRRRRRRRR")
-		print(get_data_config["strategy_qry"])
 	
-	# file_name = f"{get_download_location_config}/{kwargs['table']}_update.csv"
-	# files.append(file_name)
-	# kwargs['download_tb'](mysql_cursor, file_name, get_data_config["strategy_qry"])
 	try:
 		extract_strategy = "UPSERT"
 		for file in files:
-			print(file.split("/"), " STRATEGY: ", extract_strategy)
 			create_local_to_s3_job = LocalFilesystemToS3Operator(
 				task_id=f"create-local-{file.split('_')[1].replace('/', '-')}-to-s3-job",
 				filename=file.replace(".csv", ".parquet"),
@@ -369,8 +401,6 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 					schema=kwargs['schema'],
 					table=kwargs['table'],
 					copy_options=['parquet'],
-					# method="UPSERT",
-					# upsert_keys=columns_list_copy,
 					task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
 				)
 			if isinstance(get_data_config["start_row_count"], bool) \
@@ -414,7 +444,6 @@ def create_dag(  # pylint: disable=redefined-outer-name
 		start_date,  # pylint: disable=redefined-outer-name
 		default_args,  # pylint: disable=redefined-outer-name
 		my_func,  # pylint: disable=redefined-outer-name
-		# create_schema,  # pylint: disable=redefined-outer-name
 		dload,  # pylint: disable=redefined-outer-name
 		schema,  # pylint: disable=redefined-outer-name
 		source_schema,
@@ -431,7 +460,6 @@ def create_dag(  # pylint: disable=redefined-outer-name
 	:param start_date:
 	:param default_args:
 	:param my_func:
-	:param create_schema:
 	:param dload:
 	:return:
 	"""
@@ -467,7 +495,7 @@ def create_dag(  # pylint: disable=redefined-outer-name
 		)
 		parent_dir = "/tmp"
 		task_dir = os.path.join(parent_dir, task_id)
-		for table_name in tables:  # ["address", "business_channel", "device", "invoice"]:
+		for table_name in tables:
 			fetch_data_from_adamant = PythonOperator(
 				task_id=f"get_{table_name}_from_adamant_dwh",
 				provide_context=True,
@@ -475,14 +503,13 @@ def create_dag(  # pylint: disable=redefined-outer-name
 				op_kwargs={
 					"table": table_name,
 					"task_id": task_id,
-					# "get_create_schema": create_schema,
 					"download_tb": dload,
 					"schema": schema,
 					"source_schema": source_schema,
 					"task_dir": task_dir,
 					"conn_id": conn_id,
-					"strategy": primary_id[table_name]  # ,
-					# "strategy": primary_id[table_name]["strategy"]
+					"strategy": primary_id[table_name]
+					# "update_query_type": primary_id[table_name]["strategy"]
 					
 				}
 			)
@@ -492,7 +519,7 @@ def create_dag(  # pylint: disable=redefined-outer-name
 	return dag
 
 
-task_id = "test_dwh_orc"
+task_id = "test_dwh_orc_v2"
 
 default_args = {
 	'depends_on_past': False,
@@ -501,9 +528,9 @@ default_args = {
 	'email_on_retry': False,
 	'retries': 10,
 	'retry_delay': timedelta(minutes=3),
-	'execution_timeout': timedelta(seconds=200000),
+	'execution_timeout': timedelta(hours=12),
 }
-schedule_interval = timedelta(minutes=150)
+schedule_interval = timedelta(minutes=1000)
 start_date = datetime(2022, 7, 5)
 
 import yaml
@@ -513,7 +540,7 @@ with open("dags/docker_job/data_sources.yml") as file_loc:
 	for tbl in source_table:
 		for key, val in tbl.items():
 			print(key, " -> ", val['table_name'])
-			dag_id = f'Job-{key}-orc'
+			dag_id = f'Job-{key}-orc-v2'
 			description = f'A {key} DAG '
 			
 			globals()[dag_id] = create_dag(
@@ -523,8 +550,7 @@ with open("dags/docker_job/data_sources.yml") as file_loc:
 				description=description,
 				start_date=start_date,
 				default_args=default_args,
-				my_func=ingestion_process,  # mysql_conn,
-				# create_schema=get_schema_create_table_rs,
+				my_func=ingestion_process,
 				dload=download_datatable,
 				schema=val["schema"],
 				source_schema=val['source_schema'],

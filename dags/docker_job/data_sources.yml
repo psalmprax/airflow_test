@@ -7,106 +7,162 @@ adamant:
         address:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         business_channel:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         category:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         customer:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         device:
-            primary_key: updated_at
+            primary_key: id
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         device_category:
             primary_key: device_id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - device_id
         fos_user_group:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         fos_user_user:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype:
+#                confirmation_token: INTEGER
+#                website: INTEGER
+#                biography: INTEGER
+#                locale: INTEGER
+#                timezone: INTEGER
+#                phone: INTEGER
+#                facebook_uid: INTEGER
+#                facebook_name: INTEGER
+#                twitter_uid: INTEGER
+#                twitter_name: INTEGER
+#                gplus_uid: INTEGER
+#                gplus_name: INTEGER
+#                token: INTEGER
+#                two_step_code: INTEGER
             update_column:
                 - id
         fos_user_user_group:
             primary_key: user_id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - user_id
         gateway:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         invoice:
-            primary_key: updated_at
+            primary_key: id
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         orders:
-            primary_key: updated_at
+            primary_key: id
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         order_failed:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         order_item:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         order_item_detail:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         order_voucher:
             primary_key: order_id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - order_id
         payment:
-            primary_key: updated_at
+            primary_key: id
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         sales_channel:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         shipping:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         voucher:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         warranty:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
 wkfs:
@@ -118,17 +174,25 @@ wkfs:
         add_userfield:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         add_userfield_value:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - transaction_id
         advertising_channel:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype:
+#                advertising_medium_id: DOUBLE
+#                clicks: DOUBLE
             update_column:
                 - id
                 - application_id
@@ -136,41 +200,58 @@ wkfs:
         advertising_offer:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
+                - id
                 - offer_id
                 - advertising_channel_id
-                - offer_id
         article_numbers_rsp_history:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
         answer:
             primary_key: updated_at
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
+                - created_at
         application:
             primary_key: updated_at
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - name
+                - created_at
         application_payment_type:
             primary_key: application_id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - application_id
                 - payment_type_id
         business_channel:
             primary_key: updated_at
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - outlet_name
+                - created_at
         business_channel_offer:
             primary_key: offer_id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - offer_id
                 - business_channel_id
@@ -178,12 +259,16 @@ wkfs:
         business_channel_type:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - name
         b2b_trade_detail:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - trade_id
@@ -191,28 +276,278 @@ wkfs:
         calculation:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - name
         category:
             primary_key: updated_at
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - name
+                - created_at
         check_result_action:
             primary_key: updated_at
             strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
-        clarification:
-            primary_key: updated_at
-            strategy: DATE_STRATEGY
-            update_column:
-                - check_result_actions_id
+                - created_at
+#        clarification:
+#            primary_key: updated_at
+#            strategy: DATE_STRATEGY
+#            update_query_type: SPECIAL
+##            changing_column_datatype: {}
+#            update_column:
+#                - check_result_actions_id
         contractor:
             primary_key: id
             strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
             update_column:
                 - id
                 - name
+        currency:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - name
+        currency_rate:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype:
+#                value: DOUBLE
+            update_column:
+                - id
+        device:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        device_condition:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        device_purchase_price_history:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        device_purchase_price_history_questions:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        device_usage:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        dhl_pickup:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - user_id
+        dhl_pickup_de:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - trade_id
+#        dhl_pickup_pl:
+#            primary_key: id
+#            strategy: ID_STRATEGY
+#            update_query_type: NORMAL
+##            changing_column_datatype: {}
+#            update_column:
+#                - id
+#                - trade_id
+        donation_offer:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - offer_id
+                - created_at
+                - donation_project_id
+        donation_project:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        landingpage:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        landingpage_trade:
+            primary_key: trade_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - trade_id
+        landingpage_payment_type:
+            primary_key: landingpage_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - landingpage_id
+                - payment_type_id
+        location:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        manufactor:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        offer:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - device_id
+        offer_business_channel_history:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        offer_offer_state:
+            primary_key: offer_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - offer_id
+        offer_offer_state_set:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - offer_id
+
+        offer_refurbishment:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - offer_id
+        offer_rsp_history:
+            primary_key: offer_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - offer_id
+                - identifier
+        offer_state:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - name
+        payment:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - user_id
+        payment_allmaxx_credits:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+                - allmaxxid
+        payment_blau_credits:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+                - blauphone
+        payment_cancom:
+            primary_key: payment_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+                - cancom_customer_number
+        payment_direct_debit:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+        payment_direct_debit_austria: # has updated_at
+            primary_key: payment_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+        payment_direct_debit_poland:
+            primary_key: payment_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id

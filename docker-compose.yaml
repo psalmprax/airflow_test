@@ -140,7 +140,7 @@ services:
     depends_on:
       - airflow-scheduler
     deploy:
-      replicas: 6
+      replicas: 4
       mode: replicated
 #      resources:
 #        limits:
