@@ -307,7 +307,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
 							strategy['primary_key'],
-							get_data_config["end_row_count"]
+							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] > -10:
 						print("Using ID_STRATEGY (((((((((((((((((((((((((((((((((((((((((((((")
@@ -318,7 +318,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
 							strategy['primary_key'],
-							get_data_config["end_row_count"]
+							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] == -10:
 						insert_query = query['last_id_val_full_refresh'].format(
@@ -346,7 +346,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							kwargs["table"],
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
-							get_data_config["end_row_count"]
+							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] == -10:
 						insert_query = query['last_id_val_full_refresh_SPECIAL'].format(

@@ -53,11 +53,11 @@ query['source_fetch_new_update_data_qry'] = """select * from {}.{} where {} >= '
 query['source_or_target_rec_count_query'] = """select count(*) from {}.{}"""
 query['query_for_schema'] = """select * from {}.{} limit 10"""
 query['last_id_OR_last_id_val'] = """select * from
-									(select * from {}.{} where {} > {} order by {} asc)  as tbl limit 0, {}"""
+									(select * from {}.{} where {} > {})  as tbl limit 0, 100000"""
 
 # query['last_id_OR_last_id_val_SPECIAL'] = """select * from {}.{} where {} > {} order by {} asc limit 0, {}"""
 query['last_id_OR_last_id_val_SPECIAL'] = """select * from {}.{} where
-											{} > {} limit 0, {}"""
+											{} > {} limit 0, 100000"""
 
 query['last_id_val_full_refresh'] = """select * from (select * from {}.{} order by {} asc)  as tbl limit {}, 100000"""
 query['last_id_val_full_refresh_SPECIAL'] = """select * from {}.{} limit {}, 10000"""
