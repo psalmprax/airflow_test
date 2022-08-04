@@ -449,6 +449,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 				method=extract_strategy,
 				upsert_keys=strategy["update_column"],
 				task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
+			)
 			delete_s3_bucket = S3DeleteObjectsOperator(
 				task_id=f"delete-s3-{file.split('_')[1].replace('/', '-')}-from-s3",
 				bucket="airsamtest",
