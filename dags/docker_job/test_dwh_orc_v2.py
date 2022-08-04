@@ -104,7 +104,7 @@ def download_datatable(mysql_cursor, filename_location, query, columns, kwargs) 
 	if rows:
 		# list = [[*i, datetime.today().strftime("%Y-%m-%d %H:%M:%S%Z")] for i in rows]
 		lists = [[*i, *airflow_job_metadata_values] for i in rows]
-
+		
 		df = pd.DataFrame(lists, columns=columns)
 		# df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 		# df.replace(to_replace=[None], value=np.nan, regex=True, inplace=True)
@@ -147,6 +147,7 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 	start_row_count, end_row_count = False, False
 	response = dict()
 	response["strategy_qry"] = None
+	response["strategy_qry_count"] = None
 	response["last_id"] = last_id
 	response["start_row_count"] = start_row_count
 	response["end_row_count"] = end_row_count
@@ -230,10 +231,20 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 				kwargs["table"],
 				strategy["primary_key"],
 				date_filter,
-				strategy["primary_key"]
+				# strategy["primary_key"]
+			)
+			source_qry_count = query['source_fetch_new_update_data_qry_count'].format(
+				kwargs['source_schema'],
+				kwargs["table"],
+				strategy["primary_key"],
+				date_filter,
+				# strategy["primary_key"]
 			)
 			print("STRATEGY SOURCE QUERY: ", source_qry)
+			print("STRATEGY SOURCE QUERY: ", source_qry_count)
 			response["strategy_qry"] = source_qry
+			response["strategy_qry_count"] = source_qry_count
+		
 		
 		except Exception as ex:
 			print(ex, "cheching for errrrrrrrrrrrrrrrrrrroooooooooooooooooorrrrrrrrrrrrr")
@@ -289,7 +300,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 	try:
 		print(get_data_config["start_row_count"], " -----> ", get_data_config["end_row_count"])
 		print(get_data_config["last_id"], " -----> ", get_data_config["last_id_val"])
-
+		
 		if isinstance(get_data_config["start_row_count"], int) and isinstance(get_data_config["end_row_count"], int):
 			print("Using ID_STRATEGY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 			if update_query_type == "NORMAL":
@@ -298,7 +309,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 					print("Using ID_STRATEGY }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}")
 					print(type(get_data_config["last_id"]), " -----> ", type(get_data_config["last_id_val"]))
 					
-					if get_data_config["last_id"] >= 0 and get_data_config["last_id_val"] > -10:
+					if get_data_config["last_id"] > 0 and get_data_config["last_id_val"] > -10:
 						print("Using ID_STRATEGY }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}")
 						
 						insert_query = query['last_id_OR_last_id_val'].format(
@@ -306,21 +317,17 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							kwargs["table"],
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
-							# strategy['primary_key'],
 							start_limit
-							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] > -10:
 						print("Using ID_STRATEGY (((((((((((((((((((((((((((((((((((((((((((((")
-
+						
 						insert_query = query['last_id_OR_last_id_val'].format(
 							kwargs['source_schema'],
 							kwargs["table"],
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
-							# strategy['primary_key'],
 							start_limit
-							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] == -10:
 						insert_query = query['last_id_val_full_refresh'].format(
@@ -332,7 +339,13 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 					print(insert_query)
 					if insert_query:
 						file_name = f"{get_download_location_config}/{kwargs['table']}_{start_limit}.csv"
-						status = kwargs['download_tb'](mysql_cursor, file_name, insert_query, columns_list_copy, kwargs)
+						status = kwargs['download_tb'](
+							mysql_cursor,
+							file_name,
+							insert_query,
+							columns_list_copy,
+							kwargs
+						)
 						print(status)
 						if not status:
 							break
@@ -341,7 +354,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 			else:
 				print(update_query_type, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 				for start_limit in range(get_data_config["start_row_count"], get_data_config["end_row_count"], 10000):
-					if get_data_config["last_id"] >= 0 and get_data_config["last_id_val"] > -10:
+					if get_data_config["last_id"] > 0 and get_data_config["last_id_val"] > -10:
 						print(update_query_type, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
 						insert_query = query['last_id_OR_last_id_val_SPECIAL'].format(
 							kwargs['source_schema'],
@@ -349,7 +362,6 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
 							start_limit
-							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] == -10:
 						insert_query = query['last_id_val_full_refresh_SPECIAL'].format(
@@ -362,7 +374,13 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 					
 					if insert_query:
 						file_name = f"{get_download_location_config}/{kwargs['table']}_{start_limit}.csv"
-						status = kwargs['download_tb'](mysql_cursor, file_name, insert_query, columns_list_copy, kwargs)
+						status = kwargs['download_tb'](
+							mysql_cursor,
+							file_name,
+							insert_query,
+							columns_list_copy,
+							kwargs
+						)
 						print(status)
 						if not status:
 							break

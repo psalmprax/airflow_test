@@ -49,7 +49,8 @@ query['source_or_target_last_record_id'] = """select {} from {}.{} order by cast
 query['updated_at_source_or_target_last_record_id'] = """select {} from {}.{} order by {} desc limit 1"""
 
 query['last_id_qry'] = """select count(*) from {}.{} where {} > {}"""
-query['source_fetch_new_update_data_qry'] = """select * from {}.{} where {} >= '{}' order by {}"""
+query['source_fetch_new_update_data_qry_count'] = """select count(*) from {}.{} where {} >= '{}'"""
+query['source_fetch_new_update_data_qry'] = """select * from {}.{} where {} >= '{}'"""
 query['source_or_target_rec_count_query'] = """select count(*) from {}.{}"""
 query['query_for_schema'] = """select * from {}.{} limit 10"""
 query['last_id_OR_last_id_val'] = """select * from
