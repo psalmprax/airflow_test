@@ -307,6 +307,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
 							strategy['primary_key'],
+							start_limit
 							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] > -10:
@@ -318,6 +319,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
 							strategy['primary_key'],
+							start_limit
 							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] == -10:
@@ -346,6 +348,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							kwargs["table"],
 							strategy['primary_key'],
 							get_data_config["last_id_val"],
+							start_limit
 							# get_data_config["end_row_count"]
 						)
 					elif get_data_config["last_id_val"] == -10:
