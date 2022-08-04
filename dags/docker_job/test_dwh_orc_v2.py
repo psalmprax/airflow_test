@@ -309,7 +309,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 					print("Using ID_STRATEGY }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}")
 					print(type(get_data_config["last_id"]), " -----> ", type(get_data_config["last_id_val"]))
 					
-					if get_data_config["last_id"] > 0 and get_data_config["last_id_val"] > -10:
+					if get_data_config["last_id"] >= 0 and get_data_config["last_id_val"] > -10:
 						print("Using ID_STRATEGY }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}")
 						
 						insert_query = query['last_id_OR_last_id_val'].format(
