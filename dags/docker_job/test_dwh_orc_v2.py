@@ -412,32 +412,43 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 				dest_bucket="airsamtest",
 				replace=True,
 			)
-			if isinstance(get_data_config["start_row_count"], int) \
-					and isinstance(get_data_config["end_row_count"], int):
-				task_transfer_s3_to_redshift = S3ToRedshiftOperator(
-					s3_bucket="airsamtest",
-					s3_key=file.replace(".csv", ".parquet"),
-					aws_conn_id="s3_conn",
-					redshift_conn_id="psql_conn",
-					schema=kwargs['schema'],
-					table=kwargs['table'],
-					copy_options=['parquet'],
-					task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
-				)
-			if isinstance(get_data_config["start_row_count"], bool) \
-					and isinstance(get_data_config["end_row_count"], bool):
-				task_transfer_s3_to_redshift = S3ToRedshiftOperator(
-					s3_bucket="airsamtest",
-					s3_key=file.replace(".csv", ".parquet"),
-					aws_conn_id="s3_conn",
-					redshift_conn_id="psql_conn",
-					schema=kwargs['schema'],
-					table=kwargs['table'],
-					copy_options=['parquet'],
-					method=extract_strategy,
-					upsert_keys=strategy["update_column"],
-					task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
-				)
+			# if isinstance(get_data_config["start_row_count"], int) \
+			# 		and isinstance(get_data_config["end_row_count"], int):
+			# 	task_transfer_s3_to_redshift = S3ToRedshiftOperator(
+			# 		s3_bucket="airsamtest",
+			# 		s3_key=file.replace(".csv", ".parquet"),
+			# 		aws_conn_id="s3_conn",
+			# 		redshift_conn_id="psql_conn",
+			# 		schema=kwargs['schema'],
+			# 		table=kwargs['table'],
+			# 		copy_options=['parquet'],
+			# 		task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
+			# 	)
+			# if isinstance(get_data_config["start_row_count"], bool) \
+			# 		and isinstance(get_data_config["end_row_count"], bool):
+			# 	task_transfer_s3_to_redshift = S3ToRedshiftOperator(
+			# 		s3_bucket="airsamtest",
+			# 		s3_key=file.replace(".csv", ".parquet"),
+			# 		aws_conn_id="s3_conn",
+			# 		redshift_conn_id="psql_conn",
+			# 		schema=kwargs['schema'],
+			# 		table=kwargs['table'],
+			# 		copy_options=['parquet'],
+			# 		method=extract_strategy,
+			# 		upsert_keys=strategy["update_column"],
+			# 		task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
+			# 	)
+			task_transfer_s3_to_redshift = S3ToRedshiftOperator(
+				s3_bucket="airsamtest",
+				s3_key=file.replace(".csv", ".parquet"),
+				aws_conn_id="s3_conn",
+				redshift_conn_id="psql_conn",
+				schema=kwargs['schema'],
+				table=kwargs['table'],
+				copy_options=['parquet'],
+				method=extract_strategy,
+				upsert_keys=strategy["update_column"],
+				task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
 			delete_s3_bucket = S3DeleteObjectsOperator(
 				task_id=f"delete-s3-{file.split('_')[1].replace('/', '-')}-from-s3",
 				bucket="airsamtest",
