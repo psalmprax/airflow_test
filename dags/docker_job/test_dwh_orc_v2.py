@@ -244,8 +244,7 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 			print("STRATEGY SOURCE QUERY: ", source_qry_count)
 			response["strategy_qry"] = source_qry
 			response["strategy_qry_count"] = source_qry_count
-		
-		
+			
 		except Exception as ex:
 			print(ex, "cheching for errrrrrrrrrrrrrrrrrrroooooooooooooooooorrrrrrrrrrrrr")
 			redshift_cursor.execute("ROLLBACK")
@@ -388,14 +387,18 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 		if isinstance(get_data_config["start_row_count"], bool) \
 				and isinstance(get_data_config["end_row_count"], bool):
 			if get_data_config["last_id_val"] == -10:
-				file_name = f"{get_download_location_config}/{kwargs['table']}_update.csv"
 				print(get_data_config["strategy_qry"], "AAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHhh")
-				status = kwargs['download_tb'](
-					mysql_cursor, file_name, get_data_config["strategy_qry"],
-					columns_list_copy, kwargs
-				)
-				if status:
-					files.append(file_name)
+				mysql_cursor.execute(get_data_config["strategy_qry_count"])
+				record_count = mysql_cursor.fetchall()[0][0]
+				for count_value in range(0, record_count, 100000):
+					file_name = f"{get_download_location_config}/{kwargs['table']}_{count_value}_update.csv"
+					status = kwargs['download_tb'](
+						mysql_cursor, file_name,
+						get_data_config["strategy_qry"] + """ limit {}, 100000""".format(count_value),
+						columns_list_copy, kwargs
+					)
+					if status:
+						files.append(file_name)
 			else:
 				pass
 	except Exception as ex:

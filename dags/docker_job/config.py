@@ -57,8 +57,7 @@ query['last_id_OR_last_id_val'] = """select * from
 									(select * from {}.{} where {} > {})  as tbl limit {}, 100000"""
 
 # query['last_id_OR_last_id_val_SPECIAL'] = """select * from {}.{} where {} > {} order by {} asc limit 0, {}"""
-query['last_id_OR_last_id_val_SPECIAL'] = """select * from {}.{} where
-											{} > {} limit {}, 100000"""
+query['last_id_OR_last_id_val_SPECIAL'] = """select * from {}.{} where {} > {} limit {}, 100000"""
 
 query['last_id_val_full_refresh'] = """select * from (select * from {}.{} order by {} asc)  as tbl limit {}, 100000"""
 query['last_id_val_full_refresh_SPECIAL'] = """select * from {}.{} limit {}, 10000"""
