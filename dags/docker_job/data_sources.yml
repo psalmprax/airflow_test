@@ -213,6 +213,7 @@ wkfs:
 #            changing_column_datatype: {}
             update_column:
                 - id
+                - article_number
         answer:
             primary_key: updated_at
             strategy: DATE_STRATEGY
