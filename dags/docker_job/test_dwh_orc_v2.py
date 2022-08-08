@@ -102,15 +102,13 @@ def download_datatable(mysql_cursor, filename_location, query, columns, kwargs) 
 		print(kwargs[meta])
 	
 	if rows:
-		# list = [[*i, datetime.today().strftime("%Y-%m-%d %H:%M:%S%Z")] for i in rows]
 		lists = [[*i, *airflow_job_metadata_values] for i in rows]
 		
 		df = pd.DataFrame(lists, columns=columns)
 		# df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 		# df.replace(to_replace=[None], value=np.nan, regex=True, inplace=True)
 		df.replace(r'^\s*$', '', regex=True, inplace=True)
-		df.replace(to_replace=[None], value='', regex=True, inplace=True)
-		# df = df.fillna(value=np.nan)
+		df.replace({pd.NaT: '', np.NaN: '', None: ''}, inplace=True)
 		df = df.astype(str)
 		# df = df.convert_dtypes()
 		# print(df.dtypes)

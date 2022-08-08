@@ -46,6 +46,7 @@ adamant:
 #            changing_column_datatype: {}
             update_column:
                 - device_id
+                - category_id
         fos_user_group:
             primary_key: id
             strategy: ID_STRATEGY
@@ -474,7 +475,6 @@ wkfs:
             update_column:
                 - id
                 - offer_id
-
         offer_refurbishment:
             primary_key: id
             strategy: ID_STRATEGY
@@ -552,3 +552,80 @@ wkfs:
 #            changing_column_datatype: {}
             update_column:
                 - payment_id
+
+
+
+
+
+
+        payment_direct_debit_spain:
+            primary_key: payment_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+        payment_direct_debit_swift:
+            primary_key: payment_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+        payment_otto_credits:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+                - created_at
+        payment_paypal:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+                - created_at
+        payment_simyo_credits:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - payment_id
+                - created_at
+        payment_type:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        product_check:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - stock_id
+                - created_at
+        product_check_field:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - name
+        product_check_questionair:
+            primary_key: product_check_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - product_check_id
+                - question_id
