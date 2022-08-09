@@ -108,7 +108,7 @@ def download_datatable(mysql_cursor, filename_location, query, columns, kwargs) 
 		# df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 		# df.replace(to_replace=[None], value=np.nan, regex=True, inplace=True)
 		df.replace(r'^\s*$', '', regex=True, inplace=True)
-		df.replace({pd.NaT: '', np.NaN: '', None: ''}, inplace=True)
+		df.replace({pd.NaT: '', np.NaN: '', None: '', 'nan': ''}, inplace=True)
 		df = df.astype(str)
 		# df = df.convert_dtypes()
 		# print(df.dtypes)
@@ -175,7 +175,9 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 		strategy["primary_key"],
 		kwargs['schema'],
 		kwargs["table"],
+		strategy["primary_key"],
 		strategy["primary_key"]
+	
 	)
 	
 	if strategy["strategy"] == "ID_STRATEGY":

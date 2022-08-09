@@ -552,12 +552,6 @@ wkfs:
 #            changing_column_datatype: {}
             update_column:
                 - payment_id
-
-
-
-
-
-
         payment_direct_debit_spain:
             primary_key: payment_id
             strategy: ID_STRATEGY
@@ -629,3 +623,227 @@ wkfs:
             update_column:
                 - product_check_id
                 - question_id
+
+
+
+
+
+
+
+        product_check_value:
+            primary_key: product_check_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - product_check_id
+                - product_check_field_id
+        product_check_value_history:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        promo_code:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        promo_offer:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - offer_id
+                - promo_id
+        province:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - name
+        question:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - question
+        question_answer:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - answer_code
+        repair:
+            primary_key: returned
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - check_result_actions_id
+                - start
+        retoure:
+            primary_key: mail_submitted
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - email
+        retoure_reason:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - code
+        serie:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - manufactor_id
+        sf_guard_user:
+            primary_key: last_login
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - username
+                - created_at
+        sf_guard_user_profile:
+            primary_key: user_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - user_id
+                - email
+        sf_guard_user_profile_eno:
+            primary_key: user_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - user_id
+        sf_guard_user_profile_e_plus:
+            primary_key: user_id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - user_id
+        stock:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - offer_id
+                - created_at
+        stock_out_info:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - stock_id
+                - created_at
+        tax_offer:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - offer_id
+                - created_at
+        tracking_campaign:
+            primary_key: date_end
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        tracking_campaign_group:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - name
+        trade:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        trade_blacklist:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - value
+        trade_whitelist:
+            primary_key: valid_until
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - value
+        trade_store:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+        trade_store_email:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - email
+        user:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - created_at
+        shipment:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+#            changing_column_datatype: {}
+            update_column:
+                - id
+                - carrier_id
+                - retoure_id
+                - trade_id

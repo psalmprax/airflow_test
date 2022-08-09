@@ -46,7 +46,8 @@ airflow_job_metadata = [
 
 query = dict()
 query['source_or_target_last_record_id'] = """select {} from {}.{} order by cast({} as integer) desc limit 1"""
-query['updated_at_source_or_target_last_record_id'] = """select {} from {}.{} order by {} desc limit 1"""
+query['updated_at_source_or_target_last_record_id'] = """select {} from {}.{} where {}
+														is not null order by {} desc limit 1"""
 
 query['last_id_qry'] = """select count(*) from {}.{} where {} > {}"""
 query['source_fetch_new_update_data_qry_count'] = """select count(*) from {}.{} where {} >= '{}'"""
