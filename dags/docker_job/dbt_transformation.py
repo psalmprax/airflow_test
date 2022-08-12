@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 from datetime import datetime, timedelta
-
+from airflow.hooks.base import BaseHook
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 
@@ -15,6 +15,8 @@ def create_dag(dag_id,
                start_date,
                default_args):
     # files_to_copy = list()
+    Mygit = BaseHook.get_connection('profiles_key')
+
     dag = DAG(schedule_interval=schedule,
               default_args=default_args,
               description=description,
@@ -30,12 +32,14 @@ def create_dag(dag_id,
             bash_command=f" rm -rf /tmp/{dbt_model} && mkdir /tmp/{dbt_model}\
                             && cp -r /tmp/dbt /tmp/{dbt_model}/dbt \
                             && cd /tmp/{dbt_model}/dbt && python3 -m venv venv \
+                            && unzip -o -j -P {Mygit.password} profiles.zip \
                             && export PIP_USER=false \
                             && source /tmp/{dbt_model}/dbt/venv/bin/activate \
                             && pip  install --quiet --upgrade pip setuptools \
                             && pip3 install --quiet 'MarkupSafe<=2.0.1' 'dbt-redshift' 'dbt-core' \
                             && dbt --version && deactivate \
-                            && cd /tmp/{dbt_model}/dbt && source /tmp/{dbt_model}/dbt/venv/bin/activate \
+                            && cd /tmp/{dbt_model}/dbt \
+                            && source /tmp/{dbt_model}/dbt/venv/bin/activate \
                             && dbt deps --profiles-dir /tmp/{dbt_model}/dbt/ && dbt seed --profiles-dir /tmp/{dbt_model}/dbt/ \
                             && dbt run --models {dbt_model} --profiles-dir /tmp/{dbt_model}/dbt/"
         )
@@ -50,7 +54,7 @@ def create_dag(dag_id,
     return dag
 
 
-dbt_models = ["facts", "dimensions", "objects", "example"]
+dbt_models = ["example", "objects", "calculations"]
 for dbt_mdl in dbt_models:
     default_args = {
         'depends_on_past': False,
@@ -59,10 +63,10 @@ for dbt_mdl in dbt_models:
         'email_on_retry': False,
         'retries': 1,
         'retry_delay': timedelta(minutes=2),
-        'execution_timeout': timedelta(seconds=2000),
+        'execution_timeout': timedelta(seconds=20000),
     }
     description = f'A {dbt_mdl} DAG '
-    schedule_interval = timedelta(hours=2)
+    schedule_interval = timedelta(hours=1)
     dag_id = f'T-dbt-job-{dbt_mdl}'
     start_date = datetime(2022, 4, 1)
 

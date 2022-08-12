@@ -8,42 +8,54 @@ adamant:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         business_channel:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         category:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         customer:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         device:
             primary_key: id
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         device_category:
             primary_key: device_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - device_id
                 - category_id
@@ -51,119 +63,135 @@ adamant:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         fos_user_user:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype:
-#                confirmation_token: INTEGER
-#                website: INTEGER
-#                biography: INTEGER
-#                locale: INTEGER
-#                timezone: INTEGER
-#                phone: INTEGER
-#                facebook_uid: INTEGER
-#                facebook_name: INTEGER
-#                twitter_uid: INTEGER
-#                twitter_name: INTEGER
-#                gplus_uid: INTEGER
-#                gplus_name: INTEGER
-#                token: INTEGER
-#                two_step_code: INTEGER
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         fos_user_user_group:
             primary_key: user_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - user_id
         gateway:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         invoice:
             primary_key: id
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         orders:
             primary_key: id
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         order_failed:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         order_item:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         order_item_detail:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         order_voucher:
             primary_key: order_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - order_id
         payment:
             primary_key: id
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         sales_channel:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         shipping:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         voucher:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         warranty:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
 wkfs:
@@ -176,14 +204,18 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         add_userfield_value:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - transaction_id
@@ -191,9 +223,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype:
-#                advertising_medium_id: DOUBLE
-#                clicks: DOUBLE
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - application_id
@@ -202,7 +234,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - offer_id
@@ -211,7 +245,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - article_number
@@ -219,7 +255,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
@@ -227,7 +265,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -236,7 +276,9 @@ wkfs:
             primary_key: application_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - application_id
                 - payment_type_id
@@ -244,7 +286,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - outlet_name
@@ -253,7 +297,9 @@ wkfs:
             primary_key: offer_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - offer_id
                 - business_channel_id
@@ -262,7 +308,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -270,7 +318,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - trade_id
@@ -279,7 +329,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -287,7 +339,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -296,22 +350,29 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
-#        clarification:
-#            primary_key: updated_at
-#            strategy: DATE_STRATEGY
-#            update_query_type: SPECIAL
-##            changing_column_datatype: {}
-#            update_column:
-#                - check_result_actions_id
+        clarification:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: SPECIAL
+            changing_column_datatype: {}
+            too_long_size_column:
+                - clarifytext
+            table_name_with_cotation: False
+            update_column:
+                - check_result_actions_id
         contractor:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -319,7 +380,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -327,15 +390,18 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype:
-#                value: DOUBLE
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         device:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
@@ -343,28 +409,36 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         device_purchase_price_history:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         device_purchase_price_history_questions:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         device_usage:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
@@ -372,7 +446,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - user_id
@@ -380,23 +456,30 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - trade_id
-#        dhl_pickup_pl:
-#            primary_key: id
-#            strategy: ID_STRATEGY
-#            update_query_type: NORMAL
-##            changing_column_datatype: {}
-#            update_column:
-#                - id
-#                - trade_id
+        dhl_pickup_pl:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+            changing_column_datatype: {}
+            too_long_size_column:
+                - label_content
+            table_name_with_cotation: False
+            update_column:
+                - id
+                - trade_id
         donation_offer:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - offer_id
                 - created_at
@@ -405,7 +488,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
@@ -413,21 +498,27 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         landingpage_trade:
             primary_key: trade_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - trade_id
         landingpage_payment_type:
             primary_key: landingpage_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - landingpage_id
                 - payment_type_id
@@ -435,21 +526,27 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         manufactor:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         offer:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - device_id
@@ -457,21 +554,27 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         offer_offer_state:
             primary_key: offer_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - offer_id
         offer_offer_state_set:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - offer_id
@@ -479,7 +582,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - offer_id
@@ -487,7 +592,9 @@ wkfs:
             primary_key: offer_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - offer_id
                 - identifier
@@ -495,7 +602,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -503,7 +612,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - user_id
@@ -511,7 +622,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
                 - allmaxxid
@@ -519,7 +632,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
                 - blauphone
@@ -527,7 +642,9 @@ wkfs:
             primary_key: payment_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
                 - cancom_customer_number
@@ -535,42 +652,54 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
         payment_direct_debit_austria: # has updated_at
             primary_key: payment_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
         payment_direct_debit_poland:
             primary_key: payment_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
         payment_direct_debit_spain:
             primary_key: payment_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
         payment_direct_debit_swift:
             primary_key: payment_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
         payment_otto_credits:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
                 - created_at
@@ -578,7 +707,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
                 - created_at
@@ -586,7 +717,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - payment_id
                 - created_at
@@ -594,7 +727,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
@@ -602,7 +737,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - stock_id
@@ -611,7 +748,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -619,7 +758,9 @@ wkfs:
             primary_key: product_check_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - product_check_id
                 - question_id
@@ -634,7 +775,9 @@ wkfs:
             primary_key: product_check_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - product_check_id
                 - product_check_field_id
@@ -642,7 +785,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
@@ -650,7 +795,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - created_at
@@ -658,7 +805,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - offer_id
                 - promo_id
@@ -666,7 +815,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -674,7 +825,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - question
@@ -682,7 +835,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - answer_code
@@ -690,7 +845,9 @@ wkfs:
             primary_key: returned
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - check_result_actions_id
                 - start
@@ -698,7 +855,9 @@ wkfs:
             primary_key: mail_submitted
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - email
@@ -706,7 +865,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - code
@@ -714,7 +875,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - manufactor_id
@@ -722,7 +885,9 @@ wkfs:
             primary_key: last_login
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - username
@@ -731,7 +896,9 @@ wkfs:
             primary_key: user_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - user_id
                 - email
@@ -739,21 +906,27 @@ wkfs:
             primary_key: user_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - user_id
         sf_guard_user_profile_e_plus:
             primary_key: user_id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - user_id
         stock:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - offer_id
@@ -762,7 +935,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - stock_id
                 - created_at
@@ -770,7 +945,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - offer_id
                 - created_at
@@ -778,15 +955,19 @@ wkfs:
             primary_key: date_end
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
-                - created_at
+                - date_start
         tracking_campaign_group:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - name
@@ -794,15 +975,19 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
-                - id
+                - transaction_id
                 - created_at
         trade_blacklist:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - value
@@ -810,7 +995,9 @@ wkfs:
             primary_key: valid_until
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - value
@@ -818,14 +1005,18 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
         trade_store_email:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - email
@@ -833,7 +1024,9 @@ wkfs:
             primary_key: updated_at
             strategy: DATE_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: True
             update_column:
                 - id
                 - created_at
@@ -841,7 +1034,9 @@ wkfs:
             primary_key: id
             strategy: ID_STRATEGY
             update_query_type: NORMAL
-#            changing_column_datatype: {}
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
             update_column:
                 - id
                 - carrier_id

@@ -1,0 +1,156 @@
+version: 2
+
+models:
+  - name: wkfs_current_currency_rates
+    description: Get the most recent currency exchange rate for each currency.
+    columns:
+      - name: currency_id
+        description: ID of the currency (PK and FK)
+        tests:
+          - unique
+          - not_null
+      - name: fx_rate
+        description: Current exchange rate
+        tests:
+          - not_null
+          - gemma_dbt_utils.numeric_constraints:
+              gt: 0 # never be 0
+              gte: 0.9 # update this as required, should be sanity check
+              lte: 70 # update this as required, should be sanity check
+
+  - name: wkfs_last_clarification_per_product_check_id_in
+    description: Get the latest clarification (check result action id) per product_checks_id_in
+    columns:
+      - name: product_checks_id_in
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_last_product_check_per_stock
+    description: Get the last product check for each stock
+    columns:
+      - name: stock_id
+        description: PK and FK
+        tests:
+          - unique
+          - not_null
+      - name: product_check_id
+        description: ID of the latest product check
+        tests:
+          - unique # each product check should only related to one stock!
+          - not_null
+
+  - name: wkfs_latest_repair_per_stock
+    description: Get the highest check result action id for each stock
+    columns:
+      - name: stock_id
+        description: FK and PK
+        tests:
+          - not_null
+          - unique
+      - name: wkfs_latest_repair_per_stock
+        description: FK - check result action id of the latest repair
+        tests:
+          - not_null
+          - unique # each repair should only belong to one stock!
+
+  - name: wkfs_offer_last_state_change
+    description: Last time offer changed its state
+    columns:
+      - name: offer_id
+        description: PK and FK
+        tests:
+          - not_null
+          - unique
+      - name: last_changed_at
+        description: last time the offer changed its state
+        tests:
+          - not_null
+
+  - name: wkfs_offer_last_state_change_rts
+    description: Last time offer changed state to rts
+    columns:
+      - name: offer_id
+        description: PK and FK
+        tests:
+          - not_null
+          - unique
+      - name: last_changed_at
+        description: last time the offer changed state to rts
+        tests:
+          - not_null
+
+  - name: wkfs_offer_stock_list
+    description: Check if stock_list is valid or not.
+    columns:
+      - name: id
+        tests:
+          - not_null
+
+  - name: wkfs_offer_stock_list_created_last_seven_days
+    description: Check if stock_list_created is valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_offer_stock_list_created_last_fourteen_days
+    description: Check if stock_list_created is valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_offer_stock_list_sales_last_seven_days
+    description: Check if stock_list_sales is valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_offer_stock_list_sales_last_fourteen_days
+    description: Check if stock_list_sales is valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_offer_stock_list_stock_in_seven_days
+    description: Check if stock_list_stock_in is valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_offer_stock_list_stock_in_fourteen_days
+    description: Check if stock_list_stock_in is valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_offer_stock_list_stock_time
+    description: Check if stock_list_stock_time is valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: wkfs_promo_code_valid
+    description: Check if promo_code for trade valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+  
+  - name: wkfs_segmentation_calculations
+    description: Calculate the avg sales, total number of trades and total yearly amount for each customer in a 5 year window
+    

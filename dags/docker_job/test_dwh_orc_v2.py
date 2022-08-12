@@ -26,7 +26,8 @@ def create_table_from_pandas(
 		redshift_cursor,
 		conn,
 		schema,
-		table
+		table,
+		strategy
 ):
 	import pandas as pd
 	column_lists = list()
@@ -38,14 +39,18 @@ def create_table_from_pandas(
 	src_engine._metadata.reflect(src_engine)  # pylint: disable=protected-access
 	insp = inspect(src_engine)
 	columns_table = insp.get_columns(table_name=table)
+	if strategy["table_name_with_cotation"]:
+		table += "s"
 	qry = f"create table if not exists {schema}.{table} ("
 	for cols in columns_table:
 		column_lists.append(cols['name'])
-		column_lists_type.append(str(type(cols['type'])).split(".")[-1].replace("'>", ""))
-		columns_dict[cols['name']] = str(type(cols['type'])).split(".")[-1].replace("'>", "")
+		if cols['name'] not in strategy["too_long_size_column"]:
+			column_lists_type.append(str(type(cols['type'])).split(".")[-1].replace("'>", ""))
+			columns_dict[cols['name']] = str(type(cols['type'])).split(".")[-1].replace("'>", "")
 	
 	print("##################################### START ******** ########################################")
 	print(column_lists)
+	print(strategy["too_long_size_column"])
 	print(column_lists_type)
 	print(columns_dict)
 	print("##################################### END ******** ########################################")
@@ -80,7 +85,7 @@ def create_table_from_pandas(
 	return column_lists
 
 
-def download_datatable(mysql_cursor, filename_location, query, columns, kwargs) -> None:
+def download_datatable(mysql_cursor, filename_location, query, columns, kwargs, strategy=None) -> None:
 	"""
 
 	:param columns:
@@ -108,8 +113,11 @@ def download_datatable(mysql_cursor, filename_location, query, columns, kwargs) 
 		# df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
 		# df.replace(to_replace=[None], value=np.nan, regex=True, inplace=True)
 		df.replace(r'^\s*$', '', regex=True, inplace=True)
-		df.replace({pd.NaT: '', np.NaN: '', None: '', 'nan': ''}, inplace=True)
+		df.replace({pd.NaT: '', np.NaN: '', None: '', 'nan': '', 'None': '', 'Nat': '', 'nan': ''}, inplace=True)
 		df = df.astype(str)
+		if strategy["too_long_size_column"]:
+			for coll in strategy["too_long_size_column"]:
+				df.drop(coll, axis=1, inplace=True)
 		# df = df.convert_dtypes()
 		# print(df.dtypes)
 		# print(df.head(3))
@@ -150,7 +158,12 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 	response["start_row_count"] = start_row_count
 	response["end_row_count"] = end_row_count
 	response["last_id_val"] = -10
+	table = None
 	
+	if strategy["table_name_with_cotation"]:
+		table = kwargs["table"] + "s"
+	else:
+		table = kwargs["table"]
 	# insert_query = query['source_or_target_last_record_id'].format(
 	# 	strategy["primary_key"],
 	# 	kwargs['source_schema'],
@@ -161,7 +174,8 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 	insert_query_cnt = query['source_or_target_last_record_id'].format(
 		strategy["primary_key"],
 		kwargs['schema'],
-		kwargs["table"],
+		# kwargs["table"],
+		table,
 		strategy["primary_key"]
 	)
 	
@@ -201,6 +215,8 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 			redshift_cursor.execute("COMMIT")
 			print("No record available for ID_STRATEGY")
 			insert_query = f"""select count(*) from {kwargs['source_schema']}.{kwargs["table"]}"""
+			# insert_query = f"""select count(*) from {kwargs['source_schema']}.{table}"""
+
 			print(insert_query)
 			start_row_count = 0
 			mysql_cursor.execute(insert_query)
@@ -251,6 +267,7 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 			redshift_cursor.execute("COMMIT")
 			print("No record available for DATE_STRATEGY")
 			insert_query = f"""select count(*) from {kwargs['source_schema']}.{kwargs["table"]}"""
+			# insert_query = f"""select count(*) from {kwargs['source_schema']}.{table}"""
 			start_row_count = 0
 			mysql_cursor.execute(insert_query)
 			end_row_count = mysql_cursor.fetchall()[0][0]
@@ -292,6 +309,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 		kwargs['conn_id'],
 		kwargs['schema'],
 		kwargs['table'],
+		strategy
 	)
 	
 	# download data to local folder in the container
@@ -343,7 +361,8 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							file_name,
 							insert_query,
 							columns_list_copy,
-							kwargs
+							kwargs,
+							strategy
 						)
 						print(status)
 						if not status:
@@ -378,7 +397,8 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 							file_name,
 							insert_query,
 							columns_list_copy,
-							kwargs
+							kwargs,
+							strategy
 						)
 						print(status)
 						if not status:
@@ -395,7 +415,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 					status = kwargs['download_tb'](
 						mysql_cursor, file_name,
 						get_data_config["strategy_qry"] + """ limit {}, 100000""".format(count_value),
-						columns_list_copy, kwargs
+						columns_list_copy, kwargs, strategy
 					)
 					if status:
 						files.append(file_name)
@@ -406,6 +426,11 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 	
 	try:
 		extract_strategy = "UPSERT"
+		table_name = None
+		if strategy["table_name_with_cotation"]:
+			table_name = f'{kwargs["table"]}s'
+		else:
+			table_name = kwargs["table"]
 		for file in files:
 			create_local_to_s3_job = LocalFilesystemToS3Operator(
 				task_id=f"create-local-{file.split('_')[1].replace('/', '-')}-to-s3-job",
@@ -441,13 +466,14 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 			# 		upsert_keys=strategy["update_column"],
 			# 		task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
 			# 	)
+
 			task_transfer_s3_to_redshift = S3ToRedshiftOperator(
 				s3_bucket="airsamtest",
 				s3_key=file.replace(".csv", ".parquet"),
 				aws_conn_id="s3_conn",
 				redshift_conn_id="psql_conn",
 				schema=kwargs['schema'],
-				table=kwargs['table'],
+				table=table_name,
 				copy_options=['parquet'],
 				method=extract_strategy,
 				upsert_keys=strategy["update_column"],
@@ -566,7 +592,7 @@ default_args = {
 	'retry_delay': timedelta(minutes=3),
 	'execution_timeout': timedelta(hours=12),
 }
-schedule_interval = timedelta(minutes=1000)
+schedule_interval = timedelta(minutes=60)
 start_date = datetime(2022, 7, 5)
 
 import yaml

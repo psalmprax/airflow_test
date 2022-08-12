@@ -1,0 +1,248 @@
+version: 2
+
+models:
+  - name: obj_adamant_addresses
+    description: Raw table containing data on shipping addresses.
+    columns:
+      - name: address_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_business_channels
+    description: Raw table containing data on business channels.
+    columns:
+      - name: business_channel_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_categories
+    description: Raw table containing data on device categories.
+    columns:
+      - name: category_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_customers
+    description: Raw table containing data on customers.
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+        description: unique customer id
+      - name: orders_count
+        description: amount of orders per customer
+      - name: address_id
+        description: id from obj_adamant_addresses
+      - name: street
+        description: customer street from obj_adamant_addresses
+      - name: city
+        description: customer city from obj_adamant_addresses
+      - name: postal_code
+        description: customer postal code from obj_adamant_addresses
+      - name: country_code
+        description: customer country code from obj_adamant_addresses
+
+
+  - name: obj_adamant_devices
+    description: Raw table containing data on devices.
+    columns:
+      - name: device_id
+        tests:
+          - not_null
+          - unique
+        description: id from obj_adamant_devices
+      - name: reference
+        description: offer_id / TA-number 
+      - name: business_channel_id
+        description: id from obj_adamant_business_channel
+      - name: business_channel_name
+        description: type of business channel
+      - name: article_number
+        description: internal article number
+      - name: order_number
+        description: order number which the customer receives
+      - name: tax
+        description: tax amount in %
+      - name: device_name
+        description: name of device
+      - name: status
+        description: device status, eg stock_out, return etc
+      - name: status_updated_at
+        description: timestamp of when status has been updated
+      - name: imei
+        description: imei number of device
+      - name: serial_number
+        description: serial number of device
+      - name: is_warranty_permitted
+        description: is a warranty permitted for the device
+      - name: created_at
+        description: timestamp of when entry was created
+      - name: updated_at
+        description: timestamp of when entry was updated
+
+  - name: obj_adamant_gateways
+    description: Raw table containing data on gateways.
+    columns:
+      - name: gateway_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_invoices
+    description: Raw table containing data on invoices.
+    columns:
+      - name: invoice_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_order_item_details
+    description: Raw table containing data on order item details.
+    columns:
+      - name: order_item_detail_id
+        tests:
+          - not_null
+          - unique
+      - name: order_item_id
+        description: id from obj_adamant_order_items
+      - name: device_id
+        description: device id from obj_adamant_devices
+      - name: status
+        description: order status per order item
+
+  - name: obj_adamant_order_items
+    description: Raw table containing data on order items.
+    columns:
+      - name: order_item_id
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        description: id from object_adamant_orders
+      - name: sku
+        description: stock keeping unit (sku) number for a device
+      - name: quantity
+        description: quantity of order items in order
+      - name: price
+        description: price of a given order item
+      - name: tax
+        description: tax amount in %
+      - name: order_item_name
+        description: text of the order
+
+  - name: obj_adamant_mapping_order_voucher
+    description: Mapping table of vouchers to orders.
+    tests:
+      - unique:
+          column_name: "concat(order_id, '-', voucher_id)"
+      - not_null:
+          column_name: "concat(order_id, '-', voucher_id)"
+
+  - name: obj_adamant_mapping_user_group
+    description: Mapping table of users to groups.
+    tests:
+      - unique:
+          column_name: "concat(user_id, '-', group_id)"
+      - not_null:
+          column_name: "concat(user_id, '-', group_id)"
+
+  - name: obj_adamant_orders
+    description: Raw table containing data on orders.
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+        description: unique order id 
+      - name: city
+        description: shipping city
+      - name: post_code
+        description: shipping postal code
+      - name: country_code
+        description: abbreviation of shipping country
+      - name: business_channel_id
+        description: id from obj_adamant_business_channels
+      - name: business_channel_name
+        description: type of business channel 
+      - name: sales_channel_id
+        description: id from obj_adamant_sales_channels
+      - name: sales_channel_name
+        description: type of sales channel 
+      - name: customer_id
+        description: id from obj_adamant_customers
+      - name: invoice_id
+        description: invoice number
+      - name: reference
+        description: order number from adamant
+      - name: status
+        description: order status for FiCo
+
+      
+
+  - name: obj_adamant_payments
+    description: Raw table containing data on payments.
+    columns:
+      - name: payment_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_sales_channels
+    description: Raw table containing data on sales channels.
+    columns:
+      - name: sales_channel_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_shippings
+    description: Raw table containing data on shippings.
+    columns:
+      - name: shipping_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_user_groups
+    description: Raw table containing data on user groups.
+    columns:
+      - name: user_group_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_users
+    description: Raw table containing data on users.
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_vouchers
+    description: Raw table containing data on vouchers.
+    columns:
+      - name: voucher_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_warranties
+    description: Raw table containing data on warranties.
+    columns:
+      - name: warranty_id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_adamant_mapping_device_category
+    description: Mapping table of devices to categories.
+    tests:
+      - unique:
+          column_name: "concat(device_id, '-', category_id)"
+      - not_null:
+          column_name: "concat(device_id, '-', category_id)"

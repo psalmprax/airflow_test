@@ -1,0 +1,163 @@
+version: 2
+
+models:
+  - name: obj_wkfs_offer
+    description: Contains all fields directly related to the offer, including various calculations.
+    columns:
+      - name: id
+        description: Primary key and offer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_payment
+    description: Contains payment relevent information.
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_product_check_questionair
+    description: Contains information on product check questionairs.
+    columns:
+      - name: id
+        description: Composite primary key (not used anywhere to reference this table)
+        tests:
+          - unique
+          - not_null
+      - name: question_id
+        description: Foreign key
+        tests:
+          - not_null
+#          - gemma_dbt_utils.numeric_constraints:
+#              gt: 0
+#              lt: 10000 # must be below 10k for the composite key to work
+
+  - name: obj_wkfs_product_check_value
+    description: Contains the product check values information
+    columns:
+      - name: id
+        description: Composite primary key (not used anywhere to reference this table)
+        tests:
+          - unique
+          - not_null
+      - name: product_check_field_id
+        description: ID of the product check field (Foreign Key)
+        tests:
+          - not_null
+          - gemma_dbt_utils.numeric_constraints:
+              gt: 0
+              lte: 10000 # must be below 10k for the composite key to work
+
+  - name: obj_wkfs_product_check
+    description: Contains information on the product checks
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      
+
+  - name: obj_wkfs_question_answer
+    description: Contains the answers to questions including information on the question and the offer_id.
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      
+
+  - name: obj_wkfs_sf_guard_user
+    description: Contains all fields directly related to sf guards users
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_stock
+    description: Contains all fields directly related to stocks, including various calculations
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_trade
+    description: Contains all fields directly related to the trade, including various calculations.
+#    tests:
+#      - unique:
+#          column_name: transaction_id
+    columns:
+      - name: transaction_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_user
+    description: Contains all fields directly related to a user.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_promo_code
+    description: Check if promo_code for trade valid or not.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_offer_state
+    description: A raw table with all offer states.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_offer_offer_state_set
+    description: A raw table containing all states an offer has been in.
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_wkfs_offer_product_check_value_current
+    description: Contains information on the latest product check.
+    tests:
+      - unique:
+          column_name: "concat(offer_id,'-', product_check_field_id)"
+      - not_null:
+          column_name: "concat(offer_id,'-', product_check_field_id)"
+    columns:
+      - name: id
+        description: Composite primary key (not used anywhere to reference this table)
+        tests:
+          - unique
+          - not_null
+
+
+  - name: obj_wkfs.product_check_value_cleaned
+    description: Contains information on the latest product check value.
+    tests:
+      - unique:
+          column_name: "concat(product_check_id,'-', product_check_field_id)"
+      - not_null:
+          column_name: "concat(product_check_id,'-', product_check_field_id)"
+    columns:
+      - name: id
+        description: Composite primary key (not used anywhere to reference this table)
+        tests:
+#          - unique
+          - not_null

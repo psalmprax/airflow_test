@@ -27,18 +27,42 @@ clean-targets:         # directories to be removed by `dbt clean`
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
+on-run-end:
+  - "{{ grant_create('analytics_objects', 'master') }}"
+  - "{{ grant_read('analytics_objects', 'master') }}"
+
+
+#  - "{{ grant_read('analytics_reports', 'metabase_read') }}"
+#  - "{{ grant_read('analytics_reports', 'metabase_analytics') }}"
+#  - "{{ grant_read('analytics_reporting', 'metabase_analytics') }}"
+#  - "{{ grant_create('analytics_reporting', 'metabase_analytics') }}"
+#  - "{{ grant_create('analytics_reports', 'metabase_analytics') }}"
+#  - "{{ grant_read('analytics_objects', 'metabase_analytics') }}"
+#  - "{{ grant_read('analytics_calc', 'metabase_analytics') }}"
+#  - "{{ grant_read('raw_google_analytics', 'metabase_analytics') }}"
+#  - "{{ grant_read('raw_scanpoint', 'metabase_analytics') }}"
+#  - "{{ grant_read('raw_adamant', 'metabase_analytics') }}"
+#  - "{{ grant_read('raw_wkfs', 'metabase_analytics') }}"
+#  - "{{ grant_read('analytics_reporting', 'metabase_read') }}"
+
 # In this example config, we tell dbt to build all models in the example/ directory
 # as tables. These settings can be overridden in the individual model files
 # using the `{{ config(...) }}` macro.
 models:
   agan_dbt:
     # Config indicated by + and applies to all files under models/example/
+    +sql_header: "SET TIMEZONE TO 'UTC';"
+    +schema: bin # default if nothing else is specified
+    +materialized: table
+
     example:
-      +sql_header: "SET TIMEZONE TO 'UTC';"
-      +schema: object
+      +schema: objects
       +materialized: view
 
     objects:
-      +sql_header: "SET TIMEZONE TO 'UTC';"
-      +schema: analytics_objects
-      +materialized: view
+      +schema: objects
+#      +materialized: table
+
+    calculations:
+      +schema: calculations
+#      +materialized: table

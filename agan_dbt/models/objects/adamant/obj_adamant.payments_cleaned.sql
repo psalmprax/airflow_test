@@ -1,0 +1,14 @@
+with results as (
+select
+	convert(numeric,case "id" when '' then null else "id" end) as id,
+	convert(numeric,case "gateway_id" when '' then null else "gateway_id" end) as gateway_id,
+	case "status" when '' then null else "status" end as status,
+	convert(numeric,case "charge" when '' then null else "charge" end) as charge,
+	convert(numeric,case "paid_amount" when '' then null else "paid_amount" end) as paid_amount,
+	case "reference" when '' then null else "reference" end as reference,
+	convert(timestamp ,case "created_at" when '' then null else "created_at" end) as created_at,
+	convert(timestamp ,case "updated_at" when '' then null else "updated_at" end) as updated_at
+from {{ source("adamant","payment") }}
+)
+
+select * from results

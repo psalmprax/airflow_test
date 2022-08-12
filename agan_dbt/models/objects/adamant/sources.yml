@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: adamant
+    schema: raw_adamant
+    quoting:
+      database: true
+      schema: true
+      identifier: true
+    tables:
+      - name: order_voucher
+      - name: order_item_detail
+      - name: orders
+      - name: order_item
+      - name: invoice
+      - name: voucher
+      - name: shipping
+      - name: gateway
+      - name: sales_channel
+      - name: fos_user_user_group
+      - name: payment
+      - name: fos_user_user
+      - name: warranty
+      - name: fos_user_group
+      - name: device
+      - name: device_category
+      - name: customer
+      - name: business_channel
+      - name: category
+      - name: address

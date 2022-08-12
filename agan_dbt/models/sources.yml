@@ -1,0 +1,172 @@
+version: 2
+
+# all sources used in this dbt project by alphabet
+sources:
+  - name: wkfs
+    schema: raw_wkfs
+    tables:
+      - name: add_userfield
+      - name: add_userfield_value
+      - name: advertising_channel
+        columns: 
+          - name: id
+            tests:
+             - unique
+             - not_null 
+      - name: advertising_offer
+        columns:
+          - name: offer_id
+            tests:
+              - unique
+              - not_null
+      - name: answer
+      - name: application
+      - name: application_payment_type
+      - name: article_numbers_rsp_history
+      - name: business_channel
+        tests:
+          - unique:
+              column_name: id
+      - name: business_channel_offer
+        tests:
+          - unique:
+              column_name: offer_id
+      - name: business_channel_type
+        tests:
+          - unique:
+              column_name: id
+      - name: b2b_trade_detail
+      - name: calculation
+        tests:
+          - unique:
+              column_name: id
+      - name: category
+        tests:
+          - unique:
+              column_name: id
+      - name: check_result_action
+      - name: clarification
+      - name: contractor
+        tests:
+          - unique:
+              column_name: id
+      - name: currency
+      - name: currency_rate
+      - name: device
+        tests:
+          - unique:
+              column_name: id
+      - name: device_usage
+        tests:
+          - unique:
+              column_name: id
+      - name: device_condition
+        tests:
+          - unique:
+              column_name: id
+      - name: dhl_pickup
+      - name: dhl_pickup_de
+      - name: dhl_pickup_pl
+      - name: donation_offer
+        tests:
+          - unique:
+              column_name: offer_id
+      - name: donation_project
+        tests:
+          - unique:
+              column_name: id
+      - name: landingpage
+      - name: landingpage_trade
+      - name: landingpage_payment_type
+      - name: location
+      - name: manufactor
+        tests:
+          - unique:
+              column_name: id
+      - name: offer
+      - name: offer_business_channel_history
+      - name: offer_offer_state
+        columns:
+          - name: offer_id
+            tests:
+              - unique
+              - not_null
+      - name: offer_offer_state_set
+      - name: offer_refurbishment
+      - name: offer_rsp_history
+      - name: offer_state
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: payment
+      - name: payment_allmaxx_credits
+      - name: payment_blau_credits
+      - name: payment_cancom
+      - name: payment_direct_debit
+      - name: payment_direct_debit_austria
+      - name: payment_direct_debit_poland
+      - name: payment_direct_debit_spain
+      - name: payment_direct_debit_swift
+      - name: payment_otto_credits
+      - name: payment_paypal
+      - name: payment_simyo_credits
+      - name: payment_type
+      - name: product_check
+      - name: product_check_field
+      - name: product_check_questionair
+      - name: product_check_value
+      - name: product_check_value_history
+      - name: promo_code
+        tests:
+          - unique:
+              column_name: id
+      - name: promo_offer
+        tests:
+          - unique:
+              column_name: offer_id
+      - name: province
+      - name: question
+      - name: question_answer
+      - name: repair
+        tests:
+          - unique:
+              column_name: check_result_actions_id
+      - name: retoure
+      - name: retoure_reason
+        tests:
+          - unique:
+              column_name: id
+      - name: serie
+        tests:
+          - unique:
+              column_name: id
+      - name: sf_guard_user
+      - name: sf_guard_user_profile
+      - name: sf_guard_user_profile_eno
+      - name: sf_guard_user_profile_e_plus
+      - name: stock
+      - name: stock_out_info
+      - name: tax_offer
+        tests:
+          - unique:
+              column_name: offer_id
+      - name: tracking_campaign
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: tracking_campaign_group
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+      - name: trade
+      - name: trade_store
+      - name: trade_store_email
+      - name: users
+      - name: trade_whitelist
+      - name: trade_blacklist
