@@ -588,7 +588,7 @@ default_args = {
 	'email': ['samuel.momoh-olle@asgoodasnew.com'],
 	'email_on_failure': False,
 	'email_on_retry': False,
-	'retries': 10,
+	'retries': 40,
 	'retry_delay': timedelta(minutes=3),
 	'execution_timeout': timedelta(hours=12),
 }
