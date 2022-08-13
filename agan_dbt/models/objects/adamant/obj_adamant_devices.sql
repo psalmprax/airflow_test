@@ -17,7 +17,7 @@ WITH devices AS (
     , COALESCE(d.warranty_permitted=1, FALSE) AS is_warranty_permitted
     , d.created_at
     , d.updated_at
-    , d._ewah_executed_at
+--    , d._ewah_executed_at
 
   FROM {{ ref ("obj_adamant.device_cleaned") }} AS d
     LEFT JOIN {{ ref("obj_adamant_business_channel") }}  AS bc
