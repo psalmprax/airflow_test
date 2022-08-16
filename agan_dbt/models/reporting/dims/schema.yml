@@ -1,0 +1,149 @@
+version: 2
+
+models:
+  - name: dim_dates
+    description: Date table. Contains all dates since Jan 1, 2015 until 30 days
+                  from now.
+    columns:
+      - name: date_id
+        tests:
+          - not_null
+          - unique
+      - name: date
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_adamant_customers
+    description: Table with data on adamant customers.
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+        description: unique customer id from obj_adamant_customers
+      - name: orders_count
+        description: amount of orders per customer
+      - name: address_id
+        description: id from obj_adamant_addresses
+      - name: street
+        description: customer street from obj_adamant_addresses
+      - name: city
+        description: customer city from obj_adamant_addresses
+      - name: postal_code
+        description: customer postal code from obj_adamant_addresses
+      - name: country_code
+        description: customer country code from obj_adamant_addresses
+
+
+  - name: dim_adamant_users
+    description: Table with data on adamant users.
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_adamant_devices
+    description: Table with data on adamant devices.
+    columns:
+      - name: device_id
+        tests:
+          - not_null
+          - unique
+        description: id from obj_adamant_devices
+      - name: reference
+        description: offer_id / TA-number 
+      - name: business_channel_id
+        description: id from obj_adamant_business_channel
+      - name: business_channel_name
+        description: type of business channel
+      - name: article_number
+        description: internal article number
+      - name: order_number
+        description: order number which the customer receives
+      - name: tax
+        description: tax amount in %
+      - name: device_name
+        description: name of device
+      - name: status
+        description: device status, eg stock_out, return etc
+      - name: status_updated_at
+        description: timestamp of when status has been updated
+      - name: imei
+        description: imei number of device
+      - name: serial_number
+        description: serial number of device
+      - name: is_warranty_permitted
+        description: is a warranty permitted for the device
+      - name: created_at
+        description: timestamp of when entry was created
+      - name: updated_at
+        description: timestamp of when entry was updated
+
+#  - name: dim_adamant_business_channels
+#    description: Table with data on adamant business channels
+#    columns:
+#      - name: id
+#        description: original business channel id adamant
+#      - name: business_channel_name
+#        description: business channel name like Ebay,Back Market etc
+
+  - name: dim_business_channels
+    description: Table with data on adamant business channels
+    columns:
+      - name: id
+        description: original business channel id adamant
+        tests:
+          - not_null
+          - unique
+      - name: business_channel_name
+        description: business channel name like Ebay,Back Market etc
+      - name: business_channel_id
+        description: business channel id like b2b=1, b2c=2 etc
+      - name: business_channel_type
+        description: business channel type like b2b, b2c etc
+      - name: deleted
+        description: business channel name like Ebay,Back Market etc
+
+  - name: dim_sales_channels
+    description: Table with data on adamant sales channels
+    columns:
+      - name: id 
+        description: original sales channel id adamant
+      - name: sales_channel_name
+        description: sales channel name in adamant like BackMarket,Ebay,etc
+      - name: language
+        description: language of the sale channel (DE,ES,IT,FR)
+
+  - name: dim_adamant_order
+    description: Table with data on adamant sales channels
+    columns:
+      - name: id 
+        description: original order id adamant, from obj_adamant_orders
+      - name: order_value
+        description: order values by the customers, from obj_adamant_order_items
+      - name: tax
+        description: tax value of the order, from obj_adamant_order_items
+      - name: order_created 
+        description: time when the order was order_created, from obj_adamant_orders
+      - name: country_code 
+        description: country code of the order, from obj_adamant_orders
+      - name: shipping_service
+        description: shipping service like DHL,standard etc, from obj_adamant_shippings
+      - name: shipping_price 
+        description: shipping price, from obj_adamant_orders
+      - name: customer_id
+        description: id of the customer , from obj_adamant_orders
+      - name: invoice_id 
+        description: invoice id , from obj_adamant_orders
+      - name: payment_method
+        description: the method used to pay the order,paypal,direkt banking etc, from obj_adamant_payments
+      - name: business_channel_name
+        description: business channel name , from obj_adamant_orders
+      - name: sales_channel_name
+        description: sales channel name , from obj_adamant_orders
+      - name: payment_costs
+        description: cost of payments , from obj_adamant_payments
+   
+

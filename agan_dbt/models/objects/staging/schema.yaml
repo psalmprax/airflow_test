@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: budget_table_stage
+    description: this table contains budget table details
+    columns:
+      - name: end_of_month
+        tests:
+          - not_null

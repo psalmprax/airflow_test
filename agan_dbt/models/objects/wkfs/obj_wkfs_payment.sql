@@ -19,7 +19,7 @@ SELECT
   , p_dds.initialization_vector as enc_init_swift
   , p_dds.bank_identifier_code as enc_bic_swift
   , p_dds.international_bank_account_number as enc_iban_swift
-  , 'wvnJQHB3gyv6qUCfg615Vjam'::varbinary as _enc_key
+  , 'wvnJQHB3gyv6qUCfg615Vjam'::varchar(max) as _enc_key
   
 FROM {{ ref('obj_wkfs.payment_cleaned') }} AS p
   LEFT JOIN {{ ref('obj_wkfs.payment_type_cleaned') }} AS pt

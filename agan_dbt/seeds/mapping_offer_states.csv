@@ -1,0 +1,76 @@
+states,classification_process,classification_stock,responsibility,department
+01 wartet auf Qualitätskontrolle,Stock in Process,Stock,MKT,1b RFV
+02a Auszahlung,Stock in Process,Stock,MKT,1b RFV
+02 wartet auf RFV,Stock in Process,Stock,MKT,1b RFV
+03 wartet auf Klärung,Kundengeräte,Kundengeräte,DES,3 TSP Klärung
+04 offene Klärung,Kundengeräte,Kundengeräte,TOW,2 LOG
+05 akzeptierte Klärung,Stock in Process,Stock,TOW,2 LOG
+06 back to seller,Kundengeräte,Kundengeräte,TOW,2 LOG
+07 wartet auf Reparatur,Stock in Process,Stock,DES,3 TSP Reparatur
+08 Reparatur intern,Stock in Process,Stock,DES,3 TSP Reparatur
+09 Reparatur extern,Stock in Process,Stock,MME,4 MAWI
+10 wartet auf Ersatzteile,Stock in Process,Stock,MME,4 MAWI
+11 wartet auf Zubehör,Stock in Process,Stock,MME,4 MAWI
+13 ready to sell,Stock - Sales Potential,Stock,STB,9 Sales
+14 online,Stock - Sales Potential,Stock,STB,9 Sales
+15 stock out,Stock in Process,Stock,TOW,2 LOG
+17 Retoure angekommen,Kundengeräte,Kundengeräte,STR,7 Retouren
+18 Übergabe XP,Stock in Process,Stock,MKT,1a NU
+19 Kistennummer,Stock - Sales Potential,Stock,SEB ,9 Sales
+20 EZG,Stock in Process,Stock,STR,7 Retouren
+21 ATG,Stock - Sales Potential,Stock,STB,9 Sales
+22 TSP Prüfung,Stock in Process,Stock,DES,3 TSP Klärung
+23 Gerät anlegen,Stock in Process,Stock,MKT,1a NU
+24 non conform,Stock in Process,Stock,MKT,2 LOG
+25 Prüfung nach Reparatur,Stock in Process,Stock,DES,3 TSP Reparatur
+27 zurück zum Käufer,Kundengeräte,Kundengeräte,TOW,2 LOG
+28 Ersatzteile intern,Stock in Process,Stock,DES,3 TSP Reparatur
+30 Übergabe NU,Kundengeräte,Kundengeräte,MKT,1a NU
+31 Hold B2B,Stock - Sales Potential,Stock,SEB ,9 Sales
+32 Hold MA,Stock in Process,Stock,STB,9 Sales
+33 Schulungsgerät,Stock in Process,Stock,AMA,8 Office
+34 Wartet auf Productcheck,Stock in Process,Stock,MKT,1a NU
+35 Garantiereparatur extern (KG),Kundengeräte,Kundengeräte,MME,4 MAWI
+36 Reparatur intern (KG),Kundengeräte,Kundengeräte,DES,3 TSP Reparatur
+26 RTS-TD,Stock - Sales Potential,Stock,STB,9 Sales
+39 sold,Stock - Sales Potential,Stock,STB,9 Sales
+40 wartet auf Ersatzteile (KG),Kundengeräte,Kundengeräte,MME,4 MAWI
+41 Prüfung nach Reparatur (KG),Kundengeräte,Kundengeräte,DES,3 TSP Reparatur
+42 Übergabe NU3,Stock in Process,Stock,MKT,1a NU
+43 wartet auf KD-Info,Stock in Process,Stock,STR,6 Kundenservice
+45 keine Auszahlung,Kundengeräte,Kundengeräte,KAL,8 Office
+52 Not online,Stock - Sales Potential,Stock,STB,9 Sales
+37 Wartet auf Reparatur (KG),Kundengeräte,Kundengeräte,DES,3 TSP Reparatur
+47 Online Webshop,Stock - Sales Potential,Stock,STB,9 Sales
+53 ID Sperre,Kundengeräte,Kundengeräte,MKT/STR,6 Kundenservice
+140 wartet refurb,Stock in Process,Stock,DES,5 FullRefurb
+141 TD wartet auf RFV,Stock in Process,Stock,MKT,1b RFV
+50 Pending upload,Stock - Sales Potential,Stock,STB,9 Sales
+139 ready to sell zub,Stock - Sales Potential,Stock,STB,9 Sales
+54 B2BVerkauf,Stock - Sales Potential,Stock,SEB ,9 Sales
+55 TSP-Prüfung_Ersatzteilspender,Stock in Process,Stock,DES,3 TSP Reparatur
+56 Prüfung nach FullRefurb,Stock in Process,Stock,DES,5 FullRefurb
+57 wartet auf Reparatur (Teildefekt),Stock in Process,Stock,DES,3 TSP Reparatur
+666 nicht gefunden,Stock in Process,Stock,AMA,8 Office
+60 Reparatur FR,Stock in Process,Stock,DES,5 FullRefurb
+58 Retour TSP Prüfung,Stock in Process,Stock,DES/STR,3 TSP Reparatur
+50 Bilder,Stock - Sales Potential,Stock,MKT,1a NU
+62 Versandfehler,Stock - Sales Potential,Stock,TOW,2 LOG
+149 Schadensmeldung,Stock in Process,Stock,HEL,8 Office
+02b Übergabe RFV,Stock in Process,Stock,MKT,1b RFV
+999 interne Verwendung,Stock - Sales Potential,Stock,AMA,8 Office
+159 Übergabe externe Reparatur,Stock in Process,Stock,MME,4 MAWI
+63 Mehrfach Retoure,Stock - Sales Potential,Stock,DES,3 TSP Reparatur
+64 Übergabe Retouren,Stock in Process,Stock,STR,7 Retouren
+Wartet auf RTS,Stock - Sales Potential,Stock,STR,7 Retouren
+35b externe Garantie Reparatur,Stock in Process,Stock,MME,4 MAWI
+02c wartet auf löschung,Stock in Process,Stock,MKT,1a NU
+159b Übergabe externe Reparatur (KG),Stock in Process,Kundengeräte,MME,4 MAWI
+09b Reparatur extern (KG),Kundengeräte,Kundengeräte,MME,4 MAWI
+16 Retoure angelegt,Kundengeräte,Kundengeräte,STR,7 Retouren
+25a Prüfung nach Reparatur extern,Kundengeräte,Stock,MME,4 MAWI
+65 HandyDortmund,Stock - Sales Potential,Stock,SEB ,9 Sales
+Hygieneartikel,Kundengeräte,Stock,STR,7 Retouren
+Warten auf Löschung Retoure,Stock in Process,Stock,MKT,1a NU
+messstation,,,,
+TAV,,,,

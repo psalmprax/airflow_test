@@ -93,10 +93,13 @@ SELECT
 --    ) AS dhl_pl_pickup_time
 --  , dhl_pl.shipment_start_hour::INTERVAL
 --  , dhl_pl.shipment_end_hour::INTERVAL
+  , ('-'||dhl_pl.shipment_start_hour||dhl_pl.shipment_end_hour) AS dhl_pl_pickup_time
   , dhl_pl.shipment_start_hour::TIME
   , dhl_pl.shipment_end_hour::TIME
   , dhl_de.shipment_confirmation_number AS dhl_de_shipment_confirmation_number
 --  , CONCAT_WS(' ', dhl_de.first_name, dhl_de.name) AS dhl_de_full_name
+  , (' '||dhl_de.first_name|| dhl_de.name) AS dhl_de_full_name
+
   , dhl_de.street AS dhl_de_street
   , dhl_de.house_number AS dhl_de_housenumber
   , dhl_de.postal_code AS dhl_de_postal_code

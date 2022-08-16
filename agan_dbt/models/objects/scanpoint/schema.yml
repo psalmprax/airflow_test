@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: obj_scanpoint_department
+    description: Raw table containing data on departments.
+    columns:
+      - name: id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_scanpoint_employee
+    description: Raw table containing data on employees.
+    columns:
+      - name: id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_scanpoint_entry
+    description: Raw table containing denormalized data on scanning entries.
+    columns:
+      - name: id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_scanpoint_scanpoint
+    description: Raw table containing data on scanpoint types.
+    columns:
+      - name: id
+        tests:
+          - not_null
+          - unique
+
+  - name: obj_scanpoint_tracking
+    description: Raw table containing normalized data on scanpoint tracking.
+    columns:
+      - name: id
+        tests:
+          - not_null
+          - unique

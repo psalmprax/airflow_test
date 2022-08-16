@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: scanpoint
+    schema: raw_scanpoint
+    quoting:
+      database: true
+      schema: true
+      identifier: true
+    tables:
+      - name: department
+      - name: employee
+      - name: entry
+      - name: scanpoint
+      - name: tracking

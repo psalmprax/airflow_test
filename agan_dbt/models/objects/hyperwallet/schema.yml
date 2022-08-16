@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: obj_hw_b2c_trades
+    description: Contains the trades for b2c
+    columns:
+      - name: trade_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_hw_b2b_trades
+    description: Contains the trades for b2b
+    columns:
+      - name: trade_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+
+  - name: obj_hw_payments_paypal
+    description: Contains only paypal payments.
+    columns:
+      - name: payment_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: payment_type_id
+        description: paypal type id
+        tests:
+          - not_null
+          - gemma_dbt_utils.numeric_constraints:
+              eq: 2
+
+  - name: obj_hw_latest_payment_not_sent
+    description: Contains the last 10 days of the payments not sent.
+    columns:
+      - name: id
+        description: Primary key
+
+
+  - name: obj_hw_b2c_paypal
+    description: Contains the b2c customer,offer and trade data for the hyperwallet.
+    columns:
+      - name: offer_id
+        description: Contains the primary key of the trade id
+
+  - name: obj_hw_b2b_paypal
+    description: Contains the b2b customer, offer and trade data for the hyperwallet.
+    columns:
+      - name: offer_id
+        description: Contains the primary key of the trade id
+       
+

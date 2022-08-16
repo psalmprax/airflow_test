@@ -24,7 +24,7 @@
 
 SELECT DISTINCT
     c.id||m.id||d.id||o.condition::BIGINT AS id
-	, COUNT(o.id) AS offers_created_last_fourteen_days
+	, COUNT(o.id) AS offers_created_last_seven_days
 FROM ( select id, created_at, CASE WHEN product_check_device_condition IS NULL THEN 5 ELSE product_check_device_condition end  AS condition,
 		CASE WHEN product_check_device_id IS NOT NULL THEN product_check_device_id ELSE device_id END device_id
 	  from {{ ref ("obj_wkfs.offer_cleaned") }}) AS o

@@ -764,13 +764,6 @@ wkfs:
             update_column:
                 - product_check_id
                 - question_id
-
-
-
-
-
-
-
         product_check_value:
             primary_key: product_check_id
             strategy: ID_STRATEGY
@@ -1042,3 +1035,63 @@ wkfs:
                 - carrier_id
                 - retoure_id
                 - trade_id
+scanpoint:
+    extract_strategy: full_refresh
+    conn_id: mysql_scanpoint_conn
+    schema: raw_scanpoint
+    source_schema: scanpoint
+    table_name:
+        department:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
+            update_column:
+                - id
+                - name
+        employee:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
+            update_column:
+                - id
+                - real_name
+                - bo_name
+        scanpoint:
+            primary_key: id
+            strategy: ID_STRATEGY
+            update_query_type: NORMAL
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
+            update_column:
+                - id
+                - name
+        entry:
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
+            update_column:
+                - id
+                - created_at
+                - bo_name
+        tracking:
+            primary_key: timestamp_out
+            strategy: DATE_STRATEGY
+            update_query_type: NORMAL
+            changing_column_datatype: {}
+            too_long_size_column: {}
+            table_name_with_cotation: False
+            update_column:
+                - id
+                - timestamp_in
+                - employee_id
+                - scanpoint_id

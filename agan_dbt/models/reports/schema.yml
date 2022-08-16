@@ -1,0 +1,91 @@
+version: 2
+
+models:
+  - name: report_offer
+    description: Information on all offers made, on a per-offer level.
+    columns:
+      - name: id
+        description: Primary key and offer_id number from obj_wkfs_offer
+        tests:
+          - not_null
+          - unique
+      - name: offer_id
+        description: offer_id from obj_wkfs_offer
+
+  - name: report_trade
+    description: Information on all trades, on a per-trade level.
+    columns:
+      - name: id
+        description: Primary key; identical to transaction_id
+        tests:
+          - not_null
+          - unique
+
+  - name: report_stock
+    description: Information on all stocks, on a per-stock level.
+    columns:
+      - name: id
+        description: Primary key and stock_id from obj_wkfs_stock
+        tests:
+          - not_null
+          - unique
+      - name: offer_id
+        description: offer_id number
+          
+  - name: report_for_margin_analysis
+    description: Partial table of report_stock for a particular analysis
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - not_null
+          - unique
+
+  - name: report_cost_of_sales_margin
+    description: Customized report with data from offers, trades, users, stock where offer is stock_out
+    columns:
+      - name: id
+        description: historic id
+
+  - name: report_promo_code
+    description: Export of our promo_codes from WKFS
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - not_null
+          - unique
+
+  - name: report_stock_list
+    description: Stock list to check dead capital
+    columns:
+      - name: id
+        description: Primary key
+        tests:
+          - not_null
+          - unique
+  
+  - name: report_customer_segmentation_adamant
+    description: Data preparation for the customer segmentation analysis (avg sales, total number of sales and total yearly sales for each customer in a 5 year window
+
+
+  - name: report_customer_segmentation_wkfs
+    description: Data preparation for the customer segmentation analysis (avg sales, total number of sales and total yearly sales for each customer in a 5 year window
+  
+  - name: report_stock_out_price_rsp
+    description: Article number, stock out price and rsp by date
+    columns:
+      - name: id
+        description: offer id 
+      - name: article_number
+        description: article_number from raw_wkfs.article_numbers_rsp_history and analytics_objects.obj_wkfs_offer
+      - name: date_from
+        description: starting date of the rsp 
+      - name: date_to
+        description: ending date of the rsp 
+      - name: stock_out_price 
+        description: stock out price from analysis_objects.obj_wkfs_stock
+      - name: rsp 
+        description: rsp value of the article number in the [date_from,date_to) range
+      - name: next_rsp
+        description: next rsp value of the article 

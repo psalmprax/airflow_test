@@ -1,0 +1,304 @@
+version: 2
+
+models:
+  - name: fact_offer_states
+    description: This table contains all offers and their final states per day.
+    tests:
+      - unique:
+          column_name: "concat(date, offer_state,offer_id,deleted)"
+      - not_null:
+          column_name: "concat(date, offer_state,offer_id,deleted)"
+
+
+  - name: fact_offer_states_aggregates_daily
+    description: > 
+                This table contains the daily aggregates of offers per status,
+                stock/process classification, department and responsibility.
+                The table can be used in combination with the dim_dates, for
+                various aggregations on time dimensions.
+    columns:
+      - name: _id
+        tests:
+          - not_null
+
+  - name: fact_scanpoint_tracking
+    description: >
+                This table contains scanpoint tracking data by offer,
+                employee, department and calculated working time.
+    columns:
+      - name: id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_scanpoint_tracking_aggregates_daily
+    description: >
+                This table contains number of offers started and completed by
+                date, employee and department.
+    tests:
+      - unique:
+          column_name: "concat(date, '-', employee_id, '-', department_id,'-',category_id,'-',condition_id,'-',deleted)"
+      - not_null:
+          column_name: "concat(date, '-', employee_id, '-', department_id,'-',category_id,'-',condition_id,'-',deleted)"
+
+  - name: fact_ga_campaign
+    description: > 
+                This is a table, which combines the initial extract of ga data from multiple 
+                view ids into one model (does not calculate users correctly, so should only be used to count sessions).
+    columns:
+      - name: date
+        description: the users are counted on a daily basis so every view id has a user count per day
+      - name: source
+        description: source of the traffic
+      - name: medium
+        description: type of web traffic
+      - name: campaign
+        description: marketing campaign
+      - name: device_category
+        description: type of device - mobile, web or tablet
+      - name: users
+        description: total daily active users per day
+      - name: sessions
+        description: total sessions per day
+      - name: ad_cost
+        description: cost of advertising
+      - name: transactions
+        description: total number of transactions
+      - name: transaction_revenue
+        description: total revenue from transactions
+      - name: view_id
+        description: view id from GA - which shop (AGAN DE, WKFS PL etc)
+      - name: transactions_per_session
+        description: number of transactions per session
+      - name: cost_per_transaction
+        description: the cost per transaction for the property
+
+#    tests:
+#      - unique:
+#          column_name: "concat(date, view_id, source, medium, campaign
+#                      , device_category)"
+#      - not_null:
+#          column_name: "concat(date, view_id, source, medium, campaign
+#                      , device_category)"
+
+  - name: fact_ga_search
+    description: > 
+                This is a table, which combines the initial extract 
+                of ga data from multiple view ids into one base model.
+    columns:
+      - name: date
+        description: the figures are calculated on a daily basis per GA view
+      - name: view_id
+        description: view id from GA - which shop (AGAN DE, WKFS PL etc)
+      - name: users
+        description: number of users who searched for a given keyword
+      - name: new_users
+        description: number of new users who searched for a given keyword
+      - name: sessions
+        description: number of sessions in which the given keyword was searched for
+      - name: search_keyword
+        description: the search term
+      - name: avg_search_result_views
+        description: the average number of times people viewed a page as a result of a search
+      - name: search_exit_rate
+        description: percentage of searches which resulted in an immediate bounce from the site
+      - name: search_exits
+        description: > 
+                    the number of exits on the site that occurred following 
+                    a search result from the site's internal search feature
+      - name: search_result_views
+        description: the average number of times people viewed a page as a result of a search
+      - name: search_uniques
+        description: total number of unique keywords from internal searches within a session
+      - name: search_sessions
+        description: the total number of sessions that included an internal search
+      - name: percent_sessions_with_search
+        description: the percentage of sessions with search
+
+
+  - name: fact_adamant_orders
+    description: Table with data on adamant orders.
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+        description: unique order id from obj_adamant_orders
+      - name: city
+        description: shipping city
+      - name: post_code
+        description: shipping postal code
+      - name: country_code
+        description: abbreviation of shipping country
+      - name: business_channel_id
+        description: id from obj_adamant_business_channels
+      - name: business_channel_name
+        description: type of business channel 
+      - name: sales_channel_id
+        description: id from obj_adamant_sales_channels
+      - name: sales_channel_name
+        description: type of sales channel 
+      - name: customer_id
+        description: id from obj_adamant_customers
+      - name: invoice_id
+        description: invoice number
+      - name: reference
+        description: order number from adamant
+      - name: status
+        description: order status for FiCo
+
+  - name: fact_adamant_invoices
+    description: Table with data on adamant invoices.
+    columns:
+      - name: invoice_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_adamant_order_items
+    description: Table with data on adamant order items.
+    columns:
+      - name: order_item_id
+        tests:
+          - not_null
+          - unique
+        description: id from obj_adamant_order_items
+      - name: order_id
+        description: id from obj_adamant_orders
+      - name: sku
+        description: stock keeping unit (sku) number for a device
+      - name: quantity
+        description: quantity of order items in order
+      - name: price
+        description: price of a given order item
+      - name: tax
+        description: tax amount in %
+      - name: order_item_name
+        description: text of the order
+
+  - name: fact_adamant_payments
+    description: Table with data on adamant payments.
+    columns:
+      - name: payment_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_adamant_order_item_details
+    description: Table with data on adamant order item details. Mapping of devices to orders.
+    columns:
+      - name: order_item_detail_id
+        tests:
+          - not_null
+          - unique
+      - name: order_item_id
+        description: id from obj_adamant_order_items
+      - name: device_id
+        description: device id from obj_adamant_devices
+      - name: status
+        description: order status per order item
+
+  - name: fact_adamant_mapping_order_voucher
+    description: Mapping table of vouchers to orders.
+    tests:
+      - unique:
+          column_name: "concat(order_id, '-', voucher_id)"
+      - not_null:
+          column_name: "concat(order_id, '-', voucher_id)"
+
+  - name: fact_adamant_mapping_user_group
+    description: Mapping table of users to groups.
+    tests:
+      - unique:
+          column_name: "concat(user_id, '-', group_id)"
+      - not_null:
+          column_name: "concat(user_id, '-', group_id)"
+
+  - name: fact_adamant_mapping_device_category
+    description: Mapping table of devices to categories.
+    tests:
+      - unique:
+          column_name: "concat(device_id, '-', category_id)"
+      - not_null:
+          column_name: "concat(device_id, '-', category_id)"
+
+
+  - name: fact_ga_stats_traffic_inscope
+    description: >
+                This is a table, which combines the initial extract of ga data
+                from multiple view ids into one model i.e this is the current table for GA traffic stats.
+    columns:
+      - name: date
+        description: the users are counted on a daily basis so every view id has a user count per day
+      - name: view_id
+        description: >
+                     view id from GA i.e which shop (AGAN DE, WKFS PL) etc, contains
+                     all current view_ids from all GA properties
+      - name: 1dayUsers
+        description: count of daily active users per day
+      - name: newUsers
+        description: count of new users per day
+      - name: 28dayUsers
+        description: >
+                    number of 28 daily active users. the number represents the 28 daily active
+                    users measured on a given day i.e it's not cumulative and can't be summed.
+      - name: total_sessions
+        description: total sessions per day
+      - name: total_pageviews
+        description: total pageviews per day
+      - name: total_events
+        description: total events per day
+      - name: total_unique_events
+        description: total unique events per day
+      - name: total_items
+        description: no discription for this column
+      - name: total_item_quantity
+        description: >
+                    total number of items purchased. For example,
+                    if users purchase 2 frisbees and 5 tennis balls, this will be 7
+      - name: total_product_detail_views
+        description: total product detail views per day
+      - name: total_transactions
+        description: total transactions views per day
+      - name: total_transactionsrevenue
+        description: total revenue generated from transactions per day
+
+  - name: fact_ga_stats_segments_traffic_inscope
+    description: >
+                Combines the extracted values of ga data per view
+                where the sessions counted had transactions greater then 0 per day
+    columns:
+      - name: date
+        description: the users are counted on a daily basis so every view id has a user count per day
+      - name: view_id
+        description: >
+                    view id from GA - which shop (AGAN DE, WKFS PL etc) - contains
+                    all current view_ids from all GA properties
+      - name: 1dayUsers
+        description: count of daily active users per day
+      - name: newUsers
+        description: count of new users per day
+      - name: 28dayUsers
+        description: >
+                    number of 28 daily active users - the number represents the 28 daily active
+                    users measured on a given day (ie it's not cumulative and can't be summed)
+      - name: total_sessions
+        description: total sessions per day
+      - name: total_pageviews
+        description: total pageviews per day
+      - name: total_events
+        description: total events per day
+      - name: total_unique_events
+        description: total unique events per day
+      - name: total_items
+        description: no discription for this column
+      - name: total_item_quantity
+        description: >
+                    total number of items purchased. For example,
+                    if users purchase 2 frisbees and 5 tennis balls, this will be 7
+      - name: total_product_detail_views
+        description: total product detail views per day
+      - name: total_transactions
+        description: total transactions views per day
+      - name: total_transactionsrevenue
+        description: total revenue generated from transactions per day

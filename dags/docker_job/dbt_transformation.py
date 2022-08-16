@@ -54,7 +54,7 @@ def create_dag(dag_id,
     return dag
 
 
-dbt_models = ["example", "objects", "calculations"]
+dbt_models = ["example", "objects", "calculations", "reporting", "reports", "objects_long_run"]
 for dbt_mdl in dbt_models:
     default_args = {
         'depends_on_past': False,
@@ -66,7 +66,7 @@ for dbt_mdl in dbt_models:
         'execution_timeout': timedelta(seconds=20000),
     }
     description = f'A {dbt_mdl} DAG '
-    schedule_interval = timedelta(hours=1)
+    schedule_interval = timedelta(hours=5)
     dag_id = f'T-dbt-job-{dbt_mdl}'
     start_date = datetime(2022, 4, 1)
 

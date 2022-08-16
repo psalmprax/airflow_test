@@ -1,3 +1,4 @@
+with results as (
 select
 	convert(numeric,case id when '' then null else id end) as id,
 	convert(numeric,case shipping_address_id when '' then null else shipping_address_id end) as shipping_address_id,
@@ -18,4 +19,7 @@ select
 	convert(timestamp, case confirmation_sent_at when '' then null else confirmation_sent_at end) as confirmation_sent_at,
 	case "comment" when '' then null else "comment" end as comment
 from 
-	raw_adamant.orders
+	{{ source("adamant","orders") }}
+)
+
+select * from results

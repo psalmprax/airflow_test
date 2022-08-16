@@ -531,7 +531,7 @@ def create_dag(  # pylint: disable=redefined-outer-name
 		task_dir = os.path.join(parent_dir, task_id)
 		for table_name in tables:
 			fetch_data_from_adamant = PythonOperator(
-				task_id=f"get_{table_name}_from_adamant_dwh",
+				task_id=f"get_{table_name}_from_{source_schema}_dwh",
 				provide_context=True,
 				python_callable=my_func,
 				op_kwargs={

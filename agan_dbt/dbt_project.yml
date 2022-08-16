@@ -63,6 +63,24 @@ models:
       +schema: objects
 #      +materialized: table
 
+    objects_long_run:
+      +schema: objects
+#      +materialized: table
+
     calculations:
       +schema: calculations
 #      +materialized: table
+
+    reporting:
+      +schema: reporting
+#      +materialized: table
+
+    reports:
+      +schema: reports
+#      +materialized: table
+
+seeds:
+  agan_transformations:
+    +enabled: true
+    +quote_columns: true
+    +schema: seeds
