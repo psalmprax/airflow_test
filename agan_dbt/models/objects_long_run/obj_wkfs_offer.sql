@@ -426,6 +426,6 @@ FROM {{ ref('obj_wkfs.offer_cleaned') }} AS o
 
 
 -- don't delete below commented code
-  {% if is_incremental() %}
-   where o.id >= (select COALESCE(max(id::integer),0) from {{ this }})
-  {% endif %}
+--  {% if is_incremental() %}
+--   where o.id >= (select COALESCE(max(id::integer),0) from {{ this }})
+--  {% endif %}

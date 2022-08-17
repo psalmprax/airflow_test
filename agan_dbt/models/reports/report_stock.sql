@@ -1,5 +1,6 @@
 SELECT
     -- data from stock object table
+    distinct
     st.id
     , st.offer_id
     , st.stock_in 
@@ -143,11 +144,11 @@ FROM {{ ref('obj_wkfs_stock') }} AS st
     LEFT JOIN {{ ref('report_offer') }} AS "off"
         ON "off".id::BIGINT = st.offer_id::BIGINT
     LEFT JOIN {{ ref('wkfs_offer_stock_list_created_last_seven_days') }} AS woslclsd
-        ON ("off".category_id ||"off".manufactor_id ||"off".device_id || CASE WHEN "off".product_check_device_condition IS NULL THEN 5 ELSE "off".product_check_device_condition END)::BIGINT = woslclsd.id
+        ON ("off".category_id || "off".manufactor_id || "off".device_id || CASE WHEN "off".product_check_device_condition IS NULL THEN 5 ELSE "off".product_check_device_condition END)::BIGINT = woslclsd.id
     LEFT JOIN {{ ref('wkfs_offer_stock_list_created_last_fourteen_days') }} AS woslclfd
         ON ("off".category_id || "off".manufactor_id || "off".device_id || CASE WHEN "off".product_check_device_condition IS NULL THEN 5 ELSE "off".product_check_device_condition END)::BIGINT = woslclfd.id
     LEFT JOIN {{ ref('wkfs_offer_stock_list_sales_last_seven_days') }} AS woslslsd
-        ON ("off".category_id || "off".manufactor_id||"off".device_id || CASE WHEN "off".product_check_device_condition IS NULL THEN 5 ELSE "off".product_check_device_condition END)::BIGINT = woslslsd.id
+        ON ("off".category_id || "off".manufactor_id || "off".device_id || CASE WHEN "off".product_check_device_condition IS NULL THEN 5 ELSE "off".product_check_device_condition END)::BIGINT = woslslsd.id
     LEFT JOIN {{ ref('wkfs_offer_stock_list_sales_last_fourteen_days') }} AS woslslfd
         on ("off".category_id || "off".manufactor_id || "off".device_id || CASE WHEN "off".product_check_device_condition IS NULL THEN 5 ELSE "off".product_check_device_condition END)::BIGINT = woslslfd.id
     LEFT JOIN {{ ref('wkfs_offer_stock_list_stock_in_seven_days') }} AS woslsisd

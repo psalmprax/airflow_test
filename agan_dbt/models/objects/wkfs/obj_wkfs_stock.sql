@@ -1,4 +1,4 @@
-SELECT
+SELECT distinct
     stock.id
     -- '0000-00-00 00:00:00' cannot be parsed to timestamp
 --  , NULLIF(stock.stock_out, '0000-00-00 00:00:00')::TIMESTAMP WITH TIME ZONE

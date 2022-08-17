@@ -1,6 +1,7 @@
 SELECT
 -- TBU: select relevant columns
 --    /* id / primary & foreign key fields */
+    distinct
     "off".id
 
     -- table: device, manufactor

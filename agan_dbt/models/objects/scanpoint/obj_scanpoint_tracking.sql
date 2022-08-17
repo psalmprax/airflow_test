@@ -22,6 +22,8 @@ WITH tracking AS (
     , tr.timestamp_out
     , convert(timestamp,case tr.timestamp_in when '' then null else tr.timestamp_in end) as started_on
     , convert(timestamp,case tr.timestamp_out when '' then null else tr.timestamp_out end) as completed_on
+    , datediff('day',(case tr.timestamp_in when '' then null else tr.timestamp_in end)::timestamp,
+    	(case tr.timestamp_out when '' then null else tr.timestamp_out end)::timestamp) AS working_time
 --    , convert(DATE, case tr.timestamp_out when '' then null else tr.timestamp_out end)
 --      - convert(DATE, case tr.timestamp_in when '' then null else tr.timestamp_in end) AS working_time
   FROM {{ source('scanpoint', 'tracking') }} AS tr

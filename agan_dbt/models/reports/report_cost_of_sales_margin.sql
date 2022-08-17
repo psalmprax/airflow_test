@@ -1,6 +1,6 @@
 WITH original AS
 (
-SELECT
+SELECT distinct
     ows.id
     , owo.id AS offer_id
     , CASE WHEN ows.stock_out_price > 0

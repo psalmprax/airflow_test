@@ -94,7 +94,8 @@ WITH last_stock AS (
 ), series AS (
 
   SELECT
-      gs.gs::DATE AS date
+--      gs.gs::DATE AS date
+      gs.date
     , offer_id
     , offer_state
     , category_id
@@ -110,10 +111,12 @@ WITH last_stock AS (
     , latest_stock_in
     , latest_stock_out
 
-  FROM offer_stock_out,
-  GENERATE_SERIES(created_at::DATE,
-    COALESCE((state_valid_until::DATE - INTERVAL '1 day')::DATE
-      , CURRENT_DATE), INTERVAL '1 day') AS gs
+  FROM offer_stock_out, {{ ref("date_series")}} as gs
+  where (date >= created_at::DATE and date <= (state_valid_until::DATE - INTERVAL '1 day')::DATE)
+
+--  GENERATE_SERIES(created_at::DATE,
+--    COALESCE((state_valid_until::DATE - INTERVAL '1 day')::DATE
+--      , CURRENT_DATE), INTERVAL '1 day') AS gs
 
 ), states_mapping AS (
 

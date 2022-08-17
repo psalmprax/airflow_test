@@ -24,14 +24,6 @@
 --  , working_time
 --
 --FROM {{ ref('obj_scanpoint_tracking') }}
-{{ config(
-    materialized='table'
-  , post_hook=[
-    'create index if not exists {{ this.name }}__index_on_id on {{ this }} ("id")'
-  ]
-)
-}}
-
 with ost as (
 	SELECT
 	  *
