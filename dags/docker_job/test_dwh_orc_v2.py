@@ -20,8 +20,8 @@ from airflow.hooks.S3_hook import S3Hook
 from airflow.providers.postgres.operators.postgres import PostgresOperator  # pylint: disable=import-error
 from airflow.providers.amazon.aws.transfers.local_to_s3 import LocalFilesystemToS3Operator
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
-from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObjectsOperator
-from airflow.providers.amazon.aws.operators.s3 import S3CreateObjectOperator
+# from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObjectsOperator
+from airflow.providers.amazon.aws.operators.s3 import S3CreateObjectOperator, S3DeleteObjectsOperator
 
 
 def create_table_from_pandas(
