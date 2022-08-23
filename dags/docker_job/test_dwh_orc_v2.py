@@ -20,7 +20,7 @@ from airflow.hooks.S3_hook import S3Hook
 from airflow.providers.postgres.operators.postgres import PostgresOperator  # pylint: disable=import-error
 from airflow.providers.amazon.aws.transfers.local_to_s3 import LocalFilesystemToS3Operator
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
-# from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObjectsOperator
+from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObjectsOperator
 from airflow.providers.amazon.aws.operators.s3 import S3CreateObjectOperator
 
 
@@ -462,12 +462,12 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 				upsert_keys=strategy["update_column"],
 				task_id=f"transfer-s3-to-{file.split('_')[1].replace('/', '-')}-redshift",
 			)
-			# delete_s3_bucket = S3DeleteObjectsOperator(
-			# 	task_id=f"delete-s3-{file.split('_')[1].replace('/', '-')}-from-s3",
-			# 	bucket="airsamtest",
-			# 	keys=file.replace(".csv", ".parquet"),
-			# 	aws_conn_id="s3_conn",
-			# )
+			delete_s3_bucket = S3DeleteObjectsOperator(
+				task_id=f"delete-s3-{file.split('_')[1].replace('/', '-')}-from-s3",
+				bucket="airsamtest",
+				keys=file.replace(".csv", ".parquet"),
+				aws_conn_id="s3_conn",
+			)
 			delete_local_data = BashOperator(
 				task_id=f"start_clean-local-data-{file.split('_')[1].replace('/', '-')}",
 				bash_command=f"rm -rf {file.replace('.csv', '.parquet')}"
@@ -475,7 +475,7 @@ def ingestion_process(**kwargs):  # pylint: disable=too-many-locals
 			create_local_to_s3_job.execute(dict())
 			delete_local_data.execute(dict())
 			task_transfer_s3_to_redshift.execute(dict())
-			# delete_s3_bucket.execute(dict())
+			delete_s3_bucket.execute(dict())
 	except Exception as ex:
 		logging.debug("DATA_WAREHOUSE_LOAD_ERROR: ", ex)
 	shutil.rmtree(get_download_location_config)
