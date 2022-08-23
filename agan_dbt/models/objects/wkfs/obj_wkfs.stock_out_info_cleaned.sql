@@ -5,8 +5,8 @@ select
 		info when '' then null
 		else info
 	end as info,
-	convert(double precision, case price when '' then null else price end) as price,
-	convert(double precision, case shippingcosts when '' then null else shippingcosts end) as shippingcosts,
+	convert(decimal(15,2), case price when '' then null else price end) as price,
+	convert(decimal(15,2), case shippingcosts when '' then null else shippingcosts end) as shippingcosts,
 	convert(timestamp, case created_at when '' then null else created_at end) as created_at,
 	convert(timestamp, case updated_at when '' then null else updated_at end) as updated_at
 from
