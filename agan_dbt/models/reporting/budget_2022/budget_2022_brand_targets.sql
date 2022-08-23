@@ -1,5 +1,5 @@
 SELECT 
-  
+  distinct
   brand
   , end_of_month
   , seasonality

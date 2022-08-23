@@ -110,16 +110,16 @@ SELECT distinct
       , 'condition'
       , 'original_amount'
       , 'device_id'
-      ,"dag"
-      ,"data_interval_start"
-      ,"data_interval_end"
-      ,"execution_date"
-      ,"next_execution_date"
-      ,"prev_data_interval_start_success"
-      ,"prev_data_interval_end_success"
-      ,"prev_execution_date"
-      ,"prev_start_date_success"
-      ,"prev_execution_date_success"
+      , "dag"
+      , "data_interval_start"
+      , "data_interval_end"
+      , "execution_date"
+      , "next_execution_date"
+      , "prev_data_interval_start_success"
+      , "prev_data_interval_end_success"
+      , "prev_execution_date"
+      , "prev_start_date_success"
+      , "prev_execution_date_success"
     ],
     False,
     'o')
@@ -261,7 +261,7 @@ SELECT distinct
 --      , dev.edition
 --      , dev.capacity
 --    ) AS device
-  , manu.name||dev.model||dev.edition||dev.capacity AS device
+  , COALESCE(manu.name, '')||' '||COALESCE(dev.model,'')||' '||COALESCE(dev.edition,'')||' '||COALESCE(dev.capacity, '') AS device
   , manu.name AS manufactor_name
   , manu.id AS manufactor_id
   , CASE

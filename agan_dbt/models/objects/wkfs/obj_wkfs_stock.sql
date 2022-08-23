@@ -1,28 +1,11 @@
 SELECT distinct
     stock.id
-    -- '0000-00-00 00:00:00' cannot be parsed to timestamp
---  , NULLIF(stock.stock_out, '0000-00-00 00:00:00')::TIMESTAMP WITH TIME ZONE
-   , NULLIF(stock.stock_out::date, '0000-01-01 00:00:00'::date) AS stock_out
-  {{ select_all_except(
-    'wkfs',
-    'stock',
-    [
-        'id'
-      , 'stock_out'
-      ,"dag"
-      ,"data_interval_start"
-      ,"data_interval_end"
-      ,"execution_date"
-      ,"next_execution_date"
-      ,"prev_data_interval_start_success"
-      ,"prev_data_interval_end_success"
-      ,"prev_execution_date"
-      ,"prev_start_date_success"
-      ,"prev_execution_date_success"
-    ],
-    False,
-    'stock')
-  }}
+  , NULLIF(stock.stock_out::timestamptz, '0000-01-01 00:00:00'::timestamptz) AS stock_out
+  , stock.offer_id
+  , stock.stock_in
+  , stock.location_id
+  , stock.created_at
+  , stock.updated_at
 
   , lc.is_clarification_questionnaire
   , lc.is_clarification_technical

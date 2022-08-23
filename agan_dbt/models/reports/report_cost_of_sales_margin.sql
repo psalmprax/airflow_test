@@ -61,7 +61,7 @@ SELECT distinct
            ELSE ows.stock_out_price - owo.paid_amount + ows.stock_out_shipping_costs
       END AS marge_2
 --    , TO_CHAR(ows.stock_out - ows.stock_in, 'dd')::BIGINT AS "stockrange"
-    , datediff('day',ows.stock_in,ows.stock_out)::BIGINT AS "stockrange"
+    , datediff(day,ows.stock_in::timestamp,ows.stock_out::timestamp)::BIGINT AS "stockrange"
 
     , EXTRACT(WEEK FROM ows.stock_out) AS stock_out_week
     , EXTRACT(MONTH FROM ows.stock_out) AS stock_out_month

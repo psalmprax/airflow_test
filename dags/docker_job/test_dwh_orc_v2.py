@@ -267,6 +267,17 @@ def get_data_to_temp(strategy, kwargs, redshift_cursor, mysql_cursor):
 			response["start_row_count"] = start_row_count
 			response["end_row_count"] = end_row_count
 	
+	if strategy["strategy"] == "FULL_STRATEGY":
+		insert_query = f"""select count(*) from {kwargs['source_schema']}.{kwargs["table"]}"""
+		mysql_cursor.execute(insert_query)
+		end_row_count = mysql_cursor.fetchall()[0][0]
+		response["strategy_qry"] = None
+		response["strategy_qry_count"] = None
+		response["last_id"] = 0
+		response["start_row_count"] = 0
+		response["end_row_count"] = end_row_count
+		response["last_id_val"] = -10
+		
 	return response
 
 
@@ -560,7 +571,7 @@ default_args = {
 	'email_on_retry': False,
 	'retries': 40,
 	'retry_delay': timedelta(minutes=3),
-	'execution_timeout': timedelta(hours=12),
+	'execution_timeout': timedelta(hours=16),
 }
 schedule_interval = timedelta(minutes=60)
 start_date = datetime(2022, 7, 5)

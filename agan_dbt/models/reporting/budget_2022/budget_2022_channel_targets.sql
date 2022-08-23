@@ -1,4 +1,4 @@
-SELECT 
+SELECT distinct
   channel
   ,end_of_month
   ,seasonality

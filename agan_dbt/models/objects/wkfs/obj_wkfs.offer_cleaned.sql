@@ -1,3 +1,4 @@
+with results as (
 select
 	convert(numeric, case id when '' then null else id end) as id,
 	case
@@ -11,8 +12,8 @@ select
 	convert(numeric, case trade_id when '' then null else trade_id end) as trade_id,
 	convert(numeric, case "condition" when '' then null else "condition" end) as "condition",
 	convert(numeric, case amount when '' then null else amount end) as amount,
-	convert(numeric, case accepted_amount when '' then null else accepted_amount end) as accepted_amount,
-	convert(numeric, case original_amount when '' then null else original_amount end) as original_amount,
+	convert(double precision, case accepted_amount when '' then null else accepted_amount end) as accepted_amount,
+	convert(double precision, case original_amount when '' then null else original_amount end) as original_amount,
 	case
 		state when '' then null
 		else state
@@ -42,7 +43,7 @@ select
 	end as additional_accessories,
 	convert(numeric, case device_requests_id when '' then null else device_requests_id end) as device_requests_id,
 	convert(numeric, case product_check_device_id when '' then null else product_check_device_id end) as product_check_device_id,
-	convert(numeric, case converted_amount when '' then null else converted_amount end) as converted_amount,
+	convert(double precision, case converted_amount when '' then null else converted_amount end) as converted_amount,
 	convert(numeric, case commission_amount when '' then null else commission_amount end) as commission_amount,
 	convert(timestamp, case deleted_at when '' then null else deleted_at end) as deleted_at,
 	case
@@ -55,4 +56,7 @@ select
 		else imei
 	end as imei
 from
-	raw_wkfs.offer
+	{{ source("wkfs","offer") }}
+)
+
+select * from results

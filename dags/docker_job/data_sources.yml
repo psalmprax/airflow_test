@@ -541,8 +541,8 @@ wkfs:
             update_column:
                 - id
         offer:
-            primary_key: id
-            strategy: ID_STRATEGY
+            primary_key: updated_at
+            strategy: DATE_STRATEGY
             update_query_type: NORMAL
             changing_column_datatype: {}
             too_long_size_column: {}
@@ -561,16 +561,16 @@ wkfs:
                 - id
         offer_offer_state:
             primary_key: offer_id
-            strategy: ID_STRATEGY
-            update_query_type: NORMAL
+            strategy: FULL_STRATEGY
+            update_query_type: FULL
             changing_column_datatype: {}
             too_long_size_column: {}
             table_name_with_cotation: False
             update_column:
                 - offer_id
         offer_offer_state_set:
-            primary_key: id
-            strategy: ID_STRATEGY
+            primary_key: created_at
+            strategy: DATE_STRATEGY
             update_query_type: NORMAL
             changing_column_datatype: {}
             too_long_size_column: {}
@@ -578,6 +578,7 @@ wkfs:
             update_column:
                 - id
                 - offer_id
+                - created_at
         offer_refurbishment:
             primary_key: id
             strategy: ID_STRATEGY
@@ -843,7 +844,6 @@ wkfs:
             table_name_with_cotation: False
             update_column:
                 - check_result_actions_id
-                - start
         retoure:
             primary_key: mail_submitted
             strategy: DATE_STRATEGY
@@ -973,7 +973,7 @@ wkfs:
             table_name_with_cotation: False
             update_column:
                 - transaction_id
-                - created_at
+#                - created_at
         trade_blacklist:
             primary_key: id
             strategy: ID_STRATEGY

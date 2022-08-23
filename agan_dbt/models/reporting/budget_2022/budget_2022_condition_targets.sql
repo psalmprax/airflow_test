@@ -1,4 +1,4 @@
-SELECT 
+SELECT distinct
    condition
   , end_of_month
   , seasonality

@@ -54,7 +54,13 @@ def create_dag(dag_id,
     return dag
 
 
-dbt_models = ["example", "objects", "calculations", "reporting", "reports", "objects_long_run"]
+dbt_models = ["example",
+              "objects",
+              "calculations",
+              "reporting",
+              "reports",
+              "objects_long_run",
+              "reporting_long_run"]
 for dbt_mdl in dbt_models:
     default_args = {
         'depends_on_past': False,

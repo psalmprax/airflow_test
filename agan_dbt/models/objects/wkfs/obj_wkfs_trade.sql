@@ -1,5 +1,12 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='transaction_id',
+        dist='even'
+    )
+}}
 WITH ubm_partners AS (
-    SELECT
+    SELECT distinct
       aufv.transaction_id
 --      , STRING_AGG(convert(varchar(max),au.name) || ':' || convert(varchar(max),aufv.value), '\n') AS ubm_partner
       , LISTAGG(convert(varchar(max),au.name) || ':' || convert(varchar(max),aufv.value), '\n') AS ubm_partner
@@ -10,7 +17,7 @@ WITH ubm_partners AS (
     GROUP BY 1
 )
 , adduserfields AS (
-  SELECT
+  SELECT distinct
     auv.transaction_id
 --    , STRING_AGG(
 --      COALESCE(convert(varchar(max),au.name) || ': ' || COALESCE(convert(varchar(max),auv.value), ''), 'n.a.')
@@ -26,36 +33,35 @@ WITH ubm_partners AS (
   GROUP BY 1
 )
 , company_name AS (
-  SELECT
+  SELECT distinct
     auv.transaction_id
     , auv.value AS company_name
   FROM {{ ref('obj_wkfs.add_userfield_cleaned') }} AS au
     LEFT JOIN {{ ref('obj_wkfs.add_userfield_value_cleaned') }} AS auv
       ON auv.add_userfield_id = au.id
   WHERE au.usage = 'firmname'
-)
-
+),
+results as (
 SELECT
-  {{ select_all_except(
-    'wkfs',
-    'trade',
-    [
-      'fastlane'
-      ,"dag"
-      ,"data_interval_start"
-      ,"data_interval_end"
-      ,"execution_date"
-      ,"next_execution_date"
-      ,"prev_data_interval_start_success"
-      ,"prev_data_interval_end_success"
-      ,"prev_execution_date"
-      ,"prev_start_date_success"
-      ,"prev_execution_date_success"
-
-    ],
-    True,
-    'tr')
-  }}
+  row_number() over(partition by tr.transaction_id) rnk
+  , tr.transaction_id
+  , tr.created_at
+  , tr.updated_at
+  , tr.sf_guard_user_id
+  , tr.created_by_id
+  , tr.user_id
+  , tr.payment_id
+  , tr.pick_up_adress_id
+  , tr.dhl_identcode
+  , tr.accepted
+  , tr.application_id
+  , tr.location_id
+  , tr.deleted
+  , tr.currency_rate_id
+  , tr.private_use
+  , tr."comment"
+  , tr.server
+  , tr.repair_api_backlink
   , tr.transaction_id AS id
   , up.ubm_partner
   , COALESCE(tr.fastlane = 1, FALSE) AS is_fastlane
@@ -184,3 +190,83 @@ FROM {{ ref('obj_wkfs.trade_cleaned') }} AS tr
     ON b2btd.trade_id = tr.transaction_id
   LEFT JOIN {{ ref('obj_wkfs.location_cleaned') }} AS lo
     ON lo.id = tr.location_id
+
+)
+
+select
+
+    transaction_id
+  , created_at
+  , updated_at
+  , sf_guard_user_id
+  , created_by_id
+  , user_id
+  , payment_id
+  , pick_up_adress_id
+  , dhl_identcode
+  , accepted
+  , application_id
+  , location_id
+  , deleted
+  , currency_rate_id
+  , private_use
+  , "comment"
+  , server
+  , repair_api_backlink
+  , id
+  , ubm_partner
+  , is_fastlane
+  , userfields
+  , company_name
+  , huawei_store_email
+  , landingpage_id
+  , landingpage -- 62
+  , landingpage_tax -- 71
+  , commission_value
+  , app_currency_id
+  , app_name
+  , is_b2b_tax
+  , user_lastname
+
+  -- currency
+  , original_currency
+  , original_currency_unit
+  , currency_exchange_rate
+
+--  /* 1-n relationship!
+  -- dhl related
+  , dhl_pl_created_at
+  , dhl_pl_shipment_date
+  , dhl_pl_shipment_notification_number
+  , dhl_pl_package_count
+  , dhl_pl_pickup_time
+  , shipment_start_hour
+  , shipment_end_hour
+  , dhl_de_shipment_confirmation_number
+--  , CONCAT_WS(' ', dhl_de.first_name, dhl_de.name) AS dhl_de_full_name
+  , dhl_de_full_name
+
+  , dhl_de_street
+  , dhl_de_housenumber
+  , dhl_de_postal_code
+  , dhl_de_city
+  , dhl_de_note
+  , dhl_de_shipment_date
+  , dhl_de_package_count
+--  */
+
+  -- sf guard user information
+  , trade_sf_guard_user
+  , login_email
+  , login_name
+  , eno_contact_number
+  , last_login_at
+  , phone
+  , creator_e_plus_sapid
+  , creator_kostenstelle
+
+  -- other information
+  , location
+  , b2b_order_id
+from results
+where rnk = 1

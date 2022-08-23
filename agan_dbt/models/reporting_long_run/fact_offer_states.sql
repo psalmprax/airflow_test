@@ -1,6 +1,17 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key=['date','offer_id'],
+        incremental_strategy='insert_overwrite',
+        merge_update_columns=['date','offer_id'],
+        sort_type='interleaved',
+        sort=['date','offer_id'],
+        dist='date'
+    )
+}}
 WITH last_stock AS (
 
-  SELECT * FROM (SELECT
+  SELECT * FROM (SELECT distinct
       offer_id
     , stock_out
     , stock_in
@@ -20,7 +31,7 @@ WITH last_stock AS (
   SELECT 
   * 
   FROM 
-  (SELECT
+  (SELECT distinct
       *
     -- In case of multiple state changes per day, we selected the final change
     -- of the day.
@@ -36,11 +47,11 @@ WITH last_stock AS (
 )
 , mapping AS (
 
-   SELECT * FROM {{ ref('dim_status') }}
+   SELECT distinct * FROM {{ ref('dim_status') }}
 
 ), new_state AS (
 
-  SELECT 
+  SELECT distinct
 	  s.*
 	  , owo.category_id , owo.category, owo.condition_id , owo.deleted 
 	  , LEAD(s.created_at) OVER (PARTITION BY s.offer_id ORDER BY s.created_at ASC) AS new_state_created_at
@@ -48,7 +59,7 @@ WITH last_stock AS (
 	  , ROW_NUMBER() OVER (PARTITION BY s.offer_id ORDER BY s.created_at DESC) AS last_offer_state
   FROM 
   (
-  SELECT
+  SELECT distinct
     ols.*
     , ls.business_channel_type
     , ls.business_channel
@@ -64,7 +75,7 @@ WITH last_stock AS (
 
 ), offer_stock_out AS (
 
-  SELECT
+  SELECT distinct
       *
 --    /*
 --     * This condition is a combination of two main observations in the data.
@@ -93,8 +104,7 @@ WITH last_stock AS (
 
 ), series AS (
 
-  SELECT
---      gs.gs::DATE AS date
+  SELECT distinct
       gs.date
     , offer_id
     , offer_state
@@ -111,16 +121,15 @@ WITH last_stock AS (
     , latest_stock_in
     , latest_stock_out
 
-  FROM offer_stock_out, {{ ref("date_series")}} as gs
-  where (date >= created_at::DATE and date <= (state_valid_until::DATE - INTERVAL '1 day')::DATE)
-
+  FROM offer_stock_out , {{ ref("date_series")}} as gs
+  where date >= state_valid_from::date and date < state_valid_until::date
 --  GENERATE_SERIES(created_at::DATE,
 --    COALESCE((state_valid_until::DATE - INTERVAL '1 day')::DATE
 --      , CURRENT_DATE), INTERVAL '1 day') AS gs
 
 ), states_mapping AS (
 
-  SELECT
+  SELECT distinct
       s.*
     , m.classification_process
     , m.classification_stock
@@ -132,3 +141,9 @@ WITH last_stock AS (
       ON m.states = s.offer_state
 )
 SELECT distinct * FROM states_mapping
+-- don't delete below commented code
+  {% if is_incremental() %}
+   where date >= (select COALESCE(max(date),'0001-01-01'::timestamptz) from {{ this }})
+   and offer_id >=(select max(offer_id) from {{ this }})
+  {% endif %}
+limit 3000000 offset 0

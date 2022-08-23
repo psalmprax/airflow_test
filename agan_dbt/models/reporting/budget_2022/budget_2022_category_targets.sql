@@ -4,7 +4,7 @@ category,end_of_month,seasonality,target_revenue,target_revenue_growth,target_pe
 
 */
 
-SELECT 
+SELECT distinct
     category 
   , end_of_month 
   , seasonality 

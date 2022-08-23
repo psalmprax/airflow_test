@@ -14,7 +14,7 @@ from
 		ows.stock_out_price + ows.stock_out_shipping_costs as rechnungssumme,
 		ows.stock_in as stock_in_date ,
 --		date_part('day', ows.stock_out :: timestamp - ows.stock_in :: timestamp) as differenz_stockout_stockin,
-		datediff('day', ows.stock_in, ows.stock_out) as differenz_stockout_stockin,
+		datediff(day, ows.stock_in::timestamp, ows.stock_out::timestamp) as differenz_stockout_stockin,
 		ows.offer_id as offer_id_report_stock,
 		owo.offer_state as offer_state,
 		owo.last_stock_in as eingang_retoure ,
