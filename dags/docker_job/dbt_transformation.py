@@ -74,7 +74,7 @@ for dbt_mdl in dbt_models:
     description = f'A {dbt_mdl} DAG '
     schedule_interval = timedelta(hours=5)
     dag_id = f'T-dbt-job-{dbt_mdl}'
-    start_date = datetime(2022, 4, 1)
+    start_date = datetime(2022, 8, 23)
 
     globals()[dag_id] = create_dag(dag_id=dag_id,
                                    schedule=schedule_interval,

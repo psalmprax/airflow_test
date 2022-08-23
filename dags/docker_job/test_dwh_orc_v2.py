@@ -574,7 +574,7 @@ default_args = {
 	'execution_timeout': timedelta(hours=16),
 }
 schedule_interval = timedelta(minutes=60)
-start_date = datetime(2022, 7, 5)
+start_date = datetime(2022, 8, 23)
 
 with open("dags/docker_job/data_sources.yml") as file_loc:
 	source_table = yaml.load_all(file_loc, Loader=yaml.FullLoader)
