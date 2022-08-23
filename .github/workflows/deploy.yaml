@@ -81,7 +81,7 @@ jobs:
             whoami  && sudo rm -rf airflow_test &&
             pwd && sudo git clone https://github.com/psalmprax/airflow_test.git && ls -ltra &&
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d &&
-            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down 2> /dev/null &&
+            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml down -v 2> /dev/null &&
             sudo docker ps -a && sudo chmod -R 777 /home/ubuntu/airflow_test/logs/ &&
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/logs/ &&
             sudo chmod -R 777 /home/ubuntu/airflow_test/plugins/ && 
