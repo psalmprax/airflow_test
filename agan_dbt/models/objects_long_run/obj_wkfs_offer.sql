@@ -125,9 +125,9 @@ SELECT distinct
     'o')
   }}
   , COALESCE(
-    NULLIF(o.converted_amount, 0)
-    , NULLIF(o.accepted_amount, 0)
-    , o.original_amount
+    NULLIF(o.converted_amount::DECIMAL(15,2), 0.00)
+    , NULLIF(o.accepted_amount::DECIMAL(15,2), 0.00)
+    , o.original_amount::DECIMAL(15,2)
   ) AS base_price
   , dc.id AS condition_id
   , dc.code AS condition_code
@@ -136,77 +136,77 @@ SELECT distinct
   , refs.refurbishments
   , refs.cost_refurbishments
   , LPAD(o.id::TEXT, 6, '0') AS offer
-  , ROUND(o.accepted_amount + COALESCE(txo.tax_amount, 0), 2) AS amount
-  , ROUND(o.accepted_amount + COALESCE(txo.tax_amount, 0), 2)
-    * tr.currency_exchange_rate AS amount_original
-  , o.accepted_amount + COALESCE(txo.tax_amount, 0) AS accepted_amount
-  , (o.accepted_amount + COALESCE(txo.tax_amount, 0))
-    * tr.currency_exchange_rate AS accepted_amount_original
-  , o.converted_amount + COALESCE(txo.tax_amount, 0) AS converted_amount
-  , 100*(o.converted_amount+COALESCE(txo.tax_amount,0)) AS converted_amount_cent
+  , ROUND(o.accepted_amount::DECIMAL(15,2) + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00), 2) AS amount
+  , ROUND(o.accepted_amount::DECIMAL(15,2) + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00), 2)
+    * tr.currency_exchange_rate::DECIMAL(15,2) AS amount_original
+  , o.accepted_amount::DECIMAL(15,2) + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) AS accepted_amount
+  , (o.accepted_amount::DECIMAL(15,2) + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00))
+    * tr.currency_exchange_rate::DECIMAL(15,2) AS accepted_amount_original
+  , o.converted_amount::DECIMAL(15,2) + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) AS converted_amount
+  , 100*(o.converted_amount::DECIMAL(15,2)+COALESCE(txo.tax_amount::DECIMAL(15,2),0.00)) AS converted_amount_cent
   , CASE WHEN o.date_paid IS NOT NULL OR tr.app_name = 'b2b' THEN 'paid' ELSE 'unpaid' END AS is_paid_string
   , COALESCE(
-    NULLIF(o.converted_amount, 0)
-    , NULLIF(o.accepted_amount, 0)
+    NULLIF(o.converted_amount::DECIMAL(15,2), 0.00)
+    , NULLIF(o.accepted_amount::DECIMAL(15,2), 0.00)
     , o.original_amount
   )
-    - COALESCE(d_o.amount, 0) -- donation amount
-    + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0) ELSE 0 END -- promo amount
-    + COALESCE(txo.tax_amount, 0) -- tax amount
+    - COALESCE(d_o.amount::DECIMAL(15,2), 0.00) -- donation amount
+    + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount::DECIMAL(15,2), 0.00) ELSE 0.00 END -- promo amount
+    + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) -- tax amount
 
   , ROUND(COALESCE(
-        NULLIF(o.converted_amount, 0)
-        , NULLIF(o.accepted_amount, 0)
-        , 0
+        NULLIF(o.converted_amount::DECIMAL(15,2), 0.00)
+        , NULLIF(o.accepted_amount::DECIMAL(15,2), 0.00)
+        , 0.00
       ) -- base_price
-      - COALESCE(d_o.amount, 0) -- donation amount
-      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0) ELSE 0 END -- promo amount
-      + COALESCE(txo.tax_amount, 0) -- tax amount
+      - COALESCE(d_o.amount::DECIMAL(15,2), 0.00) -- donation amount
+      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount::DECIMAL(15,2), 0.00) ELSE 0.00 END -- promo amount
+      + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) -- tax amount
     , 2) AS paid_amount
   , ROUND(COALESCE(
-        NULLIF(o.converted_amount, 0)
-        , NULLIF(o.accepted_amount, 0)
-        , 0
+        NULLIF(o.converted_amount::DECIMAL(15,2), 0.00)
+        , NULLIF(o.accepted_amount::DECIMAL(15,2), 0.00)
+        , 0.00
       ) -- base_price
-      - COALESCE(d_o.amount, 0) -- donation amount
-      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0) ELSE 0 END -- promo amount
-      + COALESCE(txo.tax_amount, 0) -- tax amount
-    , 2) * tr.currency_exchange_rate AS paid_amount_original
+      - COALESCE(d_o.amount::DECIMAL(15,2), 0.00) -- donation amount
+      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount::DECIMAL(15,2), 0.00) ELSE 0.00 END -- promo amount
+      + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) -- tax amount
+    , 2) * tr.currency_exchange_rate::DECIMAL(15,2) AS paid_amount_original
   , ROUND(COALESCE(
-        NULLIF(o.converted_amount, 0)
-        , NULLIF(o.accepted_amount, 0)
-        , 0
+        NULLIF(o.converted_amount::DECIMAL(15,2), 0.00)
+        , NULLIF(o.accepted_amount::DECIMAL(15,2), 0.00)
+        , 0.00
       ) -- base_price
-      - COALESCE(d_o.amount, 0) -- donation amount
-      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0) ELSE 0 END -- promo amount
-      + COALESCE(txo.tax_amount, 0) -- tax amount
+      - COALESCE(d_o.amount::DECIMAL(15,2), 0.00) -- donation amount
+      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount::DECIMAL(15,2), 0.00) ELSE 0.00 END -- promo amount
+      + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) -- tax amount
     , 2) AS paid_amount_2
   , ROUND(COALESCE(
-        NULLIF(o.converted_amount, 0)
-        , NULLIF(o.accepted_amount, 0)
-        , 0
+        NULLIF(o.converted_amount::DECIMAL(15,2), 0.00)
+        , NULLIF(o.accepted_amount::DECIMAL(15,2), 0.00)
+        , 0.00
       ) -- base_price
-      - COALESCE(d_o.amount, 0) -- donation amount
-      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0) ELSE 0 END -- promo amount
-      + COALESCE(txo.tax_amount, 0) -- tax amount
-    , 2) * tr.currency_exchange_rate AS paid_amount_2_original
+      - COALESCE(d_o.amount::DECIMAL(15,2), 0.00) -- donation amount
+      + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount::DECIMAL(15,2), 0.00) ELSE 0.00 END -- promo amount
+      + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) -- tax amount
+    , 2) * tr.currency_exchange_rate::DECIMAL(15,2) AS paid_amount_2_original
   /*, ROUND(COALESCE(
-        NULLIF(o.converted_amount, 0)
-        , NULLIF(o.accepted_amount, 0)
-        , 0
+        NULLIF(o.converted_amount::DECIMAL(15,2), 0.00)
+        , NULLIF(o.accepted_amount::DECIMAL(15,2), 0.00)
+        , 0.00
       ) -- base_price
-      - COALESCE(d_o.amount, 0) -- donation amount
-      + COALESCE(po.promo_amount, 0) -- promo amount
-      + COALESCE(txo.tax_amount, 0) -- tax amount
+      - COALESCE(d_o.amount::DECIMAL(15,2), 0.00) -- donation amount
+      + COALESCE(po.promo_amount::DECIMAL(15,2), 0.00) -- promo amount
+      + COALESCE(txo.tax_amount::DECIMAL(15,2), 0.00) -- tax amount
     , 2) AS pl_paid_amount_2 -- identical to paid_amount_2??*/
-  , COALESCE(o.converted_amount, o.accepted_amount)
-    + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0) ELSE 0 END AS net_amount
-  , (COALESCE(o.converted_amount, o.accepted_amount)
-    + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0) ELSE 0 END) * tr.currency_exchange_rate AS net_amount_original
-  , o.original_amount
-  , o.original_amount * tr.currency_exchange_rate AS original_amount_original
+  , COALESCE(o.converted_amount::DECIMAL(15,2), o.accepted_amount::DECIMAL(15,2))
+    + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount::DECIMAL(15,2), 0.00) ELSE 0.00 END AS net_amount
+  , (COALESCE(o.converted_amount::DECIMAL(15,2), o.accepted_amount::DECIMAL(15,2))
+    + CASE WHEN prco.is_promo_code_valid = 1 THEN COALESCE(po.promo_amount, 0.00) ELSE 0.00 END) * tr.currency_exchange_rate::DECIMAL(15,2) AS net_amount_original
+  , o.original_amount::DECIMAL(15,2)
+  , o.original_amount::DECIMAL(15,2) * tr.currency_exchange_rate::DECIMAL(15,2) AS original_amount_original
   , tr.original_currency
-  , tr.currency_exchange_rate
+  , tr.currency_exchange_rate::DECIMAL(15,2)
 
   , ret.retoure_description
   , ret.retoure_reason_detail
@@ -286,8 +286,8 @@ SELECT distinct
     END AS promo_value_type -- 37
 
   -- donation information
-  , d_o.amount AS donation_amount
-  , d_o.amount * tr.currency_exchange_rate AS donation_amount_original
+  , d_o.amount::DECIMAL(15,2) AS donation_amount
+  , d_o.amount::DECIMAL(15,2) * tr.currency_exchange_rate::DECIMAL(15,2) AS donation_amount_original
   , do_p.name AS donation_project
 
   -- stock aggregate information
