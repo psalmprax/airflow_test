@@ -30,7 +30,7 @@ from
 		{{ ref('obj_wkfs_offer') }} owo
 		on ows.offer_id = owo.id
 	where ows.stock_out_channel not in ('Ersatzteile intern', 'back2seller') -- exclude these status
-	and stock_out_info ~ '^\d{1,6}$' -- the stock_out_info for a return has to be 1-6 digits with no letters/special characters
+	and stock_out_info ~ '^\\d{1,6}$' -- the stock_out_info for a return has to be 1-6 digits with no letters/special characters
 	) as sub
 where rnk = 1
 and cnt > 1
