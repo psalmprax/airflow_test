@@ -28,8 +28,15 @@ clean-targets:         # directories to be removed by `dbt clean`
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 on-run-end:
-  - "{{ grant_create('analytics_objects', 'master') }}"
-  - "{{ grant_read('analytics_objects', 'master') }}"
+  - "{{ grant_create('analytics_reports', 'metabase') }}"
+  - "{{ grant_read('analytics_reports', 'metabase') }}"
+  - "{{ grant_create('analytics_reporting', 'metabase') }}"
+  - "{{ grant_read('analytics_reporting', 'metabase') }}"
+  - "{{ grant_read('analytics_objects', 'metabase') }}"
+  - "{{ grant_read('analytics_calculations', 'metabase') }}"
+  - "{{ grant_read('raw_scanpoint', 'metabase') }}"
+  - "{{ grant_read('raw_adamant', 'metabase') }}"
+  - "{{ grant_read('raw_wkfs', 'metabase') }}"
 
 
 #  - "{{ grant_read('analytics_reports', 'metabase_read') }}"
