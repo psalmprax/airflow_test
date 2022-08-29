@@ -933,7 +933,6 @@ wkfs:
             table_name_with_cotation: False
             update_column:
                 - stock_id
-                - created_at
         tax_offer:
             primary_key: updated_at
             strategy: DATE_STRATEGY

@@ -1,11 +1,11 @@
-select *
+select distinct *
 from
 (
 
 with cte1 as
 (
 
-select *
+select distinct *
 from
 
 	(
@@ -39,7 +39,7 @@ and cnt > 1
 cte2 as
 (
 
-select *
+select distinct *
 from
 
 	(
@@ -87,7 +87,7 @@ where rnk3 = 1
 cte3 as
 (
 
-select *
+select distinct *
 	from cte1
 	left join cte2
 	on cte1.offer_id_report_stock = cte2.offer_id_dad   -- reference from device table = TA number = offer_id
