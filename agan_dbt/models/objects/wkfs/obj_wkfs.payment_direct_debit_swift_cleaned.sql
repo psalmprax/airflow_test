@@ -23,6 +23,8 @@ select
 	case
 		international_bank_account_number when '' then null
 		else international_bank_account_number
-	end as international_bank_account_number
+	end as international_bank_account_number,
+	'' as iban,
+	'' as bic
 from
 	raw_wkfs.payment_direct_debit_swift
