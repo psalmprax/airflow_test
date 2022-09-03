@@ -87,10 +87,11 @@ jobs:
             sudo chmod -R 777 /home/ubuntu/airflow_test/plugins/ && 
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/plugins/ && 
             sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d && 
-            sleep 10s &&
+            sleep 10s && ls -ltra /home/ubuntu/airflow_test &&
             sudo sh /home/ubuntu/airflow_test/airflow_connections.sh
-#            sudo apt install tor -y
+            
 
+#            sudo apt install tor -y
 #            cat << EOF > windscrb.exp
 #            #!/usr/bin/expect -f
 #            set timeout -1
