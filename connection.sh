@@ -1,1 +1,0 @@
-export AIRFLOW_CONN_MYSQL_CONN='mysql://data-analytics:password@db.warehouse.asgoodasnew.com:3306/adamant'
