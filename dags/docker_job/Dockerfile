@@ -49,4 +49,6 @@ USER airflow
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 RUN pip install 'apache-airflow[amazon]'
-CMD ["echo", "hello world"]
+COPY connection.sh connection.sh
+RUN chmod +x connection.sh
+CMD ["echo", "hello world", "./connection.sh"]
