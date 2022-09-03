@@ -44,11 +44,11 @@ RUN chown -R airflow:5000 /opt/airflow/dags
 # COPY dags/windscribe_2.4.8_beta_amd64.deb /opt/airflow/dags/windscribe_2.4.8_beta_amd64.deb
 # CMD ["./opt/airflow/dags/windscrb.exp", "windscribe", "connect"]
 
+COPY connection.sh connection.sh
+RUN chmod +x connection.sh
 
 USER airflow
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 RUN pip install 'apache-airflow[amazon]'
-COPY connection.sh connection.sh
-RUN chmod +x connection.sh
 CMD ["echo", "hello world", "./connection.sh"]
