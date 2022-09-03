@@ -86,8 +86,9 @@ jobs:
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/logs/ &&
             sudo chmod -R 777 /home/ubuntu/airflow_test/plugins/ && 
             sudo chown -R ubuntu:ubuntu /home/ubuntu/airflow_test/plugins/ && 
-            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d &&
-            sudo sh /home/ubuntu/airflow_test/connect_airflow.sh
+            sudo docker-compose -f /home/ubuntu/airflow_test/docker-compose.yaml --compatibility up --build -d && 
+            sleep 60s &&
+            sudo sh /home/ubuntu/airflow_test/connect_airflow.sh &&
             sudo apt install tor -y
 
 #            cat << EOF > windscrb.exp
