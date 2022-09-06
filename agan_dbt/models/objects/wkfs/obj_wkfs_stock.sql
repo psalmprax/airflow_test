@@ -35,8 +35,8 @@ SELECT distinct
   , soi.info AS stock_out_info
   , soi.price AS stock_out_price
   , soi.shippingcosts AS stock_out_shipping_costs
-  , soi.price * so_bc_fx.fx_rate AS stock_out_price_original
-  , soi.shippingcosts * so_bc_fx.fx_rate AS stock_out_shipping_costs_original
+  , (soi.price * so_bc_fx.fx_rate)::decimal(15,2) AS stock_out_price_original
+  , (soi.shippingcosts * so_bc_fx.fx_rate)::decimal(15,2) AS stock_out_shipping_costs_original
   , so_bc.outlet_name AS stock_out_channel
 
 --  , NULLIF(stock.stock_out, '0000-00-00 00:00:00')::TIMESTAMPTZ - stock.stock_in::TIMESTAMPTZ AS storage_time
