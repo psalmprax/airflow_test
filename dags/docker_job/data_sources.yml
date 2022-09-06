@@ -133,8 +133,8 @@ adamant:
                 - id
         order_item_detail:
             primary_key: id
-            strategy: ID_STRATEGY
-            update_query_type: NORMAL
+            strategy: FULL_STRATEGY
+            update_query_type: FULL
             changing_column_datatype: {}
             too_long_size_column: {}
             table_name_with_cotation: False
