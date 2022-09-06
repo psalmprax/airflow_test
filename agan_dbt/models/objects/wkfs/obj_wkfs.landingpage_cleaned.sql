@@ -68,8 +68,8 @@ select
 		else image_path
 	end as image_path,
 	convert(timestamp, case created_at when '' then null else created_at end) as created_at,
-	convert(numeric, case tax when '' then null else tax end) as tax,
-	convert(numeric, case sales_tax_bonus when '' then null else sales_tax_bonus end) as sales_tax_bonus,
+	COALESCE(convert(decimal(15,2), case tax when '' then null else tax end),0.00) as tax,
+	COALESCE(convert(decimal(15,2), case sales_tax_bonus when '' then null else sales_tax_bonus end),0.00) as sales_tax_bonus,
 	case
 		signin_image_path when '' then null
 		else signin_image_path
