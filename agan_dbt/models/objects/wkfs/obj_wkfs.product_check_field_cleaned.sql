@@ -37,4 +37,6 @@ select
 	end as default_value,
 	convert(numeric, case ignore_default when '' then null else ignore_default end) as ignore_default
 from
-	raw_wkfs.product_check_field
+    {{ source("wkfs","product_check_field")}}
+
+--	raw_wkfs.product_check_field

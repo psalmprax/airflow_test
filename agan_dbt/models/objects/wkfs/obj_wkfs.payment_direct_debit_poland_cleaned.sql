@@ -19,6 +19,10 @@ select
 	case
 		international_bank_account_number when '' then null
 		else international_bank_account_number
-	end as international_bank_account_number
+	end as international_bank_account_number,
+	null as iban_decrypt,
+	null as bic_decrypt
 from
-	raw_wkfs.payment_direct_debit_poland
+    {{ source("wkfs","payment_direct_debit_poland")}}
+
+--	raw_wkfs.payment_direct_debit_poland

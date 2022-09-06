@@ -1,3 +1,11 @@
+{{
+    config(
+        materialized='table',
+        sort_type='interleaved',
+        sort=['id','device_id'],
+        dist_style='auto'
+    )
+}}
 with results as (
 select
 	convert(numeric, case id when '' then null else id end) as id,
@@ -11,9 +19,9 @@ select
 	convert(numeric, case device_id when '' then null else device_id end) as device_id,
 	convert(numeric, case trade_id when '' then null else trade_id end) as trade_id,
 	convert(numeric, case "condition" when '' then null else "condition" end) as "condition",
-	convert(decimal(15,2), case amount when '' then null else amount end) as amount,
-	convert(decimal(15,2), case accepted_amount when '' then null else accepted_amount end) as accepted_amount,
-	convert(decimal(15,2), case original_amount when '' then null else original_amount end) as original_amount,
+	convert(decimal(15,2), case amount when '' then 0.00 else amount end) as amount,
+	convert(decimal(15,2), case accepted_amount when '' then 0.00 else accepted_amount end) as accepted_amount,
+	convert(decimal(15,2), case original_amount when '' then 0.00 else original_amount end) as original_amount,
 	case
 		state when '' then null
 		else state
@@ -43,8 +51,8 @@ select
 	end as additional_accessories,
 	convert(numeric, case device_requests_id when '' then null else device_requests_id end) as device_requests_id,
 	convert(numeric, case product_check_device_id when '' then null else product_check_device_id end) as product_check_device_id,
-	convert(decimal(15,2), case converted_amount when '' then null else converted_amount end) as converted_amount,
-	convert(decimal(15,2), case commission_amount when '' then null else commission_amount end) as commission_amount,
+	convert(decimal(15,2), case converted_amount when '' then 0.00 else converted_amount end) as converted_amount,
+	convert(decimal(15,2), case commission_amount when '' then 0.00 else commission_amount end) as commission_amount,
 	convert(timestamp, case deleted_at when '' then null else deleted_at end) as deleted_at,
 	case
 		actindo_data_hash when '' then null

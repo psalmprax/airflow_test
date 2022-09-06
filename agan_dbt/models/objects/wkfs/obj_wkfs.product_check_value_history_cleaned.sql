@@ -10,4 +10,6 @@ select
 	end as value,
 	convert(timestamp, case created_at when '' then null else created_at end) as created_at
 from
-	raw_wkfs.product_check_value_history
+    {{ source("wkfs","product_check_value_history")}}
+
+--	raw_wkfs.product_check_value_history

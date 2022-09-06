@@ -43,6 +43,10 @@ select
 	case
 		identity_number when '' then null
 		else identity_number
-	end as identity_number
+	end as identity_number,
+	null as iban_decrypt,
+	null as account_decrypt,
+    null as fin_decrypt
 from
-	raw_wkfs.payment_direct_debit_spain
+    {{ source("wkfs","payment_direct_debit_spain")}}
+--	raw_wkfs.payment_direct_debit_spain

@@ -5,6 +5,6 @@ select
 		part when '' then null
 		else part
 	end as part,
-	convert(numeric, case costs when '' then null else costs end) as costs
+	convert(decimal(15,2), case costs when '' then 0.00 else costs end) as costs
 from
 	raw_wkfs.offer_refurbishment

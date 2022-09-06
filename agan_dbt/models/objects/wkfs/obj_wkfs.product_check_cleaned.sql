@@ -46,4 +46,6 @@ select
 	convert(numeric, case quality_control when '' then null else quality_control end) as quality_control,
 	convert(numeric, case costs_estimate_optical when '' then null else costs_estimate_optical end) as costs_estimate_optical
 from
-	raw_wkfs.product_check
+    {{ source("wkfs","product_check")}}
+
+--	raw_wkfs.product_check

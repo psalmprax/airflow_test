@@ -9,5 +9,6 @@ select
 	case country_code when '' then null else country_code end as country_code,
 	case firstname when '' then null else firstname end as firstname,
 	case lastname when '' then null else lastname end as lastname
-from 
-	raw_adamant.address
+from
+    {{ source("adamant","address")}}
+--	raw_adamant.address

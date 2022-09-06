@@ -1,0 +1,14 @@
+redshift:
+    conn_id: psql_conn
+    schema: analytics_objects
+    table_name:
+      "\"obj_wkfs.payment_direct_debit_swift_cleaned\"":
+        primary_key: id
+        column_to_decrypt:
+          - bank_identifier_code
+          - international_bank_account_number
+#      "\"obj_wkfs.payment_direct_debit_swift_cleaned1\"":
+#        primary_key: id
+#        column_to_decrypt:
+#          - bank_identifier_code
+#          - international_bank_account_number

@@ -18,4 +18,6 @@ select
 	convert(timestamp, case valid_until when '' then null else valid_until end) as valid_until,
 	convert(numeric, case min_amount_value when '' then null else min_amount_value end) as min_amount_value
 from
-	raw_wkfs.promo_code
+    {{ source("wkfs","promo_code")}}
+
+--	raw_wkfs.promo_code
