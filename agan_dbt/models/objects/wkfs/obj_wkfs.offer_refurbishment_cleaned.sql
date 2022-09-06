@@ -5,6 +5,6 @@ select
 		part when '' then null
 		else part
 	end as part,
-	convert(decimal(15,2), case costs when '' then 0.00 else costs end) as costs
+	COALESCE(convert(decimal(15,2), case costs when '' then null else costs end),0.00) as costs
 from
 	raw_wkfs.offer_refurbishment

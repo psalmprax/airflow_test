@@ -4,7 +4,7 @@ select
 	case tax when '' then null else tax end as tax,
 	convert(numeric,case quantity when '' then null else quantity end) as quantity,
 	case sku when '' then null else sku end as sku,
-	convert(decimal(15,2),case price when '' then 0.00 else price end) as price,
+	COALESCE(convert(decimal(15,2),case price when '' then null else price end),0.00) as price,
 	case name when '' then null else name end as name
 from
 	raw_adamant.order_item

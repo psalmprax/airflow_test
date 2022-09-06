@@ -2,7 +2,7 @@ select
 	convert(numeric, case check_result_actions_id when '' then null else check_result_actions_id end) as check_result_actions_id,
 	convert(timestamp, case "out" when '' then null else "out" end) as "out",
 	convert(timestamp, case returned when '' then null else returned end) as returned,
-	convert(decimal(15,2), case costs when '' then 0.00 else costs end) as costs,
+	COALESCE(convert(decimal(15,2), case costs when '' then null else costs end),0.00) as costs,
 	case
 		remarks when '' then null
 		else remarks

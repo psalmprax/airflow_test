@@ -7,7 +7,7 @@ select
 	case reference when '' then null else reference end as reference,
 	convert(timestamp, case sold_at when '' then null else sold_at end) as sold_at, 
 	case status when '' then null else status end as status,
-	convert(decimal(15,2),case shipping_price when '' then 0.00 else shipping_price end) as shipping_price,
+	COALESCE(convert(decimal(15,2),case shipping_price when '' then null else shipping_price end), 0.00) as shipping_price,
 	convert(timestamp, case created_at when '' then null else created_at end) as created_at, 
 	convert(timestamp, case updated_at when '' then null else updated_at end) as updated_at, 
 	convert(numeric,case sales_channel_id when '' then null else sales_channel_id end) as sales_channel_id,
