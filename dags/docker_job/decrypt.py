@@ -71,22 +71,22 @@ def create_dag(  # pylint: disable=redefined-outer-name
 			id = f'{prefix}000{schema.replace("_", "000")}' \
 					f'{table_name.replace(".", "000").replace("_", "000")}'.replace("\"", "")
 			print(query_maker(table_name, schema, column_with_decrypt_value))
-			redshift_to_s3 = RedshiftToS3Operator(
-				task_id=f'{id}',
-				s3_bucket='airsamtest',
-				s3_key=f'Decrypt/{schema}/{table_name}',
-				# schema=f'{schema}',
-				# table=f'{table_name}',
-				select_query=query_maker(table_name, schema, column_with_decrypt_value),
-				redshift_conn_id='psql_conn',
-				aws_conn_id='s3_conn',
-				table_as_file_name=False,
-				unload_options=[
-					"FORMAT AS PARQUET",
-					"ALLOWOVERWRITE",
-					"PARALLEL OFF",
-				]
-			)
+			# redshift_to_s3 = RedshiftToS3Operator(
+			# 	task_id=f'{id}',
+			# 	s3_bucket='airsamtest',
+			# 	s3_key=f'Decrypt/{schema}/{table_name}',
+			# 	# schema=f'{schema}',
+			# 	# table=f'{table_name}',
+			# 	select_query=query_maker(table_name, schema, column_with_decrypt_value),
+			# 	redshift_conn_id='psql_conn',
+			# 	aws_conn_id='s3_conn',
+			# 	table_as_file_name=False,
+			# 	unload_options=[
+			# 		"FORMAT AS PARQUET",
+			# 		"ALLOWOVERWRITE",
+			# 		"PARALLEL OFF",
+			# 	]
+			# )
 			path = mkdir_for_task(f"{table_name}", f"{schema}")
 			prefix = "Decrypt"
 			s3_to_local = S3toLocalSystemOperator(
@@ -97,7 +97,7 @@ def create_dag(  # pylint: disable=redefined-outer-name
 				# f'Decrypt/{schema}/{table_name}',
 				local_file_path=path
 			)
-			redshift_to_s3.execute(dict())
+			# redshift_to_s3.execute(dict())
 			s3_to_local.execute(dict())
 		
 		# hello_task = HelloOperator(task_id="sample-task", name="foo_bar")
